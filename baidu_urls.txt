@@ -1,5 +1,2 @@
 https://blog.aptxhb.xyz/2022/05/03/wen-ben-san-jian-ke-sed/
-https://blog.aptxhb.xyz/2022/05/02/article-title/
-https://blog.aptxhb.xyz/2022/05/01/hello-world/
-https://blog.aptxhb.xyz/2020/01/14/5w2h-godweiyang/
 https://blog.aptxhb.xyz/2018/09/07/ji-yu-containerd-er-jin-zhi-bu-shu-k8s/
