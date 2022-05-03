@@ -1,0 +1,2552 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="Containerd二进制部署K8s, 叶落化仰">
+    <meta name="description" content="基于containerd二进制部署k8s
+声明：
+因部署涉及多台主机期间重复操作过多各组件脚本与配置大致相同固只贴出一份作为参考，参数有异部分大多数为主机名与IP，部署期间注意修改为对应角色信息。操作命令前注意标识符主机名与目录级别，下面是">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="referrer" content="no-referrer-when-downgrade">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+
+
+    
+
+    <title>Containerd二进制部署K8s | 叶落化仰</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
+
+    <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/matery.css">
+    <link rel="stylesheet" type="text/css" href="/css/my.css">
+
+    <script src="/libs/jquery/jquery-3.6.0.min.js"></script>
+
+<meta name="generator" content="Hexo 5.4.2">
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+<link rel="alternate" href="/atom.xml" title="叶落化仰" type="application/atom+xml">
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head>
+
+
+<body>
+    <header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">叶落化仰</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a>
+<ul class="right nav-menu">
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/" class="waves-effect waves-light">
+      
+      <i class="fas fa-home" style="zoom: 0.6;"></i>
+      
+      <span>首页</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/tags" class="waves-effect waves-light">
+      
+      <i class="fas fa-tags" style="zoom: 0.6;"></i>
+      
+      <span>标签</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/categories" class="waves-effect waves-light">
+      
+      <i class="fas fa-bookmark" style="zoom: 0.6;"></i>
+      
+      <span>分类</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/archives" class="waves-effect waves-light">
+      
+      <i class="fas fa-archive" style="zoom: 0.6;"></i>
+      
+      <span>归档</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/about" class="waves-effect waves-light">
+      
+      <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
+      
+      <span>关于</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/contact" class="waves-effect waves-light">
+      
+      <i class="fas fa-comments" style="zoom: 0.6;"></i>
+      
+      <span>留言板</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/friends" class="waves-effect waves-light">
+      
+      <i class="fas fa-address-book" style="zoom: 0.6;"></i>
+      
+      <span>友情链接</span>
+    </a>
+    
+  </li>
+  
+  <li>
+    <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+      <i id="searchIcon" class="fas fa-search" title="搜索" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+</ul>
+
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="/medias/logo.png" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">叶落化仰</div>
+        <div class="logo-desc">
+            
+            Never really desperate, only the lost of the soul.
+            
+        </div>
+    </div>
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li class="m-nav-item">
+	  
+		<a href="/" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-home"></i>
+			
+			首页
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/tags" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-tags"></i>
+			
+			标签
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/categories" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-bookmark"></i>
+			
+			分类
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/archives" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-archive"></i>
+			
+			归档
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/about" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-user-circle"></i>
+			
+			关于
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/contact" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-comments"></i>
+			
+			留言板
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/friends" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-address-book"></i>
+			
+			友情链接
+		</a>
+          
+        </li>
+        
+        
+        <li><div class="divider"></div></li>
+        <li>
+            <a href="https://github.com/aptxhb/aptxhb.github.io" class="waves-effect waves-light" target="_blank">
+                <i class="fab fa-github-square fa-fw"></i>Fork Me
+            </a>
+        </li>
+        
+    </ul>
+</div>
+
+
+        </div>
+
+        
+            <style>
+    .nav-transparent .github-corner {
+        display: none !important;
+    }
+
+    .github-corner {
+        position: absolute;
+        z-index: 10;
+        top: 0;
+        right: 0;
+        border: 0;
+        transform: scale(1.1);
+    }
+
+    .github-corner svg {
+        color: #0f9d58;
+        fill: #fff;
+        height: 64px;
+        width: 64px;
+    }
+
+    .github-corner:hover .octo-arm {
+        animation: a 0.56s ease-in-out;
+    }
+
+    .github-corner .octo-arm {
+        animation: none;
+    }
+
+    @keyframes a {
+        0%,
+        to {
+            transform: rotate(0);
+        }
+        20%,
+        60% {
+            transform: rotate(-25deg);
+        }
+        40%,
+        80% {
+            transform: rotate(10deg);
+        }
+    }
+</style>
+
+<a href="https://github.com/aptxhb/aptxhb.github.io" class="github-corner tooltipped hide-on-med-and-down" target="_blank"
+   data-tooltip="Fork Me" data-position="left" data-delay="50">
+    <svg viewBox="0 0 250 250" aria-hidden="true">
+        <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
+        <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2"
+              fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path>
+        <path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z"
+              fill="currentColor" class="octo-body"></path>
+    </svg>
+</a>
+        
+    </nav>
+
+</header>
+
+    
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/16.jpg')">
+    <div class="container" style="right: 0px;left: 0px;">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <h1 class="description center-align post-title">Containerd二进制部署K8s</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<main class="container content">
+
+    
+    <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                    <div class="article-tag">
+                        
+                            <a href="/tags/Typora/">
+                                <span class="chip bg-color">Typora</span>
+                            </a>
+                        
+                            <a href="/tags/Markdown/">
+                                <span class="chip bg-color">Markdown</span>
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/Markdown/" class="post-category">
+                                Markdown
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
+                    2018-09-07
+                </div>
+                
+
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
+                    2022-05-02
+                </div>
+                
+
+                
+
+                
+
+                
+            </div>
+        </div>
+        <hr class="clearfix">
+
+        
+
+        
+
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <p><strong>基于containerd二进制部署k8s</strong></p>
+<p><strong>声明：</strong></p>
+<p>因部署涉及多台主机期间重复操作过多各组件脚本与配置大致相同固只贴出一份作为参考，参数有异部分大多数为主机名与IP，部署期间注意修改为对应角色信息。操作命令前注意标识符<code>主机名</code>与<code>目录级别</code>，下面是标识符的书写规则。</p>
+<p>例：[root@k8s-master4 ~]#</p>
+<p>第一列：当前用户，隐藏为默认root操作</p>
+<p>第二列：主机名，隐藏则为当前组件的规划主机都要执行，否则只操作当前主机</p>
+<p>第三列：当前目录，注意切换对应目录级别在操作</p>
+<p>示例一：<code>k8s-master4 opt]# pwd</code> 表示只在k8s-master4主机执行操作</p>
+<p>示例二：<code>opt]# pwd</code> 表示安装组件的规划主机内都要执行此操作 如下图：keepalived组件只需在<code>k8s-master4</code>、<code>k8s-node4-1</code>节点上执行</p>
+<p><img src="https://aptxhb.oss-cn-shenzhen.aliyuncs.com/images/image-20211014093216431.png" alt="image-20211014093216431"></p>
+<h5 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h5><table>
+<thead>
+<tr>
+<th>主机名</th>
+<th>IP</th>
+<th>系统</th>
+<th>资源</th>
+<th>k8s-version</th>
+<th>CRI</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>k8s-master4</td>
+<td>192.168.92.155</td>
+<td>centos 7.8</td>
+<td>2c4G</td>
+<td>v1.17.16</td>
+<td>containerd://1.5.5</td>
+</tr>
+<tr>
+<td>k8s-node4-1</td>
+<td>192.168.92.156</td>
+<td>centos 7.8</td>
+<td>2c4G</td>
+<td>v1.17.16</td>
+<td>containerd://1.5.5</td>
+</tr>
+<tr>
+<td>k8s-node4-2</td>
+<td>192.168.92.157</td>
+<td>centos 7.8</td>
+<td>2c4G</td>
+<td>v1.17.16</td>
+<td>containerd://1.5.5</td>
+</tr>
+</tbody></table>
+<h6 id="系统版本："><a href="#系统版本：" class="headerlink" title="系统版本："></a>系统版本：</h6><pre class="line-numbers language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># uname -a</span>
+Linux k8s-master4 3.10.0-1160.el7.x86_64 <span class="token comment" spellcheck="true">#1 SMP Mon Oct 19 16:18:59 UTC 2020 x86_64 x86_64 x86_64 GNU/Linux</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<h6 id="设置主机名"><a href="#设置主机名" class="headerlink" title="设置主机名:"></a>设置主机名:</h6><pre class="line-numbers language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># hostnamectl set-hostname k8s-master4</span>
+<span class="token comment" spellcheck="true"># hostnamectl set-hostname k8s-node4-1</span>
+<span class="token comment" spellcheck="true"># hostnamectl set-hostname k8s-node4-2</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<h6 id="设置hosts本机解析："><a href="#设置hosts本机解析：" class="headerlink" title="设置hosts本机解析："></a>设置hosts本机解析：</h6><pre class="line-numbers language-shell"><code class="language-shell"># cat /etc/hosts
+127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4
+::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
+192.168.92.155	k8s-master4
+192.168.92.156	k8s-node4-1
+192.168.92.157	k8s-node4-2
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h6 id="关闭防火墙及selinux："><a href="#关闭防火墙及selinux：" class="headerlink" title="关闭防火墙及selinux："></a>关闭防火墙及selinux：</h6><pre class="line-numbers language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># systemctl stop firewalld</span>
+<span class="token comment" spellcheck="true"># systemctl disable firewalld</span>
+
+<span class="token comment" spellcheck="true"># sed -e 's#SELINUX=enforcing#SELINUX=disabled#g' /etc/selinux/config</span>
+<span class="token comment" spellcheck="true"># setenforce 0</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h6 id="关闭swap分区："><a href="#关闭swap分区：" class="headerlink" title="关闭swap分区："></a>关闭swap分区：</h6><pre class="line-numbers language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># swapoff -a</span>
+<span class="token comment" spellcheck="true"># grep swap /etc/fstab</span>
+<span class="token comment" spellcheck="true"># /dev/mapper/centos-swap swap                    swap    defaults        0 0  # 注释swap挂载分区</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<h6 id="设置时间同步"><a href="#设置时间同步" class="headerlink" title="设置时间同步"></a>设置时间同步</h6><pre class="line-numbers language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime</span>
+<span class="token comment" spellcheck="true"># yum -y install ntpdate</span>
+<span class="token comment" spellcheck="true"># ntpdate ntp.aliyun.com</span>
+<span class="token comment" spellcheck="true"># cat > /root/cron_file &lt;&lt; EOF</span>
+*/2 * * * * ntpdate ntp.aliyun.com <span class="token operator">&amp;</span><span class="token operator">></span> /dev/null
+EOF
+<span class="token comment" spellcheck="true"># crontab /root/cron_file</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p><strong>注意：</strong>因为这是本地虚拟机没有安装时间同步服务，所以只用命令简单同步时间。生产环境不要按照此方法。</p>
+<h6 id="开启内核模块"><a href="#开启内核模块" class="headerlink" title="开启内核模块"></a>开启内核模块</h6><pre class="line-numbers language-bash"><code class="language-bash">~<span class="token punctuation">]</span><span class="token comment" spellcheck="true"># cat > /etc/sysctl.d/k8s.conf &lt;&lt; EOF</span>
+net.bridge.bridge-nf-call-ip6tables <span class="token operator">=</span> 1
+net.bridge.bridge-nf-call-iptables <span class="token operator">=</span> 1
+net.ipv4.ip_forward <span class="token operator">=</span> 1
+vm.swappiness <span class="token operator">=</span> 0
+EOF
+
+~<span class="token punctuation">]</span><span class="token comment" spellcheck="true"># cat > ipvs.sh &lt;&lt; "EOF"</span>
+<span class="token comment" spellcheck="true">#!/bin/bash</span>
+
+/sbin/modprobe br_netfilter
+/sbin/modprobe -- nf_conntrack_ipv4
+
+ipvs_mods_dir<span class="token operator">=</span><span class="token string">"/usr/lib/modules/<span class="token variable"><span class="token variable">$(</span><span class="token function">uname</span> -r<span class="token variable">)</span></span>/kernel/net/netfilter/ipvs"</span>
+<span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token punctuation">$(</span>ls <span class="token variable">$ipvs_mods_dir</span><span class="token operator">|</span><span class="token function">grep</span> -o <span class="token string">"^[^.]*"</span><span class="token punctuation">)</span>
+<span class="token keyword">do</span>
+  /sbin/modinfo -F filename <span class="token variable">$i</span> <span class="token operator">&amp;</span><span class="token operator">></span>/dev/null
+  <span class="token keyword">if</span> <span class="token punctuation">[</span> <span class="token variable">$?</span> -eq 0 <span class="token punctuation">]</span><span class="token punctuation">;</span><span class="token keyword">then</span>
+    /sbin/modprobe <span class="token variable">$i</span>
+  <span class="token keyword">fi</span>
+<span class="token keyword">done</span>
+
+EOF
+~<span class="token punctuation">]</span><span class="token comment" spellcheck="true"># sysctl -p /etc/sysctl.d/k8s.conf</span>
+~<span class="token punctuation">]</span><span class="token comment" spellcheck="true"># chmod +x ipvs.sh</span>
+~<span class="token punctuation">]</span><span class="token comment" spellcheck="true"># ./ipvs.sh</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h4 id="一、自签k8s所需证书"><a href="#一、自签k8s所需证书" class="headerlink" title="一、自签k8s所需证书"></a>一、自签k8s所需证书</h4><p><strong>说明：</strong>证书只在管理节点生成，然后按节点角色拷贝证书秘钥至主机。注意秘钥的权限是<code>600</code>拷贝加上<code>-p</code>参数。</p>
+<ol>
+<li><h6 id="安装cfssl"><a href="#安装cfssl" class="headerlink" title="安装cfssl"></a>安装cfssl</h6></li>
+</ol>
+<p><a target="_blank" rel="noopener" href="https://pkg.cfssl.org/R1.2/cfssl_linux-amd64">cfssl 下载地址</a></p>
+<p><a target="_blank" rel="noopener" href="https://pkg.cfssl.org/R1.2/cfssljson_linux-amd64">cfssl-json 下载地址</a></p>
+<p><a target="_blank" rel="noopener" href="https://pkg.cfssl.org/R1.2/cfssl-certinfo_linux-amd64">cfssl-certinfo 下载地址</a></p>
+<pre class="line-numbers language-bash"><code class="language-bash">k8s-master4 ~<span class="token punctuation">]</span><span class="token comment" spellcheck="true"># wget https://pkg.cfssl.org/R1.2/cfssl_linux-amd64 -O /usr/local/sbin/cfssl</span>
+k8s-master4 ~<span class="token punctuation">]</span><span class="token comment" spellcheck="true"># wget https://pkg.cfssl.org/R1.2/cfssljson_linux-amd64 -O /usr/local/sbin/cfssl-json</span>
+k8s-master4 ~<span class="token punctuation">]</span><span class="token comment" spellcheck="true"># wget https://pkg.cfssl.org/R1.2/cfssl-certinfo_linux-amd64 -O /usr/local/sbin/cfssl-certinfo</span>
+k8s-master4 ~<span class="token punctuation">]</span><span class="token comment" spellcheck="true"># chmod +x /usr/local/sbin/cfssl*</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p><img src="https://aptxhb.oss-cn-shenzhen.aliyuncs.com/images/image-20211012113552567.png" alt="image-20211012113552567"></p>
+<ol start="2">
+<li><h6 id="创建CA证书签名请求配置文件ca-csr-json"><a href="#创建CA证书签名请求配置文件ca-csr-json" class="headerlink" title="创建CA证书签名请求配置文件ca-csr.json"></a>创建CA证书签名请求配置文件<code>ca-csr.json</code></h6></li>
+</ol>
+<pre class="line-numbers language-bash"><code class="language-bash">k8s-master4 ~<span class="token punctuation">]</span><span class="token comment" spellcheck="true"># mkdir /opt/certs/</span>
+k8s-master4 ~<span class="token punctuation">]</span><span class="token comment" spellcheck="true"># cat > /opt/certs/ca-csr.json &lt;&lt; EOF</span>
+<span class="token punctuation">{</span>
+    <span class="token string">"CN"</span><span class="token keyword">:</span> <span class="token string">"HuaCloud"</span>,
+    <span class="token string">"hosts"</span><span class="token keyword">:</span> <span class="token punctuation">[</span>
+    <span class="token punctuation">]</span>,
+    <span class="token string">"key"</span><span class="token keyword">:</span> <span class="token punctuation">{</span>
+        <span class="token string">"algo"</span><span class="token keyword">:</span> <span class="token string">"rsa"</span>,
+        <span class="token string">"size"</span><span class="token keyword">:</span> 2048
+    <span class="token punctuation">}</span>,
+    <span class="token string">"names"</span><span class="token keyword">:</span> <span class="token punctuation">[</span>
+        <span class="token punctuation">{</span>
+            <span class="token string">"C"</span><span class="token keyword">:</span> <span class="token string">"CN"</span>,
+            <span class="token string">"ST"</span><span class="token keyword">:</span> <span class="token string">"shenzhen"</span>,
+            <span class="token string">"L"</span><span class="token keyword">:</span> <span class="token string">"shenzhen"</span>,
+            <span class="token string">"O"</span><span class="token keyword">:</span> <span class="token string">"IT"</span>,
+            <span class="token string">"OU"</span><span class="token keyword">:</span> <span class="token string">"ops"</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">]</span>,
+    <span class="token string">"ca"</span><span class="token keyword">:</span> <span class="token punctuation">{</span>
+        <span class="token string">"expiry"</span><span class="token keyword">:</span> <span class="token string">"175200h"</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+EOF
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<ul>
+<li>CN：Common Name，浏览器使用该字段验证网站是否合法，一般写的是域名，非常重要。</li>
+<li>C：Country。国家</li>
+<li>ST：State，州，省</li>
+<li>L：Locality，城区，城市</li>
+<li>O：Organization Name，组织名称，公司名称</li>
+<li>OU：Organization Unit Name。组织单位名称，公司部门</li>
+</ul>
+<ol start="3">
+<li><h6 id="生成CA证书和私钥"><a href="#生成CA证书和私钥" class="headerlink" title="生成CA证书和私钥"></a>生成CA证书和私钥</h6></li>
+</ol>
+<pre class="line-numbers language-bash"><code class="language-bash">k8s-master4 certs<span class="token punctuation">]</span><span class="token comment" spellcheck="true"># cfssl gencert -initca ca-csr.json | cfssl-json -bare ca</span>
+k8s-master4 certs<span class="token punctuation">]</span><span class="token comment" spellcheck="true"># ll</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p><img src="https://aptxhb.oss-cn-shenzhen.aliyuncs.com/images/image-20211012114912559.png" alt="image-20211012114912559"></p>
+<h5 id="签发-etcd-证书"><a href="#签发-etcd-证书" class="headerlink" title="签发 etcd 证书"></a>签发 etcd 证书</h5><ol>
+<li><h6 id="创建基于根证书的配置文件"><a href="#创建基于根证书的配置文件" class="headerlink" title="创建基于根证书的配置文件"></a>创建基于根证书的配置文件</h6></li>
+</ol>
+<pre class="line-numbers language-json"><code class="language-json">k8s-master4 certs<span class="token punctuation">]</span># cat > ca-config.json &lt;&lt; EOF
+<span class="token punctuation">{</span>
+    <span class="token property">"signing"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+        <span class="token property">"default"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+            <span class="token property">"expiry"</span><span class="token operator">:</span> <span class="token string">"175200h"</span>
+        <span class="token punctuation">}</span><span class="token punctuation">,</span>
+        <span class="token property">"profiles"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+            <span class="token property">"server"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+                <span class="token property">"expiry"</span><span class="token operator">:</span> <span class="token string">"175200h"</span><span class="token punctuation">,</span>
+                <span class="token property">"usages"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+                    <span class="token string">"signing"</span><span class="token punctuation">,</span>
+                    <span class="token string">"key encipherment"</span><span class="token punctuation">,</span>
+                    <span class="token string">"server auth"</span>
+                <span class="token punctuation">]</span>
+            <span class="token punctuation">}</span><span class="token punctuation">,</span>
+            <span class="token property">"client"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+                <span class="token property">"expiry"</span><span class="token operator">:</span> <span class="token string">"175200h"</span><span class="token punctuation">,</span>
+                <span class="token property">"usages"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+                    <span class="token string">"signing"</span><span class="token punctuation">,</span>
+                    <span class="token string">"key encipherment"</span><span class="token punctuation">,</span>
+                    <span class="token string">"client auth"</span>
+                <span class="token punctuation">]</span>
+            <span class="token punctuation">}</span><span class="token punctuation">,</span>
+            <span class="token property">"peer"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+                <span class="token property">"expiry"</span><span class="token operator">:</span> <span class="token string">"175200h"</span><span class="token punctuation">,</span>
+                <span class="token property">"usages"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+                    <span class="token string">"signing"</span><span class="token punctuation">,</span>
+                    <span class="token string">"key encipherment"</span><span class="token punctuation">,</span>
+                    <span class="token string">"server auth"</span><span class="token punctuation">,</span>
+                    <span class="token string">"client auth"</span>
+                <span class="token punctuation">]</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+EOF
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<ul>
+<li>client certificate：客户端使用，用于服务端认证客户端，例如etcdctl、etcd proxy、fleetctl、docker客户端</li>
+<li>server certificate：服务器端使用，客户端已验证服务端身份，例如docker服务端、kube-apiserver</li>
+<li>peer certificate：双向证书，用于etcd集群成员间通信</li>
+</ul>
+<ol start="2">
+<li><h6 id="创建证书签名请求的配置文件"><a href="#创建证书签名请求的配置文件" class="headerlink" title="创建证书签名请求的配置文件"></a>创建证书签名请求的配置文件</h6></li>
+</ol>
+<pre class="line-numbers language-json"><code class="language-json">k8s-master4 certs<span class="token punctuation">]</span># cat > etcd-peer-csr.json &lt;&lt; EOF
+<span class="token punctuation">{</span>
+    <span class="token property">"CN"</span><span class="token operator">:</span> <span class="token string">"k8s-etcd"</span><span class="token punctuation">,</span>
+    <span class="token property">"hosts"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+        <span class="token string">"192.168.92.155"</span><span class="token punctuation">,</span>
+        <span class="token string">"192.168.92.156"</span><span class="token punctuation">,</span>
+        <span class="token string">"192.168.92.157"</span>
+    <span class="token punctuation">]</span><span class="token punctuation">,</span>
+    <span class="token property">"key"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+        <span class="token property">"algo"</span><span class="token operator">:</span> <span class="token string">"rsa"</span><span class="token punctuation">,</span>
+        <span class="token property">"size"</span><span class="token operator">:</span> <span class="token number">2048</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token property">"names"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+        <span class="token punctuation">{</span>
+            <span class="token property">"C"</span><span class="token operator">:</span> <span class="token string">"CN"</span><span class="token punctuation">,</span>
+            <span class="token property">"ST"</span><span class="token operator">:</span> <span class="token string">"shenzhen"</span><span class="token punctuation">,</span>
+            <span class="token property">"L"</span><span class="token operator">:</span> <span class="token string">"shenzhen"</span><span class="token punctuation">,</span>
+            <span class="token property">"O"</span><span class="token operator">:</span> <span class="token string">"IT"</span><span class="token punctuation">,</span>
+            <span class="token property">"OU"</span><span class="token operator">:</span> <span class="token string">"ops"</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">]</span>
+<span class="token punctuation">}</span>
+EOF
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p><code>hosts</code>：etcd 节点有多少就对应修改</p>
+<ol start="3">
+<li><h6 id="签发etcd证书和私钥"><a href="#签发etcd证书和私钥" class="headerlink" title="签发etcd证书和私钥"></a>签发etcd证书和私钥</h6></li>
+</ol>
+<pre class="line-numbers language-bash"><code class="language-bash">k8s-master4 certs<span class="token punctuation">]</span><span class="token comment" spellcheck="true"># cfssl gencert -ca=ca.pem -ca-key=ca-key.pem -config=ca-config.json -profile=peer etcd-peer-csr.json|cfssl-json -bare etcd-peer</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p><img src="https://aptxhb.oss-cn-shenzhen.aliyuncs.com/images/image-20211012120531731.png" alt="image-20211012120531731"></p>
+<h5 id="签发-client-证书"><a href="#签发-client-证书" class="headerlink" title="签发 client 证书"></a>签发 client 证书</h5><ol>
+<li><h6 id="创建证书签名请求的配置文件-1"><a href="#创建证书签名请求的配置文件-1" class="headerlink" title="创建证书签名请求的配置文件"></a>创建证书签名请求的配置文件</h6></li>
+</ol>
+<pre class="line-numbers language-bash"><code class="language-bash">k8s-master4 certs<span class="token punctuation">]</span><span class="token comment" spellcheck="true"># cat > client-csr.json &lt;&lt; EOF</span>
+<span class="token punctuation">{</span>
+    <span class="token string">"CN"</span><span class="token keyword">:</span> <span class="token string">"k8s-node"</span>,
+    <span class="token string">"hosts"</span><span class="token keyword">:</span> <span class="token punctuation">[</span>
+    <span class="token punctuation">]</span>,
+    <span class="token string">"key"</span><span class="token keyword">:</span> <span class="token punctuation">{</span>
+        <span class="token string">"algo"</span><span class="token keyword">:</span> <span class="token string">"rsa"</span>,
+        <span class="token string">"size"</span><span class="token keyword">:</span> 2048
+    <span class="token punctuation">}</span>,
+    <span class="token string">"names"</span><span class="token keyword">:</span> <span class="token punctuation">[</span>
+        <span class="token punctuation">{</span>
+            <span class="token string">"C"</span><span class="token keyword">:</span> <span class="token string">"CN"</span>,
+            <span class="token string">"ST"</span><span class="token keyword">:</span> <span class="token string">"shenzhen"</span>,
+            <span class="token string">"L"</span><span class="token keyword">:</span> <span class="token string">"shenzhen"</span>,
+            <span class="token string">"O"</span><span class="token keyword">:</span> <span class="token string">"IT"</span>,
+            <span class="token string">"OU"</span><span class="token keyword">:</span> <span class="token string">"ops"</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">]</span>
+<span class="token punctuation">}</span>
+EOF
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<ol start="2">
+<li><h6 id="签发client证书和私钥"><a href="#签发client证书和私钥" class="headerlink" title="签发client证书和私钥"></a>签发client证书和私钥</h6></li>
+</ol>
+<pre class="line-numbers language-bash"><code class="language-bash">k8s-master4 certs<span class="token punctuation">]</span><span class="token comment" spellcheck="true"># cfssl gencert -ca=ca.pem -ca-key=ca-key.pem -config=ca-config.json -profile=client client-csr.json |cfssl-json -bare client</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p><img src="https://aptxhb.oss-cn-shenzhen.aliyuncs.com/images/image-20211012122819509.png" alt="image-20211012122819509"></p>
+<h5 id="签发-kube-apiserver-证书"><a href="#签发-kube-apiserver-证书" class="headerlink" title="签发 kube-apiserver 证书"></a>签发 kube-apiserver 证书</h5><ol>
+<li><h6 id="创建证书请求配置文件"><a href="#创建证书请求配置文件" class="headerlink" title="创建证书请求配置文件"></a>创建证书请求配置文件</h6></li>
+</ol>
+<pre class="line-numbers language-json"><code class="language-json">k8s-master4 certs<span class="token punctuation">]</span># cat > apiserver-csr.json &lt;&lt; EOF
+<span class="token punctuation">{</span>
+    <span class="token property">"CN"</span><span class="token operator">:</span> <span class="token string">"k8s-apiserver"</span><span class="token punctuation">,</span>
+    <span class="token property">"hosts"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+        <span class="token string">"127.0.0.1"</span><span class="token punctuation">,</span>
+        <span class="token string">"10.96.0.1"</span><span class="token punctuation">,</span>
+        <span class="token string">"kubernetes.default"</span><span class="token punctuation">,</span>
+        <span class="token string">"kubernetes.default.svc"</span><span class="token punctuation">,</span>
+        <span class="token string">"kubernetes.default.svc.cluster"</span><span class="token punctuation">,</span>
+        <span class="token string">"kubernetes.default.svc.cluster.local"</span><span class="token punctuation">,</span>
+        <span class="token string">"192.168.92.154"</span><span class="token punctuation">,</span> // vip
+        <span class="token string">"192.168.92.155"</span><span class="token punctuation">,</span>
+        <span class="token string">"192.168.92.156"</span><span class="token punctuation">,</span>
+        <span class="token string">"192.168.92.157"</span>
+    <span class="token punctuation">]</span><span class="token punctuation">,</span>
+    <span class="token property">"key"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+        <span class="token property">"algo"</span><span class="token operator">:</span> <span class="token string">"rsa"</span><span class="token punctuation">,</span>
+        <span class="token property">"size"</span><span class="token operator">:</span> <span class="token number">2048</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token property">"names"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+        <span class="token punctuation">{</span>
+            <span class="token property">"C"</span><span class="token operator">:</span> <span class="token string">"CN"</span><span class="token punctuation">,</span>
+            <span class="token property">"ST"</span><span class="token operator">:</span> <span class="token string">"shenzhen"</span><span class="token punctuation">,</span>
+            <span class="token property">"L"</span><span class="token operator">:</span> <span class="token string">"shenzhen"</span><span class="token punctuation">,</span>
+            <span class="token property">"O"</span><span class="token operator">:</span> <span class="token string">"IT"</span><span class="token punctuation">,</span>
+            <span class="token property">"OU"</span><span class="token operator">:</span> <span class="token string">"ops"</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">]</span>
+<span class="token punctuation">}</span>
+EOF
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<ol start="2">
+<li><h6 id="签发apiserver证书和私钥"><a href="#签发apiserver证书和私钥" class="headerlink" title="签发apiserver证书和私钥"></a>签发apiserver证书和私钥</h6></li>
+</ol>
+<pre class="line-numbers language-bash"><code class="language-bash">k8s-master4 certs<span class="token punctuation">]</span><span class="token comment" spellcheck="true"># cfssl gencert -ca=ca.pem -ca-key=ca-key.pem -config=ca-config.json -profile=server apiserver-csr.json |cfssl-json -bare apiserver</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p><img src="https://aptxhb.oss-cn-shenzhen.aliyuncs.com/images/image-20211012151403019.png" alt="image-20211012151403019"></p>
+<h5 id="签发kubelet证书"><a href="#签发kubelet证书" class="headerlink" title="签发kubelet证书"></a>签发kubelet证书</h5><ol>
+<li><h6 id="创建证书请求配置文件-1"><a href="#创建证书请求配置文件-1" class="headerlink" title="创建证书请求配置文件"></a>创建证书请求配置文件</h6></li>
+</ol>
+<pre class="line-numbers language-json"><code class="language-json">k8s-master4 certs<span class="token punctuation">]</span># cat > kubelet-csr.json &lt;&lt; EOF
+<span class="token punctuation">{</span>
+    <span class="token property">"CN"</span><span class="token operator">:</span> <span class="token string">"k8s-kubelet"</span><span class="token punctuation">,</span>
+    <span class="token property">"hosts"</span><span class="token operator">:</span> <span class="token punctuation">[</span> 
+    <span class="token string">"127.0.0.1"</span><span class="token punctuation">,</span>
+    <span class="token string">"192.168.92.154"</span><span class="token punctuation">,</span> // vip
+    <span class="token string">"192.168.92.155"</span><span class="token punctuation">,</span>
+    <span class="token string">"192.168.92.156"</span><span class="token punctuation">,</span>
+    <span class="token string">"192.168.92.157"</span>
+    <span class="token punctuation">]</span><span class="token punctuation">,</span>
+    <span class="token property">"key"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+        <span class="token property">"algo"</span><span class="token operator">:</span> <span class="token string">"rsa"</span><span class="token punctuation">,</span>
+        <span class="token property">"size"</span><span class="token operator">:</span> <span class="token number">2048</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token property">"names"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+        <span class="token punctuation">{</span>
+            <span class="token property">"C"</span><span class="token operator">:</span> <span class="token string">"CN"</span><span class="token punctuation">,</span>
+            <span class="token property">"ST"</span><span class="token operator">:</span> <span class="token string">"shenzhen"</span><span class="token punctuation">,</span>
+            <span class="token property">"L"</span><span class="token operator">:</span> <span class="token string">"shenzhen"</span><span class="token punctuation">,</span>
+            <span class="token property">"O"</span><span class="token operator">:</span> <span class="token string">"IT"</span><span class="token punctuation">,</span>
+            <span class="token property">"OU"</span><span class="token operator">:</span> <span class="token string">"ops"</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">]</span>
+<span class="token punctuation">}</span>
+EOF
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<ol start="2">
+<li><h6 id="签发kubelet证书和私钥"><a href="#签发kubelet证书和私钥" class="headerlink" title="签发kubelet证书和私钥"></a>签发kubelet证书和私钥</h6></li>
+</ol>
+<pre class="line-numbers language-bash"><code class="language-bash">k8s-master4 certs<span class="token punctuation">]</span><span class="token comment" spellcheck="true"># cfssl gencert -ca=ca.pem -ca-key=ca-key.pem -config=ca-config.json -profile=server kubelet-csr.json | cfssl-json -bare kubelet</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p><img src="https://aptxhb.oss-cn-shenzhen.aliyuncs.com/images/image-20211012152028883.png" alt="image-20211012152028883"></p>
+<h5 id="签发kube-proxy证书"><a href="#签发kube-proxy证书" class="headerlink" title="签发kube-proxy证书"></a>签发kube-proxy证书</h5><ol>
+<li><h6 id="创建证书请求配置文件-2"><a href="#创建证书请求配置文件-2" class="headerlink" title="创建证书请求配置文件"></a>创建证书请求配置文件</h6></li>
+</ol>
+<pre class="line-numbers language-json"><code class="language-json">k8s-master4 certs<span class="token punctuation">]</span># cat > kube-proxy-csr.json &lt;&lt; EOF
+<span class="token punctuation">{</span>
+    <span class="token property">"CN"</span><span class="token operator">:</span> <span class="token string">"system:kube-proxy"</span><span class="token punctuation">,</span>
+    <span class="token property">"key"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+        <span class="token property">"algo"</span><span class="token operator">:</span> <span class="token string">"rsa"</span><span class="token punctuation">,</span>
+        <span class="token property">"size"</span><span class="token operator">:</span> <span class="token number">2048</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token property">"names"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+        <span class="token punctuation">{</span>
+            <span class="token property">"C"</span><span class="token operator">:</span> <span class="token string">"CN"</span><span class="token punctuation">,</span>
+            <span class="token property">"ST"</span><span class="token operator">:</span> <span class="token string">"shenzhen"</span><span class="token punctuation">,</span>
+            <span class="token property">"L"</span><span class="token operator">:</span> <span class="token string">"shenzhen"</span><span class="token punctuation">,</span>
+            <span class="token property">"O"</span><span class="token operator">:</span> <span class="token string">"IT"</span><span class="token punctuation">,</span>
+            <span class="token property">"OU"</span><span class="token operator">:</span> <span class="token string">"ops"</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">]</span>
+<span class="token punctuation">}</span>
+EOF
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<ol start="2">
+<li><h6 id="签发kube-proxy证书和私钥"><a href="#签发kube-proxy证书和私钥" class="headerlink" title="签发kube-proxy证书和私钥"></a>签发kube-proxy证书和私钥</h6></li>
+</ol>
+<pre class="line-numbers language-bash"><code class="language-bash">k8s-master4 certs<span class="token punctuation">]</span><span class="token comment" spellcheck="true"># cfssl gencert -ca=ca.pem -ca-key=ca-key.pem -config=ca-config.json -profile=client kube-proxy-csr.json |cfssl-json -bare kube-proxy-client</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p><img src="https://aptxhb.oss-cn-shenzhen.aliyuncs.com/images/image-20211012152450818.png" alt="image-20211012152450818"></p>
+<p>注意：这里的clent不能与其他的通用，上面CN变了，<code>"CN": "system:kube-proxy"</code></p>
+<h5 id="签发metrics-server证书"><a href="#签发metrics-server证书" class="headerlink" title="签发metrics server证书"></a>签发metrics server证书</h5><ol>
+<li><h6 id="创建metrics-server证书请求配置文件"><a href="#创建metrics-server证书请求配置文件" class="headerlink" title="创建metrics server证书请求配置文件"></a>创建metrics server证书请求配置文件</h6></li>
+</ol>
+<pre class="line-numbers language-json"><code class="language-json">k8s-master4 certs<span class="token punctuation">]</span># cat > metrics-server-csr.json &lt;&lt; EOF
+<span class="token punctuation">{</span>
+  <span class="token property">"CN"</span><span class="token operator">:</span> <span class="token string">"system:kube-proxy"</span><span class="token punctuation">,</span>
+  <span class="token property">"hosts"</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+  <span class="token property">"key"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token property">"algo"</span><span class="token operator">:</span> <span class="token string">"rsa"</span><span class="token punctuation">,</span>
+    <span class="token property">"size"</span><span class="token operator">:</span> <span class="token number">2048</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token property">"names"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+    <span class="token punctuation">{</span>
+      <span class="token property">"C"</span><span class="token operator">:</span> <span class="token string">"CN"</span><span class="token punctuation">,</span>
+      <span class="token property">"ST"</span><span class="token operator">:</span> <span class="token string">"shenzhen"</span><span class="token punctuation">,</span>
+      <span class="token property">"L"</span><span class="token operator">:</span> <span class="token string">"shenzhen"</span><span class="token punctuation">,</span>
+      <span class="token property">"O"</span><span class="token operator">:</span> <span class="token string">"metrics-proxy"</span><span class="token punctuation">,</span>
+      <span class="token property">"OU"</span><span class="token operator">:</span> <span class="token string">"IT"</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">]</span>
+<span class="token punctuation">}</span>
+EOF
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<ol start="2">
+<li><h6 id="签发metrics-server证书和私钥"><a href="#签发metrics-server证书和私钥" class="headerlink" title="签发metrics server证书和私钥"></a>签发metrics server证书和私钥</h6></li>
+</ol>
+<pre class="line-numbers language-bash"><code class="language-bash">k8s-master4 certs<span class="token punctuation">]</span><span class="token comment" spellcheck="true"># cfssl gencert -ca=ca.pem -ca-key=ca-key.pem -config=ca-config.json -profile=client metrics-server-csr.json  | cfssl-json -bare metrics-proxy</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p><img src="https://aptxhb.oss-cn-shenzhen.aliyuncs.com/images/image-20211012153211111.png" alt="image-20211012153211111"></p>
+<h4 id="二、部署Contianerd"><a href="#二、部署Contianerd" class="headerlink" title="二、部署Contianerd"></a>二、部署Contianerd</h4><h5 id="1-部署containerd"><a href="#1-部署containerd" class="headerlink" title="1. 部署containerd"></a>1. 部署containerd</h5><h6 id="集群规划："><a href="#集群规划：" class="headerlink" title="集群规划："></a>集群规划：</h6><table>
+<thead>
+<tr>
+<th>主机名</th>
+<th>IP</th>
+<th>版本</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>k8s-master4</td>
+<td>192.168.92.155</td>
+<td>containerd://1.5.5</td>
+</tr>
+<tr>
+<td>k8s-node4-1</td>
+<td>192.168.92.156</td>
+<td>containerd://1.5.5</td>
+</tr>
+<tr>
+<td>k8s-node4-2</td>
+<td>192.168.92.157</td>
+<td>containerd://1.5.5</td>
+</tr>
+</tbody></table>
+<h6 id="下载软件包"><a href="#下载软件包" class="headerlink" title="下载软件包"></a>下载软件包</h6><p><a target="_blank" rel="noopener" href="https://github.com/containerd/containerd/releases/download/v1.5.5/cri-containerd-cni-1.5.5-linux-amd64.tar.gz">containerd 下载链接</a></p>
+<pre class="line-numbers language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># mkdir /opt/src &amp;&amp; cd /opt/src</span>
+<span class="token comment" spellcheck="true"># wget https://github.com/containerd/containerd/releases/download/v1.5.5/cri-containerd-cni-1.5.5-linux-amd64.tar.gz</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<h6 id="解压containerd软件包"><a href="#解压containerd软件包" class="headerlink" title="解压containerd软件包"></a>解压containerd软件包</h6><pre class="line-numbers language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># tar -xf cri-containerd-cni-1.5.5-linux-amd64.tar.gz -C /</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h6 id="生成配置文件"><a href="#生成配置文件" class="headerlink" title="生成配置文件"></a>生成配置文件</h6><pre class="line-numbers language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># mkdir /etc/containerd</span>
+<span class="token comment" spellcheck="true"># containerd config default > /etc/containerd/config.toml</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<h6 id="修改配置config-toml"><a href="#修改配置config-toml" class="headerlink" title="修改配置config.toml"></a>修改配置config.toml</h6><pre><code>...
+sandbox_image = "docker.io/kubernetes/pause:latest"
+...
+# conf_dir = "/etc/cni/net.d"
+...
+SystemdCgroup = true
+...
+      [plugins."io.containerd.grpc.v1.cri".registry.mirrors]
+         [plugins."io.containerd.grpc.v1.cri".registry.mirrors."docker.io"]
+            endpoint = ["https://uwa9by0v.mirror.aliyuncs.com"]
+         [plugins."io.containerd.grpc.v1.cri".registry.mirrors."k8s.gcr.io"]
+            endpoint = ["http://registry.aliyuncs.com/k8sxio"]
+...
+</code></pre>
+<p>以上是需要修改的内容</p>
+<h6 id="启动并设置开机自启"><a href="#启动并设置开机自启" class="headerlink" title="启动并设置开机自启"></a>启动并设置开机自启</h6><pre class="line-numbers language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># systemctl enable containerd --now</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h4 id="三、部署主控节点组件"><a href="#三、部署主控节点组件" class="headerlink" title="三、部署主控节点组件"></a>三、部署主控节点组件</h4><h5 id="1-安装etcd集群"><a href="#1-安装etcd集群" class="headerlink" title="1. 安装etcd集群"></a>1. 安装etcd集群</h5><h6 id="集群规划：-1"><a href="#集群规划：-1" class="headerlink" title="集群规划："></a>集群规划：</h6><table>
+<thead>
+<tr>
+<th>主机名</th>
+<th>角色</th>
+<th>IP</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>k8s-master4</td>
+<td>etcd leader</td>
+<td>192.168.92.155</td>
+</tr>
+<tr>
+<td>k8s-node4-1</td>
+<td>etcd foolow</td>
+<td>192.168.92.156</td>
+</tr>
+<tr>
+<td>k8s-node4-2</td>
+<td>etcd foolow</td>
+<td>192.168.92.157</td>
+</tr>
+</tbody></table>
+<h6 id="下载软件、解压、做软连接："><a href="#下载软件、解压、做软连接：" class="headerlink" title="下载软件、解压、做软连接："></a>下载软件、解压、做软连接：</h6><pre class="line-numbers language-bash"><code class="language-bash">~<span class="token punctuation">]</span><span class="token comment" spellcheck="true"># mkdir /opt/src &amp;&amp; cd /opt/src</span>
+src<span class="token punctuation">]</span><span class="token comment" spellcheck="true"># wget https://github.com/etcd-io/etcd/releases/download/v3.1.20/etcd-v3.1.20-linux-amd64.tar.gz</span>
+src<span class="token punctuation">]</span><span class="token comment" spellcheck="true"># tar -xf etcd-v3.1.20-linux-amd64.tar.gz -C /opt/</span>
+src<span class="token punctuation">]</span><span class="token comment" spellcheck="true"># cd /opt/</span>
+opt<span class="token punctuation">]</span><span class="token comment" spellcheck="true"># mv etcd-v3.1.20-linux-amd64/ etcd-v3.1.20</span>
+opt<span class="token punctuation">]</span><span class="token comment" spellcheck="true"># ln -s /opt/etcd-v3.1.20/ /opt/etcd</span>
+opt<span class="token punctuation">]</span><span class="token comment" spellcheck="true"># ll</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p><img src="https://aptxhb.oss-cn-shenzhen.aliyuncs.com/images/image-20211013135838293.png" alt="image-20211013135838293"></p>
+<h6 id="创建目录，拷贝证书、私钥："><a href="#创建目录，拷贝证书、私钥：" class="headerlink" title="创建目录，拷贝证书、私钥："></a>创建目录，拷贝证书、私钥：</h6><pre class="line-numbers language-bash"><code class="language-bash">~<span class="token punctuation">]</span><span class="token comment" spellcheck="true"># useradd -s /sbin/nologin  -M etcd</span>
+~<span class="token punctuation">]</span><span class="token comment" spellcheck="true"># mkdir -p /opt/etcd/certs /data/etcd /data/logs/etcd-server</span>
+~<span class="token punctuation">]</span><span class="token comment" spellcheck="true"># scp -p /opt/certs/etcd-peer-key.pem 192.168.92.155:/opt/etcd/certs/</span>
+~<span class="token punctuation">]</span><span class="token comment" spellcheck="true"># scp -p /opt/certs/etcd-peer.pem  192.168.92.155:/opt/etcd/certs/</span>
+~<span class="token punctuation">]</span><span class="token comment" spellcheck="true"># scp -p /opt/certs/ca.pem 192.168.92.155:/opt/etcd/certs/</span>
+~<span class="token punctuation">]</span><span class="token comment" spellcheck="true"># chown -R etcd.etcd /opt/etcd/certs /data/etcd /data/logs/etcd-server</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h6 id="创建启动脚本："><a href="#创建启动脚本：" class="headerlink" title="创建启动脚本："></a>创建启动脚本：</h6><pre class="line-numbers language-bash"><code class="language-bash">~<span class="token punctuation">]</span><span class="token comment" spellcheck="true"># cd /opt/etcd/</span>
+etcd<span class="token punctuation">]</span><span class="token comment" spellcheck="true"># cat > etcd-server-startup.sh &lt;&lt; EOF</span>
+<span class="token comment" spellcheck="true">#!/bin/sh</span>
+./etcd --name etcd-server-155 \
+       --data-dir /data/etcd/etcd-server \
+       --listen-peer-urls https://192.168.92.155:2380 \
+       --listen-client-urls https://192.168.92.155:2379,http://127.0.0.1:2379 \
+       --quota-backend-bytes 8000000000 \
+       --initial-advertise-peer-urls https://192.168.92.155:2380 \
+       --advertise-client-urls https://192.168.92.155:2379,http://127.0.0.1:2379 \
+       --initial-cluster  etcd-server-155<span class="token operator">=</span>https://192.168.92.155:2380,etcd-server-156<span class="token operator">=</span>https://192.168.92.156:2380,etcd-server-157<span class="token operator">=</span>https://192.168.92.157:2380 \
+       --ca-file ./certs/ca.pem \
+       --cert-file ./certs/etcd-peer.pem \
+       --key-file ./certs/etcd-peer-key.pem \
+       --client-cert-auth  \
+       --trusted-ca-file ./certs/ca.pem \
+       --peer-ca-file ./certs/ca.pem \
+       --peer-cert-file ./certs/etcd-peer.pem \
+       --peer-key-file ./certs/etcd-peer-key.pem \
+       --peer-client-cert-auth \
+       --peer-trusted-ca-file ./certs/ca.pem \
+       --log-output stdout
+EOF
+etcd<span class="token punctuation">]</span><span class="token comment" spellcheck="true"># chmod +x etcd-server-startup.sh</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p><strong>注意：</strong>修改对应参数，证书秘钥记得拷贝</p>
+<h6 id="安装supervisor进程守护服务："><a href="#安装supervisor进程守护服务：" class="headerlink" title="安装supervisor进程守护服务："></a>安装supervisor进程守护服务：</h6><pre class="line-numbers language-bash"><code class="language-bash">etcd<span class="token punctuation">]</span><span class="token comment" spellcheck="true"># yum -y install supervisor</span>
+etcd<span class="token punctuation">]</span><span class="token comment" spellcheck="true"># systemctl enable supervisord --now</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<h6 id="编辑etcd-server启动配置："><a href="#编辑etcd-server启动配置：" class="headerlink" title="编辑etcd-server启动配置："></a>编辑etcd-server启动配置：</h6><pre><code>etcd]# cat &gt; /etc/supervisord.d/etcd-server.ini &lt;&lt; EOF
+[program:etcd-server]
+command=/opt/etcd/etcd-server-startup.sh                        ; the program (relative uses PATH, can take args)
+numprocs=1                                                      ; number of processes copies to start (def 1)
+directory=/opt/etcd                                             ; directory to cwd to before exec (def no cwd)
+autostart=true                                                  ; start at supervisord start (default: true)
+autorestart=true                                                ; retstart at unexpected quit (default: true)
+startsecs=30                                                    ; number of secs prog must stay running (def. 1)
+startretries=3                                                  ; max # of serial start failures (default 3)
+exitcodes=0,2                                                   ; 'expected' exit codes for process (default 0,2)
+stopsignal=QUIT                                                 ; signal used to kill process (default TERM)
+stopwaitsecs=10                                                 ; max num secs to wait b4 SIGKILL (default 10)
+user=etcd                                                       ; setuid to this UNIX account to run the program
+redirect_stderr=true                                            ; redirect proc stderr to stdout (default false)
+killasgroup=true                                                ; kill all process in a group
+stopasgroup=true                                                ; stop all process in a group
+stdout_logfile=/data/logs/etcd-server/etcd.stdout.log           ; stdout log path, NONE for none; default AUTO
+stdout_logfile_maxbytes=64MB                                    ; max # logfile bytes b4 rotation (default 50MB)
+stdout_logfile_backups=4                                        ; # of stdout logfile backups (default 10)
+stdout_capture_maxbytes=1MB                                     ; number of bytes in 'capturemode' (default 0)
+stdout_events_enabled=false                                     ; emit events on stdout writes (default false)
+EOF
+</code></pre>
+<h6 id="启动etcd-server服务："><a href="#启动etcd-server服务：" class="headerlink" title="启动etcd-server服务："></a>启动etcd-server服务：</h6><pre class="line-numbers language-bash"><code class="language-bash">etcd<span class="token punctuation">]</span><span class="token comment" spellcheck="true"># supervisorctl update</span>
+<span class="token comment" spellcheck="true"># 检查服务状态</span>
+etcd<span class="token punctuation">]</span><span class="token comment" spellcheck="true"># supervisorctl status</span>
+etcd-server                      RUNNING   pid 9587, <span class="token function">uptime</span> 0:01:03
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p><img src="https://aptxhb.oss-cn-shenzhen.aliyuncs.com/images/image-20211013144415527.png" alt="image-20211013144415527"></p>
+<h6 id="检查etcd集群状态："><a href="#检查etcd集群状态：" class="headerlink" title="检查etcd集群状态："></a>检查etcd集群状态：</h6><pre class="line-numbers language-bash"><code class="language-bash">etcd<span class="token punctuation">]</span><span class="token comment" spellcheck="true"># ./etcdctl member list</span>
+etcd<span class="token punctuation">]</span><span class="token comment" spellcheck="true"># ./etcdctl cluster-health</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p><img src="https://aptxhb.oss-cn-shenzhen.aliyuncs.com/images/image-20211013150240168.png" alt="image-20211013150240168"></p>
+<h5 id="2-安装apiserver组件"><a href="#2-安装apiserver组件" class="headerlink" title="2. 安装apiserver组件"></a>2. 安装apiserver组件</h5><h6 id="集群规划：-2"><a href="#集群规划：-2" class="headerlink" title="集群规划："></a>集群规划：</h6><table>
+<thead>
+<tr>
+<th>主机</th>
+<th>IP</th>
+<th>角色</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>k8s-master4</td>
+<td>192.168.92.155</td>
+<td>kube-apiserver</td>
+</tr>
+<tr>
+<td>k8s-node4-1</td>
+<td>192.168.92.156</td>
+<td>kube-apiserver</td>
+</tr>
+<tr>
+<td>k8s-node4-2</td>
+<td>192.168.92.157</td>
+<td>kube-apiserver</td>
+</tr>
+</tbody></table>
+<h6 id="下载软件，解压，做软链："><a href="#下载软件，解压，做软链：" class="headerlink" title="下载软件，解压，做软链："></a>下载软件，解压，做软链：</h6><p><a target="_blank" rel="noopener" href="https://github.com/kubernetes/kubernetes">kubernetes 下载链接</a></p>
+<pre class="line-numbers language-bash"><code class="language-bash">~<span class="token punctuation">]</span><span class="token comment" spellcheck="true"># cd /opt/src</span>
+src<span class="token punctuation">]</span><span class="token comment" spellcheck="true"># wget https://dl.k8s.io/v1.17.16/kubernetes-server-linux-amd64.tar.gz</span>
+src<span class="token punctuation">]</span><span class="token comment" spellcheck="true"># tar -xf kubernetes-server-linux-amd64-v1.17.16.tar.gz -C /opt/</span>
+
+src<span class="token punctuation">]</span><span class="token comment" spellcheck="true"># cd /opt/</span>
+opt<span class="token punctuation">]</span><span class="token comment" spellcheck="true"># mv kubernetes kubernetes-v1.17.16</span>
+opt<span class="token punctuation">]</span><span class="token comment" spellcheck="true"># ln -s /opt/kubernetes-v1.17.16 /opt/kubernetes</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p><img src="https://aptxhb.oss-cn-shenzhen.aliyuncs.com/images/image-20211013155027768.png" alt="image-20211013155027768"></p>
+<h6 id="整理kubernetes软件包："><a href="#整理kubernetes软件包：" class="headerlink" title="整理kubernetes软件包："></a>整理kubernetes软件包：</h6><pre class="line-numbers language-bash"><code class="language-bash">opt<span class="token punctuation">]</span><span class="token comment" spellcheck="true"># cd kubernetes</span>
+kubernetes<span class="token punctuation">]</span><span class="token comment" spellcheck="true"># rm -f kubernetes-src.tar.gz</span>
+
+kubernetes<span class="token punctuation">]</span><span class="token comment" spellcheck="true"># cd server/bin/</span>
+bin<span class="token punctuation">]</span><span class="token comment" spellcheck="true"># rm -f *_tag</span>
+bin<span class="token punctuation">]</span><span class="token comment" spellcheck="true"># rm -f *.tar</span>
+bin<span class="token punctuation">]</span><span class="token comment" spellcheck="true"># ll</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p><img src="https://aptxhb.oss-cn-shenzhen.aliyuncs.com/images/image-20211013160222000.png" alt="image-20211013160222000"></p>
+<h6 id="创建目录，拷贝证书、私钥：-1"><a href="#创建目录，拷贝证书、私钥：-1" class="headerlink" title="创建目录，拷贝证书、私钥："></a>创建目录，拷贝证书、私钥：</h6><pre class="line-numbers language-bash"><code class="language-bash">bin<span class="token punctuation">]</span><span class="token comment" spellcheck="true"># mkdir -p /data/logs/kubernetes/kube-apiserver ./certs ./conf</span>
+bin<span class="token punctuation">]</span><span class="token comment" spellcheck="true"># scp -p /opt/certs/apiserver-key.pem /opt/certs/apiserver.pem /opt/certs/ca.pem /opt/certs/ca-key.pem  /opt/certs/client-key.pem  /opt/certs/client.pem /opt/certs/metrics-proxy-key.pem /opt/certs/metrics-proxy.pem 192.168.92.155:/opt/kubernetes/server/bin/certs/</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p><img src="https://aptxhb.oss-cn-shenzhen.aliyuncs.com/images/image-20211013162023543.png" alt="image-20211013162023543"></p>
+<h6 id="编辑配置文件："><a href="#编辑配置文件：" class="headerlink" title="编辑配置文件："></a>编辑配置文件：</h6><pre class="line-numbers language-yaml"><code class="language-yaml">bin<span class="token punctuation">]</span><span class="token comment" spellcheck="true"># cat > conf/audit.yaml &lt;&lt; EOF</span>
+<span class="token key atrule">apiVersion</span><span class="token punctuation">:</span> audit.k8s.io/v1beta1 <span class="token comment" spellcheck="true"># This is required.</span>
+<span class="token key atrule">kind</span><span class="token punctuation">:</span> Policy
+<span class="token comment" spellcheck="true"># Don't generate audit events for all requests in RequestReceived stage.</span>
+<span class="token key atrule">omitStages</span><span class="token punctuation">:</span>
+  <span class="token punctuation">-</span> <span class="token string">"RequestReceived"</span>
+<span class="token key atrule">rules</span><span class="token punctuation">:</span>
+  <span class="token comment" spellcheck="true"># Log pod changes at RequestResponse level</span>
+  <span class="token punctuation">-</span> <span class="token key atrule">level</span><span class="token punctuation">:</span> RequestResponse
+    <span class="token key atrule">resources</span><span class="token punctuation">:</span>
+    <span class="token punctuation">-</span> <span class="token key atrule">group</span><span class="token punctuation">:</span> <span class="token string">""</span>
+      <span class="token comment" spellcheck="true"># Resource "pods" doesn't match requests to any subresource of pods,</span>
+      <span class="token comment" spellcheck="true"># which is consistent with the RBAC policy.</span>
+      <span class="token key atrule">resources</span><span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token string">"pods"</span><span class="token punctuation">]</span>
+  <span class="token comment" spellcheck="true"># Log "pods/log", "pods/status" at Metadata level</span>
+  <span class="token punctuation">-</span> <span class="token key atrule">level</span><span class="token punctuation">:</span> Metadata
+    <span class="token key atrule">resources</span><span class="token punctuation">:</span>
+    <span class="token punctuation">-</span> <span class="token key atrule">group</span><span class="token punctuation">:</span> <span class="token string">""</span>
+      <span class="token key atrule">resources</span><span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token string">"pods/log"</span><span class="token punctuation">,</span> <span class="token string">"pods/status"</span><span class="token punctuation">]</span>
+
+  <span class="token comment" spellcheck="true"># Don't log requests to a configmap called "controller-leader"</span>
+  <span class="token punctuation">-</span> <span class="token key atrule">level</span><span class="token punctuation">:</span> None
+    <span class="token key atrule">resources</span><span class="token punctuation">:</span>
+    <span class="token punctuation">-</span> <span class="token key atrule">group</span><span class="token punctuation">:</span> <span class="token string">""</span>
+      <span class="token key atrule">resources</span><span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token string">"configmaps"</span><span class="token punctuation">]</span>
+      <span class="token key atrule">resourceNames</span><span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token string">"controller-leader"</span><span class="token punctuation">]</span>
+
+  <span class="token comment" spellcheck="true"># Don't log watch requests by the "system:kube-proxy" on endpoints or services</span>
+  <span class="token punctuation">-</span> <span class="token key atrule">level</span><span class="token punctuation">:</span> None
+    <span class="token key atrule">users</span><span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token string">"system:kube-proxy"</span><span class="token punctuation">]</span>
+    <span class="token key atrule">verbs</span><span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token string">"watch"</span><span class="token punctuation">]</span>
+    <span class="token key atrule">resources</span><span class="token punctuation">:</span>
+    <span class="token punctuation">-</span> <span class="token key atrule">group</span><span class="token punctuation">:</span> <span class="token string">""</span> <span class="token comment" spellcheck="true"># core API group</span>
+      <span class="token key atrule">resources</span><span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token string">"endpoints"</span><span class="token punctuation">,</span> <span class="token string">"services"</span><span class="token punctuation">]</span>
+
+  <span class="token comment" spellcheck="true"># Don't log authenticated requests to certain non-resource URL paths.</span>
+  <span class="token punctuation">-</span> <span class="token key atrule">level</span><span class="token punctuation">:</span> None
+    <span class="token key atrule">userGroups</span><span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token string">"system:authenticated"</span><span class="token punctuation">]</span>
+    <span class="token key atrule">nonResourceURLs</span><span class="token punctuation">:</span>
+    <span class="token punctuation">-</span> <span class="token string">"/api*"</span> <span class="token comment" spellcheck="true"># Wildcard matching.</span>
+    <span class="token punctuation">-</span> <span class="token string">"/version"</span>
+
+  <span class="token comment" spellcheck="true"># Log the request body of configmap changes in kube-system.</span>
+  <span class="token punctuation">-</span> <span class="token key atrule">level</span><span class="token punctuation">:</span> Request
+    <span class="token key atrule">resources</span><span class="token punctuation">:</span>
+    <span class="token punctuation">-</span> <span class="token key atrule">group</span><span class="token punctuation">:</span> <span class="token string">""</span> <span class="token comment" spellcheck="true"># core API group</span>
+      <span class="token key atrule">resources</span><span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token string">"configmaps"</span><span class="token punctuation">]</span>
+    <span class="token comment" spellcheck="true"># This rule only applies to resources in the "kube-system" namespace.</span>
+    <span class="token comment" spellcheck="true"># The empty string "" can be used to select non-namespaced resources.</span>
+    <span class="token key atrule">namespaces</span><span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token string">"kube-system"</span><span class="token punctuation">]</span>
+
+  <span class="token comment" spellcheck="true"># Log configmap and secret changes in all other namespaces at the Metadata level.</span>
+  <span class="token punctuation">-</span> <span class="token key atrule">level</span><span class="token punctuation">:</span> Metadata
+    <span class="token key atrule">resources</span><span class="token punctuation">:</span>
+    <span class="token punctuation">-</span> <span class="token key atrule">group</span><span class="token punctuation">:</span> <span class="token string">""</span> <span class="token comment" spellcheck="true"># core API group</span>
+      <span class="token key atrule">resources</span><span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token string">"secrets"</span><span class="token punctuation">,</span> <span class="token string">"configmaps"</span><span class="token punctuation">]</span>
+
+  <span class="token comment" spellcheck="true"># Log all other resources in core and extensions at the Request level.</span>
+  <span class="token punctuation">-</span> <span class="token key atrule">level</span><span class="token punctuation">:</span> Request
+    <span class="token key atrule">resources</span><span class="token punctuation">:</span>
+    <span class="token punctuation">-</span> <span class="token key atrule">group</span><span class="token punctuation">:</span> <span class="token string">""</span> <span class="token comment" spellcheck="true"># core API group</span>
+    <span class="token punctuation">-</span> <span class="token key atrule">group</span><span class="token punctuation">:</span> <span class="token string">"extensions"</span> <span class="token comment" spellcheck="true"># Version of group should NOT be included.</span>
+
+  <span class="token comment" spellcheck="true"># A catch-all rule to log all other requests at the Metadata level.</span>
+  <span class="token punctuation">-</span> <span class="token key atrule">level</span><span class="token punctuation">:</span> Metadata
+    <span class="token comment" spellcheck="true"># Long-running requests like watches that fall under this rule will not</span>
+    <span class="token comment" spellcheck="true"># generate an audit event in RequestReceived.</span>
+    <span class="token key atrule">omitStages</span><span class="token punctuation">:</span>
+      <span class="token punctuation">-</span> <span class="token string">"RequestReceived"</span>
+EOF
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h6 id="编辑启动脚本："><a href="#编辑启动脚本：" class="headerlink" title="编辑启动脚本："></a>编辑启动脚本：</h6><pre class="line-numbers language-shell"><code class="language-shell">bin]# cat > kube-apiserver.sh << EOF
+#!/bin/bash
+./kube-apiserver \
+  --apiserver-count 2 \
+  --audit-log-path /data/logs/kubernetes/kube-apiserver/audit-log \
+  --audit-policy-file ./conf/audit.yaml \
+  --authorization-mode RBAC \
+  --client-ca-file ./certs/ca.pem \
+  --requestheader-client-ca-file ./certs/ca.pem \
+  --enable-admission-plugins NamespaceLifecycle,LimitRanger,ServiceAccount,DefaultStorageClass,DefaultTolerationSeconds,MutatingAdmissionWebhook,ValidatingAdmissionWebhook,ResourceQuota \
+  --etcd-cafile ./certs/ca.pem \
+  --etcd-certfile ./certs/client.pem \
+  --etcd-keyfile ./certs/client-key.pem \
+  --etcd-servers https://192.168.92.155:2379,https://192.168.92.156:2379,https://192.168.92.157:2379 \
+  --service-account-key-file ./certs/ca-key.pem \
+  --service-cluster-ip-range 10.96.0.0/22 \
+  --service-node-port-range 3000-29999 \
+  --target-ram-mb=1024 \
+  --kubelet-client-certificate ./certs/client.pem \
+  --kubelet-client-key ./certs/client-key.pem \
+  --log-dir  /data/logs/kubernetes/kube-apiserver \
+  --tls-cert-file ./certs/apiserver.pem \
+  --tls-private-key-file ./certs/apiserver-key.pem \
+  --proxy-client-cert-file ./certs/metrics-proxy.pem \
+  --proxy-client-key-file ./certs/metrics-proxy-key.pem \
+  --requestheader-client-ca-file ./certs/ca.pem \
+  --requestheader-allowed-names= \
+  --requestheader-extra-headers-prefix=X-Remote-Extra- \
+  --requestheader-group-headers=X-Remote-Group \
+  --requestheader-username-headers=X-Remote-User \
+  --v 2
+EOF
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h6 id="编辑kube-apiserver启动配置："><a href="#编辑kube-apiserver启动配置：" class="headerlink" title="编辑kube-apiserver启动配置："></a>编辑kube-apiserver启动配置：</h6><pre><code>bin]# cat &gt; /etc/supervisord.d/kube-apiserver.ini &lt;&lt; EOF
+[program:kube-apiserver]
+command=/opt/kubernetes/server/bin/kube-apiserver.sh
+numprocs=1
+directory=/opt/kubernetes/server/bin
+autostart=true
+autorestart=true
+startsecs=30
+startretries=3
+exitcodes=0,2
+stopsignal=QUIT
+stopwaitsecs=10
+user=root
+redirect_stderr=true
+killasgroup=true
+stopasgroup=true
+stdout_logfile=/data/logs/kubernetes/kube-apiserver/apiserver.stdout.log
+stdout_logfile_maxbytes=64MB
+stdout_logfile_backups=4
+stdout_capture_maxbytes=1MB
+stdout_events_enabled=false
+EOF
+</code></pre>
+<h6 id="启动kube-apiserver并检查："><a href="#启动kube-apiserver并检查：" class="headerlink" title="启动kube-apiserver并检查："></a>启动kube-apiserver并检查：</h6><pre class="line-numbers language-bash"><code class="language-bash">bin<span class="token punctuation">]</span><span class="token comment" spellcheck="true"># supervisorctl update</span>
+bin<span class="token punctuation">]</span><span class="token comment" spellcheck="true"># supervisorctl status</span>
+bin<span class="token punctuation">]</span><span class="token comment" spellcheck="true"># ss -nutlp | egrep "8080|6443"</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<p><img src="https://aptxhb.oss-cn-shenzhen.aliyuncs.com/images/image-20211013163102110.png" alt="image-20211013163102110"></p>
+<p><strong>注意：</strong>其他节点修改对应参数并启动</p>
+<h5 id="3-配置nginx四层反向代理"><a href="#3-配置nginx四层反向代理" class="headerlink" title="3. 配置nginx四层反向代理"></a>3. 配置nginx四层反向代理</h5><h6 id="集群规划：-3"><a href="#集群规划：-3" class="headerlink" title="集群规划："></a>集群规划：</h6><table>
+<thead>
+<tr>
+<th>主机</th>
+<th>IP</th>
+<th>版本</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>k8s-master4</td>
+<td>192.168.92.155</td>
+<td>1.20.1</td>
+</tr>
+<tr>
+<td>k8s-node4-1</td>
+<td>192.168.92.156</td>
+<td>1.20.1</td>
+</tr>
+</tbody></table>
+<h6 id="软件安装："><a href="#软件安装：" class="headerlink" title="软件安装："></a>软件安装：</h6><pre class="line-numbers language-bash"><code class="language-bash">k8s-master4 ~<span class="token punctuation">]</span><span class="token comment" spellcheck="true"># yum -y install nginx nginx-mod-stream</span>
+k8s-master4 ~<span class="token punctuation">]</span><span class="token comment" spellcheck="true"># systemctl enable nginx --now</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<h6 id="编辑配置文件-x2F-etc-x2F-nginx-x2F-nginx-conf："><a href="#编辑配置文件-x2F-etc-x2F-nginx-x2F-nginx-conf：" class="headerlink" title="编辑配置文件/etc/nginx/nginx.conf："></a>编辑配置文件/etc/nginx/nginx.conf：</h6><p>新增以下配置</p>
+<pre><code>stream {
+    upstream kube-apiserver {
+        server 192.168.92.155:6443     max_fails=3 fail_timeout=30s;
+        server 192.168.92.156:6443     max_fails=3 fail_timeout=30s;
+        server 192.168.92.157:6443     max_fails=3 fail_timeout=30s;
+    }
+    server {
+        listen 7443;
+        proxy_connect_timeout 2s;
+        proxy_timeout 900s;
+        proxy_pass kube-apiserver;
+    }
+}
+</code></pre>
+<p><strong>注意：</strong><code>stream</code>模块与<code>http</code>模块同级，所以<code>stream</code>模块配置不能编写入<code>http</code>模块中。</p>
+<h6 id="启动并设置开机自启-1"><a href="#启动并设置开机自启-1" class="headerlink" title="启动并设置开机自启"></a>启动并设置开机自启</h6><pre class="line-numbers language-bash"><code class="language-bash">k8s-master4 ~<span class="token punctuation">]</span><span class="token comment" spellcheck="true"># systemctl enable nginx --now</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p><strong>注意：</strong>这里以k8s-master4主机为例，另一台k8s-node4-1需要相同操作</p>
+<h5 id="4-安装keepalived负载均衡"><a href="#4-安装keepalived负载均衡" class="headerlink" title="4. 安装keepalived负载均衡"></a>4. 安装keepalived负载均衡</h5><h6 id="集群规划：-4"><a href="#集群规划：-4" class="headerlink" title="集群规划："></a>集群规划：</h6><table>
+<thead>
+<tr>
+<th>主机名</th>
+<th>IP</th>
+<th>角色</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>k8s-master4</td>
+<td>192.168.92.155</td>
+<td>master</td>
+</tr>
+<tr>
+<td>k8s-node4-1</td>
+<td>192.168.92.156</td>
+<td>backup</td>
+</tr>
+</tbody></table>
+<p>VIP：192.168.92.154</p>
+<h6 id="安装keepalived服务："><a href="#安装keepalived服务：" class="headerlink" title="安装keepalived服务："></a>安装keepalived服务：</h6><pre class="line-numbers language-bash"><code class="language-bash">k8s-master4 ~<span class="token punctuation">]</span><span class="token comment" spellcheck="true"># yum install keepalived -y</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h6 id="编辑检查脚本："><a href="#编辑检查脚本：" class="headerlink" title="编辑检查脚本："></a>编辑检查脚本：</h6><pre class="line-numbers language-shell"><code class="language-shell">k8s-master4 ~]# cat > /etc/keepalived/check_port.sh << "EOF"
+#!/bin/bash
+CHK_PORT=$1
+if [ -n "$CHK_PORT" ];then
+        PORT_PROCESS=`netstat -nutlp|grep $CHK_PORT|wc -l`
+        if [ $PORT_PROCESS -eq 0 ];then
+                echo "Port $CHK_PORT Is Not Used,End."
+                exit 1
+        fi
+else
+        echo "Check Port Cant Be Empty!"
+fi
+EOF
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h6 id="添加执行权限并测试脚本："><a href="#添加执行权限并测试脚本：" class="headerlink" title="添加执行权限并测试脚本："></a>添加执行权限并测试脚本：</h6><pre class="line-numbers language-shell"><code class="language-shell">k8s-master4 ~]# chmod +x /etc/keepalived/check_port.sh
+k8s-master4 ~]# /etc/keepalived/check_port.sh
+k8s-master4 ~]# /etc/keepalived/check_port.sh 25452
+k8s-master4 ~]# /etc/keepalived/check_port.sh 8080
+k8s-master4 ~]# /etc/keepalived/check_port.sh 7443
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p><img src="https://aptxhb.oss-cn-shenzhen.aliyuncs.com/images/image-20211013174227949.png" alt="image-20211013174227949"></p>
+<p>**PS:**无输出证明端口存活</p>
+<h6 id="编辑keepalived配置文件："><a href="#编辑keepalived配置文件：" class="headerlink" title="编辑keepalived配置文件："></a>编辑keepalived配置文件：</h6><p><strong>注意：</strong>这里两台服务器keepalived配置略有不同，在下面分别贴出</p>
+<pre><code># k8s-master4主机keepalived配置如下：
+k8s-master4 ~]# cat &gt; /etc/keepalived/keepalived.conf &lt;&lt; EOF
+global_defs {
+   router_id 192.168.92.155
+
+}
+
+vrrp_script chk_nginx {
+    script "/etc/keepalived/check_port.sh 7443"
+    interval 2
+    weight -20
+}
+
+vrrp_instance VI_1 {
+    state MASTER
+    interface ens32
+    virtual_router_id 251
+    priority 100
+    advert_int 1
+    mcast_src_ip 192.168.92.155
+    nopreempt
+
+    authentication {
+        auth_type PASS
+        auth_pass 12345678
+    }
+    track_script {
+         chk_nginx
+    }
+    virtual_ipaddress {
+        192.168.92.154
+    }
+}
+EOF
+
+# k8s-node4-1主机keepalived配置如下：
+k8s-node4-1 ~]# cat &gt; /etc/keepalived/keepalived.conf &lt;&lt; EOF
+global_defs {
+    router_id 192.168.92.156
+}
+vrrp_script chk_nginx {
+    script "/etc/keepalived/check_port.sh 7443"
+    interval 2
+    weight -20
+}
+vrrp_instance VI_1 {
+    state BACKUP
+    interface ens32
+    virtual_router_id 251
+    mcast_src_ip 192.168.92.156
+    priority 90
+    advert_int 1
+    authentication {
+        auth_type PASS
+        auth_pass 12345678
+    }
+    track_script {
+        chk_nginx
+    }
+    virtual_ipaddress {
+        192.168.92.154
+    }
+}
+EOF
+</code></pre>
+<h6 id="启动keepalived服务："><a href="#启动keepalived服务：" class="headerlink" title="启动keepalived服务："></a>启动keepalived服务：</h6><pre><code>k8s-master4 ~]# systemctl enable keepalived --now
+</code></pre>
+<h6 id="检查keepalived服务："><a href="#检查keepalived服务：" class="headerlink" title="检查keepalived服务："></a>检查keepalived服务：<img src="https://aptxhb.oss-cn-shenzhen.aliyuncs.com/images/image-20211013184735757.png" alt="image-20211013184735757"></h6><h5 id="5-安装kube-controller-manager组件"><a href="#5-安装kube-controller-manager组件" class="headerlink" title="5. 安装kube-controller-manager组件"></a>5. 安装kube-controller-manager组件</h5><h6 id="集群规划：-5"><a href="#集群规划：-5" class="headerlink" title="集群规划："></a>集群规划：</h6><table>
+<thead>
+<tr>
+<th>主机</th>
+<th>IP</th>
+<th>角色</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>k8s-master4</td>
+<td>192.168.92.155</td>
+<td>kube-controller-manager</td>
+</tr>
+<tr>
+<td>k8s-node4-1</td>
+<td>192.168.92.156</td>
+<td>kube-controller-manager</td>
+</tr>
+<tr>
+<td>k8s-node4-2</td>
+<td>192.168.92.157</td>
+<td>kube-controller-manager</td>
+</tr>
+</tbody></table>
+<h6 id="编辑启动脚本：-1"><a href="#编辑启动脚本：-1" class="headerlink" title="编辑启动脚本："></a>编辑启动脚本：</h6><pre class="line-numbers language-shell"><code class="language-shell">~]# cd /opt/kubernetes/server/bin/
+k8s-master4 bin]# cat > kube-controller-manager.sh << EOF
+#!/bin/sh
+./kube-controller-manager \
+  --cluster-cidr 172.92.0.0/16 \
+  --leader-elect true \
+  --log-dir /data/logs/kubernetes/kube-controller-manager \
+  --master http://127.0.0.1:8080 \
+  --service-account-private-key-file ./certs/ca-key.pem \
+  --service-cluster-ip-range 10.96.0.0/22 \
+  --root-ca-file ./certs/ca.pem \
+  --v 2
+EOF
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h6 id="编辑supervisor配置文件："><a href="#编辑supervisor配置文件：" class="headerlink" title="编辑supervisor配置文件："></a>编辑supervisor配置文件：</h6><pre class="line-numbers language-ini"><code class="language-ini">bin]# cat > /etc/supervisord.d/kube-controller-manager.ini &lt;&lt; EOF
+<span class="token selector">[program:kube-controller-manager]</span>
+<span class="token constant">command</span><span class="token attr-value"><span class="token punctuation">=</span>/opt/kubernetes/server/bin/kube-controller-manager.sh</span>
+<span class="token constant">numprocs</span><span class="token attr-value"><span class="token punctuation">=</span>1</span>
+<span class="token constant">directory</span><span class="token attr-value"><span class="token punctuation">=</span>/opt/kubernetes/server/bin</span>
+<span class="token constant">autostart</span><span class="token attr-value"><span class="token punctuation">=</span>true</span>
+<span class="token constant">autorestart</span><span class="token attr-value"><span class="token punctuation">=</span>true</span>
+<span class="token constant">startsecs</span><span class="token attr-value"><span class="token punctuation">=</span>30</span>
+<span class="token constant">startretries</span><span class="token attr-value"><span class="token punctuation">=</span>3</span>
+<span class="token constant">exitcodes</span><span class="token attr-value"><span class="token punctuation">=</span>0,2</span>
+<span class="token constant">stopsignal</span><span class="token attr-value"><span class="token punctuation">=</span>QUIT</span>
+<span class="token constant">stopwaitsecs</span><span class="token attr-value"><span class="token punctuation">=</span>10</span>
+<span class="token constant">user</span><span class="token attr-value"><span class="token punctuation">=</span>root</span>
+<span class="token constant">redirect_stderr</span><span class="token attr-value"><span class="token punctuation">=</span>true</span>
+<span class="token constant">killasgroup</span><span class="token attr-value"><span class="token punctuation">=</span>true</span>
+<span class="token constant">stopasgroup</span><span class="token attr-value"><span class="token punctuation">=</span>true</span>
+<span class="token constant">stdout_logfile</span><span class="token attr-value"><span class="token punctuation">=</span>/data/logs/kubernetes/kube-controller-manager/controller.stdout.log</span>
+<span class="token constant">stdout_logfile_maxbytes</span><span class="token attr-value"><span class="token punctuation">=</span>64MB</span>
+<span class="token constant">stdout_logfile_backups</span><span class="token attr-value"><span class="token punctuation">=</span>4</span>
+<span class="token constant">stdout_capture_maxbytes</span><span class="token attr-value"><span class="token punctuation">=</span>1MB</span>
+<span class="token constant">stdout_events_enabled</span><span class="token attr-value"><span class="token punctuation">=</span>false</span>
+EOF
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h6 id="创建目录与添加执行权限："><a href="#创建目录与添加执行权限：" class="headerlink" title="创建目录与添加执行权限："></a>创建目录与添加执行权限：</h6><pre class="line-numbers language-bash"><code class="language-bash">bin<span class="token punctuation">]</span><span class="token comment" spellcheck="true"># mkdir -p /data/logs/kubernetes/kube-controller-manager</span>
+bin<span class="token punctuation">]</span><span class="token comment" spellcheck="true"># chmod +x ./kube-controller-manager.sh</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<h6 id="启动与检查："><a href="#启动与检查：" class="headerlink" title="启动与检查："></a>启动与检查：</h6><pre class="line-numbers language-bash"><code class="language-bash">bin<span class="token punctuation">]</span><span class="token comment" spellcheck="true"># supervisorctl update</span>
+bin<span class="token punctuation">]</span><span class="token comment" spellcheck="true"># supervisorctl status</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p><img src="https://aptxhb.oss-cn-shenzhen.aliyuncs.com/images/image-20211014075502807.png" alt="image-20211014075502807"></p>
+<h5 id="6-安装kube-scheduler组件"><a href="#6-安装kube-scheduler组件" class="headerlink" title="6. 安装kube-scheduler组件"></a>6. 安装kube-scheduler组件</h5><h6 id="集群规划：-6"><a href="#集群规划：-6" class="headerlink" title="集群规划："></a>集群规划：</h6><table>
+<thead>
+<tr>
+<th>主机</th>
+<th>IP</th>
+<th>角色</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>k8s-master4</td>
+<td>192.168.92.155</td>
+<td>kube-scheduler</td>
+</tr>
+<tr>
+<td>k8s-node4-1</td>
+<td>192.168.92.156</td>
+<td>kube-scheduler</td>
+</tr>
+<tr>
+<td>k8s-node4-2</td>
+<td>192.168.92.157</td>
+<td>kube-scheduler</td>
+</tr>
+</tbody></table>
+<h6 id="编辑启动脚本：-2"><a href="#编辑启动脚本：-2" class="headerlink" title="编辑启动脚本："></a>编辑启动脚本：</h6><pre class="line-numbers language-shell"><code class="language-shell">bin]# cat > kube-scheduler.sh << EOF
+#!/bin/sh
+./kube-scheduler \
+  --leader-elect  \
+  --log-dir /data/logs/kubernetes/kube-scheduler \
+  --master http://127.0.0.1:8080 \
+  --v 2
+EOF
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h6 id="编辑supervisor管理配置："><a href="#编辑supervisor管理配置：" class="headerlink" title="编辑supervisor管理配置："></a>编辑supervisor管理配置：</h6><pre class="line-numbers language-ini"><code class="language-ini">bin]# cat > /etc/supervisord.d/kube-scheduler.ini &lt;&lt; EOF
+<span class="token selector">[program:kube-scheduler]</span>
+<span class="token constant">command</span><span class="token attr-value"><span class="token punctuation">=</span>/opt/kubernetes/server/bin/kube-scheduler.sh</span>
+<span class="token constant">numprocs</span><span class="token attr-value"><span class="token punctuation">=</span>1</span>
+<span class="token constant">directory</span><span class="token attr-value"><span class="token punctuation">=</span>/opt/kubernetes/server/bin</span>
+<span class="token constant">autostart</span><span class="token attr-value"><span class="token punctuation">=</span>true</span>
+<span class="token constant">autorestart</span><span class="token attr-value"><span class="token punctuation">=</span>true</span>
+<span class="token constant">startsecs</span><span class="token attr-value"><span class="token punctuation">=</span>30</span>
+<span class="token constant">startretries</span><span class="token attr-value"><span class="token punctuation">=</span>3</span>
+<span class="token constant">exitcodes</span><span class="token attr-value"><span class="token punctuation">=</span>0,2</span>
+<span class="token constant">stopsignal</span><span class="token attr-value"><span class="token punctuation">=</span>QUIT</span>
+<span class="token constant">stopwaitsecs</span><span class="token attr-value"><span class="token punctuation">=</span>10</span>
+<span class="token constant">user</span><span class="token attr-value"><span class="token punctuation">=</span>root</span>
+<span class="token constant">redirect_stderr</span><span class="token attr-value"><span class="token punctuation">=</span>true</span>
+<span class="token constant">killasgroup</span><span class="token attr-value"><span class="token punctuation">=</span>true</span>
+<span class="token constant">stopasgroup</span><span class="token attr-value"><span class="token punctuation">=</span>true</span>
+<span class="token constant">stdout_logfile</span><span class="token attr-value"><span class="token punctuation">=</span>/data/logs/kubernetes/kube-scheduler/scheduler.stdout.log</span>
+<span class="token constant">stdout_logfile_maxbytes</span><span class="token attr-value"><span class="token punctuation">=</span>64MB</span>
+<span class="token constant">stdout_logfile_backups</span><span class="token attr-value"><span class="token punctuation">=</span>4</span>
+<span class="token constant">stdout_capture_maxbytes</span><span class="token attr-value"><span class="token punctuation">=</span>1MB</span>
+<span class="token constant">stdout_events_enabled</span><span class="token attr-value"><span class="token punctuation">=</span>false</span>
+EOF
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h6 id="创建目录与添加执行权限：-1"><a href="#创建目录与添加执行权限：-1" class="headerlink" title="创建目录与添加执行权限："></a>创建目录与添加执行权限：</h6><pre class="line-numbers language-shell"><code class="language-shell">bin]# mkdir -p /data/logs/kubernetes/kube-scheduler
+bin]# chmod +x ./kube-scheduler.sh
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<h6 id="启动与检查：-1"><a href="#启动与检查：-1" class="headerlink" title="启动与检查："></a>启动与检查：</h6><pre class="line-numbers language-bash"><code class="language-bash">bin<span class="token punctuation">]</span><span class="token comment" spellcheck="true"># supervisorctl update</span>
+bin<span class="token punctuation">]</span><span class="token comment" spellcheck="true"># supervisorctl status</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p><img src="https://aptxhb.oss-cn-shenzhen.aliyuncs.com/images/image-20211014080834445.png" alt="image-20211014080834445"></p>
+<h5 id="7-主控节点环境检查"><a href="#7-主控节点环境检查" class="headerlink" title="7. 主控节点环境检查"></a>7. 主控节点环境检查</h5><h6 id="环境检查："><a href="#环境检查：" class="headerlink" title="环境检查："></a>环境检查：</h6><pre class="line-numbers language-bash"><code class="language-bash">k8s-master4 bin<span class="token punctuation">]</span><span class="token comment" spellcheck="true"># yum install bash-completion -y</span>
+k8s-master4 bin<span class="token punctuation">]</span><span class="token comment" spellcheck="true"># kubectl completion bash > /etc/bash_completion.d/kubelet</span>
+k8s-master4 bin<span class="token punctuation">]</span><span class="token comment" spellcheck="true"># kubectl get cs</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<p><img src="https://aptxhb.oss-cn-shenzhen.aliyuncs.com/images/image-20211014081827976.png" alt="image-20211014081827976"></p>
+<p>如图：各组件状态Healthy则为正常，下面安装运算节点组件</p>
+<h4 id="三、部署运算节点"><a href="#三、部署运算节点" class="headerlink" title="三、部署运算节点"></a>三、部署运算节点</h4><h5 id="1-安装kubelet组件"><a href="#1-安装kubelet组件" class="headerlink" title="1. 安装kubelet组件"></a>1. 安装kubelet组件</h5><h6 id="集群规划：-7"><a href="#集群规划：-7" class="headerlink" title="集群规划："></a>集群规划：</h6><table>
+<thead>
+<tr>
+<th>主机</th>
+<th>IP</th>
+<th>角色</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>k8s-master4</td>
+<td>192.168.92.155</td>
+<td>kube-kubelet</td>
+</tr>
+<tr>
+<td>k8s-node4-1</td>
+<td>192.168.92.156</td>
+<td>kube-kubelet</td>
+</tr>
+<tr>
+<td>k8s-node4-2</td>
+<td>192.168.92.157</td>
+<td>kube-kubelet</td>
+</tr>
+</tbody></table>
+<h6 id="配置用户context文件："><a href="#配置用户context文件：" class="headerlink" title="配置用户context文件："></a>配置用户context文件：</h6><pre class="line-numbers language-shell"><code class="language-shell">k8s-master4 conf]# kubectl config set-cluster myk8s \
+  --certificate-authority=../certs/ca.pem \
+  --embed-certs=true \
+  --server=https://192.168.92.154:7443 \
+  --kubeconfig=kubelet.kubeconfig
+
+k8s-master4 conf]# kubectl config set-credentials k8s-node \
+  --client-certificate=../certs/client.pem \
+  --client-key=../certs/client-key.pem \
+  --embed-certs=true \
+  --kubeconfig=kubelet.kubeconfig
+
+k8s-master4 conf]# kubectl config set-context myk8s-context \
+  --cluster=myk8s \
+  --user=k8s-node \
+  --kubeconfig=kubelet.kubeconfig
+
+k8s-master4 conf]# kubectl config use-context myk8s-context --kubeconfig=kubelet.kubeconfig
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h6 id="编辑RBAC权限文件："><a href="#编辑RBAC权限文件：" class="headerlink" title="编辑RBAC权限文件："></a>编辑RBAC权限文件：</h6><pre class="line-numbers language-yaml"><code class="language-yaml">k8s<span class="token punctuation">-</span>master4 conf<span class="token punctuation">]</span><span class="token comment" spellcheck="true"># cat > k8s-node.yaml &lt;&lt; EOF</span>
+<span class="token key atrule">apiVersion</span><span class="token punctuation">:</span> rbac.authorization.k8s.io/v1
+<span class="token key atrule">kind</span><span class="token punctuation">:</span> ClusterRoleBinding
+<span class="token key atrule">metadata</span><span class="token punctuation">:</span>
+  <span class="token key atrule">name</span><span class="token punctuation">:</span> k8s<span class="token punctuation">-</span>node
+<span class="token key atrule">roleRef</span><span class="token punctuation">:</span>
+  <span class="token key atrule">apiGroup</span><span class="token punctuation">:</span> rbac.authorization.k8s.io
+  <span class="token key atrule">kind</span><span class="token punctuation">:</span> ClusterRole
+  <span class="token key atrule">name</span><span class="token punctuation">:</span> cluster<span class="token punctuation">-</span>admin
+<span class="token key atrule">subjects</span><span class="token punctuation">:</span>
+<span class="token punctuation">-</span> <span class="token key atrule">apiGroup</span><span class="token punctuation">:</span> rbac.authorization.k8s.io
+  <span class="token key atrule">kind</span><span class="token punctuation">:</span> User
+  <span class="token key atrule">name</span><span class="token punctuation">:</span> k8s<span class="token punctuation">-</span>node
+EOF
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h6 id="执行RBAC文件："><a href="#执行RBAC文件：" class="headerlink" title="执行RBAC文件："></a>执行RBAC文件：</h6><pre class="line-numbers language-shell"><code class="language-shell">k8s-master4 conf]# kubectl create -f k8s-node.yaml
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p><img src="https://aptxhb.oss-cn-shenzhen.aliyuncs.com/images/image-20211015100027389.png" alt="image-20211015100027389"></p>
+<p><strong>注意：</strong>这里绑定的<code>ClusterRole</code>是<code>cluster-admin</code>权限为最高建议</p>
+<h6 id="上传文件与证书、秘钥到其他节点："><a href="#上传文件与证书、秘钥到其他节点：" class="headerlink" title="上传文件与证书、秘钥到其他节点："></a>上传文件与证书、秘钥到其他节点：</h6><pre class="line-numbers language-shell"><code class="language-shell">k8s-master4 conf]# scp -p kubelet.kubeconfig k8s-node.yaml 192.168.92.156:/opt/kubernetes/server/bin/conf/
+k8s-master4 conf]# scp -p kubelet.kubeconfig k8s-node.yaml 192.168.92.157:/opt/kubernetes/server/bin/conf/
+
+k8s-master4 bin]# cp -p /opt/certs/kubelet.pem /opt/certs/kubelet-key.pem ../certs/
+k8s-master4 bin]# scp -p /opt/certs/kubelet.pem /opt/certs/kubelet-key.pem 192.168.92.156:/opt/kubernetes/server/bin/certs/
+k8s-master4 bin]# scp -p /opt/certs/kubelet.pem /opt/certs/kubelet-key.pem 192.168.92.157:/opt/kubernetes/server/bin/certs/
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h6 id="编辑启动脚本与配置："><a href="#编辑启动脚本与配置：" class="headerlink" title="编辑启动脚本与配置："></a>编辑启动脚本与配置：</h6><pre><code># kubelet配置文件kubelet.yaml
+conf]# cat &gt; kubelet.yaml &lt;&lt; EOF
+apiVersion: kubelet.config.k8s.io/v1beta1
+kind: KubeletConfiguration
+cgroupDriver: systemd
+clusterDNS:
+- 10.96.0.2
+clusterDomain: cluster.local
+EOF
+
+# kubelet启动脚本kubelet.sh
+conf]# cat &gt; ../kubelet.sh &lt;&lt; EOF
+#!/bin/sh
+./kubelet \
+  --anonymous-auth=false \
+  --bootstrap-kubeconfig=./conf/bootstrap-kubelet.conf \
+  --kubeconfig=./conf/kubelet.kubeconfig \
+  --config=./conf/kubelet.yaml \
+  --fail-swap-on="false" \
+  --client-ca-file ./certs/ca.pem \
+  --tls-cert-file ./certs/kubelet.pem \
+  --tls-private-key-file ./certs/kubelet-key.pem \
+  --container-runtime=remote \
+  --container-runtime-endpoint=/run/containerd/containerd.sock \
+  --pod-infra-container-image=docker.io/kubernetes/pause:latest \
+  --hostname-override k8s-master4 \
+  --image-gc-high-threshold 20 \
+  --image-gc-low-threshold 10 \
+  --log-dir /data/logs/kubernetes/kube-kubelet \
+  --root-dir /data/kubelet
+EOF
+</code></pre>
+<h6 id="编辑supervisor管理配置：-1"><a href="#编辑supervisor管理配置：-1" class="headerlink" title="编辑supervisor管理配置："></a>编辑supervisor管理配置：</h6><pre class="line-numbers language-ini"><code class="language-ini">bin]# cat > /etc/supervisord.d/kube-kubelet.ini &lt;&lt; EOF
+<span class="token selector">[program:kube-kubelet]</span>
+<span class="token constant">command</span><span class="token attr-value"><span class="token punctuation">=</span>/opt/kubernetes/server/bin/kubelet.sh     ; the program (relative uses PATH, can take args)</span>
+<span class="token constant">numprocs</span><span class="token attr-value"><span class="token punctuation">=</span>1                                        ; number of processes copies to start (def 1)</span>
+<span class="token constant">directory</span><span class="token attr-value"><span class="token punctuation">=</span>/opt/kubernetes/server/bin              ; directory to cwd to before exec (def no cwd)</span>
+<span class="token constant">autostart</span><span class="token attr-value"><span class="token punctuation">=</span>true                                    ; start at supervisord start (default: true)</span>
+<span class="token constant">autorestart</span><span class="token attr-value"><span class="token punctuation">=</span>true                                ; retstart at unexpected quit (default: true)</span>
+<span class="token constant">startsecs</span><span class="token attr-value"><span class="token punctuation">=</span>30                                      ; number of secs prog must stay running (def. 1)</span>
+<span class="token constant">startretries</span><span class="token attr-value"><span class="token punctuation">=</span>3                                    ; max # of serial start failures (default 3)</span>
+<span class="token constant">exitcodes</span><span class="token attr-value"><span class="token punctuation">=</span>0,2                                     ; 'expected' exit codes for process (default 0,2)</span>
+<span class="token constant">stopsignal</span><span class="token attr-value"><span class="token punctuation">=</span>QUIT                                   ; signal used to kill process (default TERM)</span>
+<span class="token constant">stopwaitsecs</span><span class="token attr-value"><span class="token punctuation">=</span>10                                   ; max num secs to wait b4 SIGKILL (default 10)</span>
+<span class="token constant">user</span><span class="token attr-value"><span class="token punctuation">=</span>root                                         ; setuid to this UNIX account to run the program</span>
+<span class="token constant">redirect_stderr</span><span class="token attr-value"><span class="token punctuation">=</span>true                              ; redirect proc stderr to stdout (default false)</span>
+<span class="token constant">killasgroup</span><span class="token attr-value"><span class="token punctuation">=</span>true                                  ; kill all process in a group</span>
+<span class="token constant">stopasgroup</span><span class="token attr-value"><span class="token punctuation">=</span>true                                  ; stop all process in a group</span>
+<span class="token constant">stdout_logfile</span><span class="token attr-value"><span class="token punctuation">=</span>/data/logs/kubernetes/kube-kubelet/kubelet.stdout.log   ; stderr log path, NONE for none; default AUTO</span>
+<span class="token constant">stdout_logfile_maxbytes</span><span class="token attr-value"><span class="token punctuation">=</span>64MB                      ; max # logfile bytes b4 rotation (default 50MB)</span>
+<span class="token constant">stdout_logfile_backups</span><span class="token attr-value"><span class="token punctuation">=</span>4                          ; # of stdout logfile backups (default 10)</span>
+<span class="token constant">stdout_capture_maxbytes</span><span class="token attr-value"><span class="token punctuation">=</span>1MB                       ; number of bytes in 'capturemode' (default 0)</span>
+<span class="token constant">stdout_events_enabled</span><span class="token attr-value"><span class="token punctuation">=</span>false                       ; emit events on stdout writes (default false)</span>
+EOF
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h6 id="创建目录添加执行权限："><a href="#创建目录添加执行权限：" class="headerlink" title="创建目录添加执行权限："></a>创建目录添加执行权限：</h6><pre class="line-numbers language-shell"><code class="language-shell">bin]# chmod +x ../kubelet.sh
+bin]# mkdir -p /data/logs/kubernetes/kube-kubelet /data/kubelet
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<h6 id="启动并检查："><a href="#启动并检查：" class="headerlink" title="启动并检查："></a>启动并检查：</h6><pre class="line-numbers language-shell"><code class="language-shell">bin]# supervisorctl update
+bin]# supervisorctl status
+bin]# tail -fn20 /data/logs/kubernetes/kube-kubelet/kubelet.stdout.log
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<p><img src="https://aptxhb.oss-cn-shenzhen.aliyuncs.com/images/image-20211014095028549.png" alt="image-20211014095028549"></p>
+<p>因没开启健康检查参数与指定端点，日志中有健康检查错误可以忽略。</p>
+<pre><code>bin]# kubectl get nodes -o wide
+</code></pre>
+<p><img src="https://aptxhb.oss-cn-shenzhen.aliyuncs.com/images/image-20211014095503004.png" alt="image-20211014095503004"></p>
+<h5 id="2-安装kube-proxy组件"><a href="#2-安装kube-proxy组件" class="headerlink" title="2. 安装kube-proxy组件"></a>2. 安装kube-proxy组件</h5><h6 id="集群规划：-8"><a href="#集群规划：-8" class="headerlink" title="集群规划："></a>集群规划：</h6><table>
+<thead>
+<tr>
+<th>主机</th>
+<th>IP</th>
+<th>角色</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>k8s-master4</td>
+<td>192.168.92.155</td>
+<td>kube-proxy</td>
+</tr>
+<tr>
+<td>k8s-node4-1</td>
+<td>192.168.92.156</td>
+<td>kube-proxy</td>
+</tr>
+<tr>
+<td>k8s-node4-2</td>
+<td>192.168.92.157</td>
+<td>kube-proxy</td>
+</tr>
+</tbody></table>
+<h6 id="软件包安装与模块检查："><a href="#软件包安装与模块检查：" class="headerlink" title="软件包安装与模块检查："></a>软件包安装与模块检查：</h6><pre class="line-numbers language-bash"><code class="language-bash">~<span class="token punctuation">]</span><span class="token comment" spellcheck="true"># cd /opt/kubernetes/server/bin/</span>
+bin<span class="token punctuation">]</span><span class="token comment" spellcheck="true"># yum -y install ipset ipvsadm</span>
+bin<span class="token punctuation">]</span><span class="token comment" spellcheck="true"># lsmod | grep ip_vs</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<p><img src="https://aptxhb.oss-cn-shenzhen.aliyuncs.com/images/image-20211014101045857.png" alt="image-20211014101045857"></p>
+<h6 id="创建目录与拷贝证书、秘钥："><a href="#创建目录与拷贝证书、秘钥：" class="headerlink" title="创建目录与拷贝证书、秘钥："></a>创建目录与拷贝证书、秘钥：</h6><pre class="line-numbers language-bash"><code class="language-bash">bin<span class="token punctuation">]</span><span class="token comment" spellcheck="true"># mkdir -p /data/logs/kubernetes/kube-proxy</span>
+
+k8s-master4 bin<span class="token punctuation">]</span><span class="token comment" spellcheck="true"># cp -p /opt/certs/kube-proxy-client-key.pem /opt/certs/kube-proxy-client.pem ./certs/</span>
+k8s-master4 bin<span class="token punctuation">]</span><span class="token comment" spellcheck="true"># scp -p /opt/certs/kube-proxy-client-key.pem /opt/certs/kube-proxy-client.pem 192.168.92.157:/opt/kubernetes/server/bin/certs/</span>
+k8s-master4 bin<span class="token punctuation">]</span><span class="token comment" spellcheck="true"># scp -p /opt/certs/kube-proxy-client-key.pem /opt/certs/kube-proxy-client.pem 192.168.92.157:/opt/kubernetes/server/bin/certs/</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h6 id="创建资源文件并拷贝至其他节点："><a href="#创建资源文件并拷贝至其他节点：" class="headerlink" title="创建资源文件并拷贝至其他节点："></a>创建资源文件并拷贝至其他节点：</h6><pre><code>k8s-master4 bin]# cd /opt/kubernetes/server/bin/conf/
+k8s-master4 conf]# kubectl config set-cluster myk8s \
+  --certificate-authority=../certs/ca.pem \
+  --embed-certs=true \
+  --server=https://192.168.92.154:7443 \
+  --kubeconfig=kube-proxy.kubeconfig
+
+k8s-master4 conf]# kubectl config set-credentials kube-proxy \
+  --client-certificate=../certs/kube-proxy-client.pem \
+  --client-key=../certs/kube-proxy-client-key.pem \
+  --embed-certs=true \
+  --kubeconfig=kube-proxy.kubeconfig
+
+k8s-master4 conf]# kubectl config set-context myk8s-context \
+  --cluster=myk8s \
+  --user=kube-proxy \
+  --kubeconfig=kube-proxy.kubeconfig
+  
+k8s-master4 conf]# kubectl config use-context myk8s-context --kubeconfig=kube-proxy.kubeconfig
+
+k8s-master4 conf]# scp -p kube-proxy.kubeconfig 192.168.92.156:/opt/kubernetes/server/bin/conf/
+k8s-master4 conf]# scp -p kube-proxy.kubeconfig 192.168.92.157:/opt/kubernetes/server/bin/conf/
+</code></pre>
+<h6 id="编辑启动脚本：-3"><a href="#编辑启动脚本：-3" class="headerlink" title="编辑启动脚本："></a>编辑启动脚本：</h6><pre class="line-numbers language-shell"><code class="language-shell">conf]# cat > ../kube-proxy.sh << EOF
+#!/bin/sh
+./kube-proxy \
+  --cluster-cidr 172.92.0.0/16 \
+  --hostname-override  k8s-master4 \
+  --proxy-mode=ipvs \
+  --ipvs-scheduler=nq \
+  --kubeconfig ./conf/kube-proxy.kubeconfig
+EOF
+
+
+conf]# chmod +x ../kube-proxy.sh
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h6 id="编辑supervisor管理配置：-2"><a href="#编辑supervisor管理配置：-2" class="headerlink" title="编辑supervisor管理配置："></a>编辑supervisor管理配置：</h6><pre class="line-numbers language-shell"><code class="language-shell">conf]# cat > /etc/supervisord.d/kube-proxy.ini << EOF
+[program:kube-proxy]
+command=/opt/kubernetes/server/bin/kube-proxy.sh
+numprocs=1
+directory=/opt/kubernetes/server/bin
+autostart=true
+autorestart=true
+startsecs=30
+startretries=3
+exitcodes=0,2
+stopsignal=QUIT
+stopwaitsecs=10
+user=root
+redirect_stderr=true
+killasgroup=true
+stopasgroup=true
+stdout_logfile=/data/logs/kubernetes/kube-proxy/proxy.stdout.log
+stdout_logfile_maxbytes=64MB
+stdout_logfile_backups=4
+stdout_capture_maxbytes=1MB
+stdout_events_enabled=false
+EOF
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h6 id="启动与检查：-2"><a href="#启动与检查：-2" class="headerlink" title="启动与检查："></a>启动与检查：</h6><pre class="line-numbers language-shell"><code class="language-shell">conf]# supervisorctl update
+conf]# supervisorctl status
+conf]# tail -fn20 /data/logs/kubernetes/kube-proxy/proxy.stdout.log
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<p><img src="https://aptxhb.oss-cn-shenzhen.aliyuncs.com/images/image-20211014105908239.png" alt="image-20211014105908239"></p>
+<p><img src="https://aptxhb.oss-cn-shenzhen.aliyuncs.com/images/image-20211014105949903.png" alt="image-20211014105949903"></p>
+<p><img src="https://aptxhb.oss-cn-shenzhen.aliyuncs.com/images/image-20211014110016777.png" alt="image-20211014110016777"></p>
+<p><img src="https://aptxhb.oss-cn-shenzhen.aliyuncs.com/images/image-20211014110047627.png" alt="image-20211014110047627"></p>
+<pre><code># 编辑一个简单的nginx资源清单
+k8s-master4 nginx]# cat ds.yaml 
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: nginx-ds
+spec:
+  selector:
+    matchLabels:
+      app: nginx-ds
+  template:
+    metadata:
+      labels:
+        app: nginx-ds
+    spec:
+      containers:
+      - name: my-nginx
+        image: nginx:latest
+        ports:
+        - containerPort: 80
+# 引用ds.yaml资源清单
+k8s-master4 nginx]# kubectl apply -f ds.yaml
+
+# 查看nginx pod 状态
+k8s-master4 nginx]# kubectl get pods -o wide
+</code></pre>
+<p><img src="https://aptxhb.oss-cn-shenzhen.aliyuncs.com/images/image-20211014121809579.png" alt="image-20211014121809579"></p>
+<p>这时候可以看到各节点的pod创建是<code>Running</code>状态但是分配的IP相同，都是10.88.xx.xx网段。这是因为containerd自带的cni插件配置<code>/etc/cni/net.d/10-containerd-net.conflist</code>导致，我们可以来看下这个文件。</p>
+<pre class="line-numbers language-json"><code class="language-json">~<span class="token punctuation">]</span># cat /etc/cni/net.d/<span class="token number">10</span>-containerd-net.conflist
+<span class="token punctuation">{</span>
+  <span class="token property">"cniVersion"</span><span class="token operator">:</span> <span class="token string">"0.4.0"</span><span class="token punctuation">,</span>
+  <span class="token property">"name"</span><span class="token operator">:</span> <span class="token string">"containerd-net"</span><span class="token punctuation">,</span>
+  <span class="token property">"plugins"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+    <span class="token punctuation">{</span>
+      <span class="token property">"type"</span><span class="token operator">:</span> <span class="token string">"bridge"</span><span class="token punctuation">,</span>
+      <span class="token property">"bridge"</span><span class="token operator">:</span> <span class="token string">"cni0"</span><span class="token punctuation">,</span>
+      <span class="token property">"isGateway"</span><span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+      <span class="token property">"ipMasq"</span><span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+      <span class="token property">"promiscMode"</span><span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+      <span class="token property">"ipam"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+        <span class="token property">"type"</span><span class="token operator">:</span> <span class="token string">"host-local"</span><span class="token punctuation">,</span>
+        <span class="token property">"ranges"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+          <span class="token punctuation">[</span><span class="token punctuation">{</span>
+            <span class="token property">"subnet"</span><span class="token operator">:</span> <span class="token string">"10.88.0.0/16"</span>
+          <span class="token punctuation">}</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+          <span class="token punctuation">[</span><span class="token punctuation">{</span>
+            <span class="token property">"subnet"</span><span class="token operator">:</span> <span class="token string">"2001:4860:4860::/64"</span>
+          <span class="token punctuation">}</span><span class="token punctuation">]</span>
+        <span class="token punctuation">]</span><span class="token punctuation">,</span>
+        <span class="token property">"routes"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+          <span class="token punctuation">{</span> <span class="token property">"dst"</span><span class="token operator">:</span> <span class="token string">"0.0.0.0/0"</span> <span class="token punctuation">}</span><span class="token punctuation">,</span>
+          <span class="token punctuation">{</span> <span class="token property">"dst"</span><span class="token operator">:</span> "<span class="token operator">:</span><span class="token operator">:</span>/<span class="token number">0</span>" <span class="token punctuation">}</span>
+        <span class="token punctuation">]</span>
+      <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token punctuation">{</span>
+      <span class="token property">"type"</span><span class="token operator">:</span> <span class="token string">"portmap"</span><span class="token punctuation">,</span>
+      <span class="token property">"capabilities"</span><span class="token operator">:</span> <span class="token punctuation">{</span><span class="token property">"portMappings"</span><span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">]</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>可以看到 <code>/etc/cni/net.d/10-containerd-net.conflist</code> 这个文件中已经定义了 <code>subnet</code> 网段恰好就是 <code>10.88.0.0/16</code> ，网桥名称为 <code>cni0</code> , 网络类型为 <code>bridge</code> 但是使用bridge 网络的容器无法跨多个宿主机进行通信，跨主机通信需要借助其他的 cni 插件，比如我们下面要安装的 Flannel，或者Calico 等等。</p>
+<h4 id="四、部署网络插件"><a href="#四、部署网络插件" class="headerlink" title="四、部署网络插件"></a>四、部署网络插件</h4><h5 id="1-安装Flannel插件"><a href="#1-安装Flannel插件" class="headerlink" title="1. 安装Flannel插件"></a>1. 安装Flannel插件</h5><h6 id="节点规划："><a href="#节点规划：" class="headerlink" title="节点规划："></a>节点规划：</h6><table>
+<thead>
+<tr>
+<th>主机</th>
+<th>IP</th>
+<th>角色</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>k8s-master4</td>
+<td>192.168.92.155</td>
+<td>flannel</td>
+</tr>
+<tr>
+<td>k8s-node4-1</td>
+<td>192.168.92.156</td>
+<td>flannel</td>
+</tr>
+<tr>
+<td>k8s-node4-2</td>
+<td>192.168.92.157</td>
+<td>flannel</td>
+</tr>
+</tbody></table>
+<h6 id="下载软件包、解压、做软链接："><a href="#下载软件包、解压、做软链接：" class="headerlink" title="下载软件包、解压、做软链接："></a>下载软件包、解压、做软链接：</h6><p><a target="_blank" rel="noopener" href="https://github.com/flannel-io/flannel/releases">flannel 下载链接</a></p>
+<pre><code>~]# cd /opt/src
+src]# wget https://github.com/flannel-io/flannel/releases/download/v0.11.0/flannel-v0.11.0-linux-amd64.tar.gz
+src]# mkdir /opt/flannel-v0.11.0
+src]# tar -xf flannel-v0.11.0-linux-amd64.tar.gz -C /opt/flannel-v0.11.0
+src]# ln -s /opt/flannel-v0.11.0 /opt/flannel
+</code></pre>
+<h6 id="拷贝证书、秘钥："><a href="#拷贝证书、秘钥：" class="headerlink" title="拷贝证书、秘钥："></a>拷贝证书、秘钥：</h6><pre><code>src]# cd /opt/flannel
+k8s-master4 flannel]# mkdir certs
+k8s-master4 flannel]# cp -p /opt/certs/ca.pem /opt/certs/client.pem /opt/certs/client-key.pem  /opt/flannel/certs/
+
+# 拷贝至其他主机节点
+k8s-master4 flannel]# scp -rp /opt/flannel/certs 192.168.92.156:/opt/flannel/
+k8s-master4 flannel]# scp -rp /opt/flannel/certs 192.168.92.157:/opt/flannel/
+</code></pre>
+<h6 id="编辑配置文件：-1"><a href="#编辑配置文件：-1" class="headerlink" title="编辑配置文件："></a>编辑配置文件：</h6><pre><code>flannel]# cat &gt; subnet.env &lt;&lt; EOF
+FLANNEL_NETWORK=172.92.0.0/16
+FLANNEL_SUBNET=172.92.155.1/24
+FLANNEL_MTU=1500
+FLANNEL_IPMASQ=false
+EOF
+</code></pre>
+<h6 id="编辑启动脚本：-4"><a href="#编辑启动脚本：-4" class="headerlink" title="编辑启动脚本："></a>编辑启动脚本：</h6><pre><code>flannel]# cat flanneld.sh 
+#!/bin/sh
+./flanneld \
+  --public-ip=192.168.92.155 \
+  --etcd-endpoints=https://192.168.92.155:2379,https://192.168.92.156:2379,https://192.168.92.157:2379 \
+  --etcd-keyfile=./certs/client-key.pem \
+  --etcd-certfile=./certs/client.pem \
+  --etcd-cafile=./certs/ca.pem \
+  --iface=ens32 \
+  --subnet-file=./subnet.env \
+  --healthz-port=2401
+EOF
+
+# 给权限
+flannel]# chmod +x flanneld.sh
+</code></pre>
+<h6 id="编辑supervisor管理配置：-3"><a href="#编辑supervisor管理配置：-3" class="headerlink" title="编辑supervisor管理配置："></a>编辑supervisor管理配置：</h6><pre><code>flannel]# cat &gt; /etc/supervisord.d/flannel.ini &lt;&lt; EOF
+[program:flanneld]
+command=/opt/flannel/flanneld.sh                             ; the program (relative uses PATH, can take args)
+numprocs=1                                                   ; number of processes copies to start (def 1)
+directory=/opt/flannel                                       ; directory to cwd to before exec (def no cwd)
+autostart=true                                               ; start at supervisord start (default: true)
+autorestart=true                                             ; retstart at unexpected quit (default: true)
+startsecs=30                                                 ; number of secs prog must stay running (def. 1)
+startretries=3                                               ; max # of serial start failures (default 3)
+exitcodes=0,2                                                ; 'expected' exit codes for process (default 0,2)
+stopsignal=QUIT                                              ; signal used to kill process (default TERM)
+stopwaitsecs=10                                              ; max num secs to wait b4 SIGKILL (default 10)
+user=root                                                    ; setuid to this UNIX account to run the program
+redirect_stderr=true                                         ; redirect proc stderr to stdout (default false)
+killasgroup=true                                             ; kill all process in a group
+stopasgroup=true                                             ; stop all process in a group
+stdout_logfile=/data/logs/flanneld/flanneld.stdout.log       ; stderr log path, NONE for none; default AUTO
+stdout_logfile_maxbytes=64MB                                 ; max # logfile bytes b4 rotation (default 50MB)
+stdout_logfile_backups=4                                     ; # of stdout logfile backups (default 10)
+stdout_capture_maxbytes=1MB                                  ; number of bytes in 'capturemode' (default 0)
+stdout_events_enabled=false                                  ; emit events on stdout writes (default false)
+EOF
+
+# 创建目录
+flannel]# mkdir -p /data/logs/flanneld
+</code></pre>
+<h6 id="修改CNI配置："><a href="#修改CNI配置：" class="headerlink" title="修改CNI配置："></a>修改CNI配置：</h6><p>修改后如下：</p>
+<pre><code>flannel]# cat /etc/cni/net.d/10-containerd-net.conflist 
+{
+  "cniVersion": "0.4.0",
+  "name": "containerd-net",
+  "plugins": [
+    {
+      "type": "bridge",
+      "bridge": "cni0",
+      "isGateway": true,
+      "ipMasq": true,
+      "promiscMode": true,
+      "ipam": {
+        "type": "host-local",
+        "ranges": [
+          [{
+            "subnet": "172.92.155.0/24"
+          }]
+        ],
+        "routes": [
+          { "dst": "0.0.0.0/0" }
+        ]
+      }
+    },
+    {
+      "type": "portmap",
+      "capabilities": {"portMappings": true}
+    }
+  ]
+}
+</code></pre>
+<p><strong>注：</strong>这里的<code>subnet</code>网段尽量根据宿主机<code>IP</code>的最后两位定义，这样便于pod出错后快速定位主机。</p>
+<h6 id="重启containerd："><a href="#重启containerd：" class="headerlink" title="重启containerd："></a>重启containerd：</h6><pre><code>flannel]# ifconfig cni0 down &amp;&amp; ip link del cni0
+flannel]# systemctl restart containerd
+flannel]# supervisorctl restart kube-kubelet
+</code></pre>
+<h6 id="启动flanneld并检查："><a href="#启动flanneld并检查：" class="headerlink" title="启动flanneld并检查："></a>启动flanneld并检查：</h6><pre><code>flannel]# supervisorctl update
+flannel]# supervisorctl status
+</code></pre>
+<img src="https://aptxhb.oss-cn-shenzhen.aliyuncs.com/images/image-20211014154326846.png" alt="image-20211014154326846" style="zoom: 80%;">
+
+<pre><code>flannel]# kubectl get pod -o wide
+</code></pre>
+<p><img src="https://aptxhb.oss-cn-shenzhen.aliyuncs.com/images/image-20211014154957780.png" alt="image-20211014154957780"></p>
+<h5 id="2-向平台交付coredns插件"><a href="#2-向平台交付coredns插件" class="headerlink" title="2. 向平台交付coredns插件"></a>2. 向平台交付coredns插件</h5><h6 id="资源清单创建："><a href="#资源清单创建：" class="headerlink" title="资源清单创建："></a>资源清单创建：</h6><pre><code>k8s-master4 ~]# mkdir -p /data/yaml/coredns
+k8s-master4 ~]# cat &gt; /etc/nginx/conf.d/k8s-yaml.hcloud.com.conf &lt;&lt; EOF
+server {
+    listen 80;
+    server_name k8s-yaml.hcloud.com;
+
+    location / {
+        autoindex on;
+        default_type text/plain;
+        root /data/yaml;
+   }
+}
+EOF
+
+k8s-master4 ~]# 重启nginx
+k8s-master4 ~]# nginx -s reload
+
+k8s-master4 ~]# cd /data/yaml/coredns/
+</code></pre>
+<h6 id="创建rbac-yaml"><a href="#创建rbac-yaml" class="headerlink" title="创建rbac.yaml:"></a>创建rbac.yaml:</h6><pre><code>k8s-master4 ~]# cat &gt; /data/yaml/coredns/rbac.yaml &lt;&lt; EOF
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: coredns
+  namespace: kube-system
+  labels:
+      kubernetes.io/cluster-service: "true"
+      addonmanager.kubernetes.io/mode: Reconcile
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  labels:
+    kubernetes.io/bootstrapping: rbac-defaults
+    addonmanager.kubernetes.io/mode: Reconcile
+  name: system:coredns
+rules:
+- apiGroups:
+  - ""
+  resources:
+  - endpoints
+  - services
+  - pods
+  - namespaces
+  verbs:
+  - list
+  - watch
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  annotations:
+    rbac.authorization.kubernetes.io/autoupdate: "true"
+  labels:
+    kubernetes.io/bootstrapping: rbac-defaults
+    addonmanager.kubernetes.io/mode: EnsureExists
+  name: system:coredns
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: system:coredns
+subjects:
+- kind: ServiceAccount
+  name: coredns
+  namespace: kube-system
+EOF
+</code></pre>
+<h6 id="创建cm-yaml"><a href="#创建cm-yaml" class="headerlink" title="创建cm.yaml:"></a>创建cm.yaml:</h6><pre><code>k8s-master4 ~]# cat &gt; /data/yaml/coredns/cm.yaml &lt;&lt; EOF
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: coredns
+  namespace: kube-system
+data:
+  Corefile: |
+    .:53 {
+        errors
+        log
+        health
+        ready
+        kubernetes cluster.local 10.96.0.0/22
+        forward . 192.168.92.2
+        cache 30
+        loop
+        reload
+        loadbalance
+       }
+EOF
+</code></pre>
+<h6 id="创建dp-yaml："><a href="#创建dp-yaml：" class="headerlink" title="创建dp.yaml："></a>创建dp.yaml：</h6><pre><code>k8s-master4 ~]# cat &gt; /data/yaml/coredns/dp.yaml &lt;&lt; EOF
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: coredns
+  namespace: kube-system
+  labels:
+    k8s-app: coredns
+    kubernetes.io/name: "CoreDNS"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      k8s-app: coredns
+  template:
+    metadata:
+      labels:
+        k8s-app: coredns
+    spec:
+      priorityClassName: system-cluster-critical
+      serviceAccountName: coredns
+      containers:
+      - name: coredns
+        image: docker.io/coredns/coredns:1.6.1
+        args:
+        - -conf
+        - /etc/coredns/Corefile
+        volumeMounts:
+        - name: config-volume
+          mountPath: /etc/coredns
+        ports:
+        - containerPort: 53
+          name: dns
+          protocol: UDP
+        - containerPort: 53
+          name: dns-tcp
+          protocol: TCP
+        - containerPort: 9153
+          name: metrics
+          protocol: TCP
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+            scheme: HTTP
+          initialDelaySeconds: 60
+          timeoutSeconds: 5
+          successThreshold: 1
+          failureThreshold: 5
+      dnsPolicy: Default
+      volumes:
+        - name: config-volume
+          configMap:
+            name: coredns
+            items:
+            - key: Corefile
+              path: Corefile
+EOF
+</code></pre>
+<h6 id="创建svc-yaml："><a href="#创建svc-yaml：" class="headerlink" title="创建svc.yaml："></a>创建svc.yaml：</h6><pre><code>k8s-master4 ~]# cat &gt; /data/yaml/coredns/svc.yaml &lt;&lt; EOF
+apiVersion: v1
+kind: Service
+metadata:
+  name: coredns
+  namespace: kube-system
+  labels:
+    k8s-app: coredns
+    kubernetes.io/cluster-service: "true"
+    kubernetes.io/name: "CoreDNS"
+spec:
+  selector:
+    k8s-app: coredns
+  clusterIP: 10.96.0.2
+  ports:
+  - name: dns
+    port: 53
+    protocol: UDP
+  - name: dns-tcp
+    port: 53
+  - name: metrics
+    port: 9153
+    protocol: TCP
+EOF
+</code></pre>
+<h6 id="交付插件："><a href="#交付插件：" class="headerlink" title="交付插件："></a>交付插件：</h6><pre><code>k8s-master4 ~]# kubectl apply -f /data/yaml/coredns/rbac.yaml
+k8s-master4 ~]# kubectl apply -f /data/yaml/coredns/cm.yaml
+k8s-master4 ~]# kubectl apply -f /data/yaml/coredns/dp.yaml
+k8s-master4 ~]# kubectl apply -f /data/yaml/coredns/svc.yml
+</code></pre>
+<h6 id="测试检查："><a href="#测试检查：" class="headerlink" title="测试检查："></a>测试检查：</h6><pre><code>k8s-master4 ~]# kubectl get pods -n kube-system
+</code></pre>
+<p><img src="https://aptxhb.oss-cn-shenzhen.aliyuncs.com/images/image-20211015144950126.png" alt="image-20211015144950126"></p>
+<p>解析检查如下图：</p>
+<p><img src="https://aptxhb.oss-cn-shenzhen.aliyuncs.com/images/image-20211015145614866.png" alt="image-20211015145614866"></p>
+<p>现在k8s集群已经部署完成，但是为了更方便的使用后面会交付<code>traefik</code>、<code>dashboard</code>、<code>prometheus</code>、<code>efk</code> 等服务。下面是是针对整个集群的环境检查。</p>
+<h4 id="五、集群整体环境检查"><a href="#五、集群整体环境检查" class="headerlink" title="五、集群整体环境检查"></a>五、集群整体环境检查</h4><pre><code># 查看个进程状态
+# supervisorctl status
+</code></pre>
+<p><img src="https://aptxhb.oss-cn-shenzhen.aliyuncs.com/images/image-20211014175206117.png" alt="image-20211014175206117"></p>
+<pre><code># 查看网络状态
+# ip addr
+</code></pre>
+<p><img src="https://aptxhb.oss-cn-shenzhen.aliyuncs.com/images/image-20211014180315098.png" alt="image-20211014180315098"></p>
+<pre><code># 查看路由规则
+# route -n
+</code></pre>
+<p><img src="https://aptxhb.oss-cn-shenzhen.aliyuncs.com/images/image-20211014180206102.png" alt="image-20211014180206102"></p>
+<pre><code># 查看集群节点与组件状态
+# kubectl get cs
+# kubectl get nodes -o wide
+# kubectl get pods -o wide
+</code></pre>
+<p><img src="https://aptxhb.oss-cn-shenzhen.aliyuncs.com/images/image-20211014180722612.png" alt="image-20211014180722612"></p>
+<pre><code># 查看pod信息状态
+# kubectl get pods -o wide
+</code></pre>
+<p><img src="https://aptxhb.oss-cn-shenzhen.aliyuncs.com/images/image-20211014181210572.png" alt="image-20211014181210572"></p>
+<h5 id="测试pod之间网络互通"><a href="#测试pod之间网络互通" class="headerlink" title="测试pod之间网络互通"></a>测试pod之间网络互通</h5><pre><code># 启动一个用来测试的pod
+# kubectl run my-test --image=busybox -- tail -f /dev/null
+# kubectl get pods -o wide
+</code></pre>
+<p><img src="https://aptxhb.oss-cn-shenzhen.aliyuncs.com/images/image-20211014182031681.png" alt="image-20211014182031681"></p>
+<p>这里我们可以看到新pod在<code>k8s-node4-2</code>节点上，接下来进入用来测试的<code>pod</code>去<code>ping</code>其他3个节点上的pod。</p>
+<pre><code># kubectl exec -it my-test-f84cbcd45-rcvcg -- sh
+</code></pre>
+<p><img src="https://aptxhb.oss-cn-shenzhen.aliyuncs.com/images/image-20211014182727696.png" alt="image-20211014182727696"></p>
+
+                
+            </div>
+            <hr/>
+
+            
+
+
+
+            <div class="tag_share" style="display: block;">
+                <div class="post-meta__tag-list" style="display: inline-block;">
+                    
+                        <div class="article-tag">
+                            
+                                <a href="/tags/Typora/">
+                                    <span class="chip bg-color">Typora</span>
+                                </a>
+                            
+                                <a href="/tags/Markdown/">
+                                    <span class="chip bg-color">Markdown</span>
+                                </a>
+                            
+                        </div>
+                    
+                </div>
+                <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
+                    <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+<div id="article-share">
+
+    
+    <div class="social-share" data-sites="twitter,facebook,google,qq,qzone,wechat,weibo,douban,linkedin" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div>
+    <script src="/libs/share/js/social-share.min.js"></script>
+    
+
+    
+
+</div>
+
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+            <div class="card">
+                <a href="/2020/01/14/5w2h-godweiyang/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/16.jpg" class="responsive-img" alt="5W2H | 关于写博客的七点反思">
+                        
+                        <span class="card-title">5W2H | 关于写博客的七点反思</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+                        
+                    </div>
+                    <div class="publish-info">
+                        <span class="publish-date">
+                            <i class="far fa-clock fa-fw icon-date"></i>2020-01-14
+                        </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/%E9%9A%8F%E7%AC%94/" class="post-category">
+                                    随笔
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/%E5%8D%9A%E5%AE%A2/">
+                        <span class="chip bg-color">博客</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                本篇&nbsp;<i class="far fa-dot-circle"></i>
+            </div>
+            <div class="card">
+                <a href="/2018/09/07/ji-yu-containerd-er-jin-zhi-bu-shu-k8s/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/16.jpg" class="responsive-img" alt="Containerd二进制部署K8s">
+                        
+                        <span class="card-title">Containerd二进制部署K8s</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2018-09-07
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/Markdown/" class="post-category">
+                                    Markdown
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/Typora/">
+                        <span class="chip bg-color">Typora</span>
+                    </a>
+                    
+                    <a href="/tags/Markdown/">
+                        <span class="chip bg-color">Markdown</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+
+</div>
+
+
+
+<!-- 代码块功能依赖 -->
+<script type="text/javascript" src="/libs/codeBlock/codeBlockFuction.js"></script>
+
+<!-- 代码语言 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeLang.js"></script>
+
+
+<!-- 代码块复制 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeCopy.js"></script>
+
+
+<!-- 代码块收缩 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script>
+
+
+    
+
+</main>
+
+
+
+
+    <footer class="page-footer bg-color">
+    
+        
+
+<link rel="stylesheet" href="/libs/aplayer/APlayer.min.css">
+<div class="music-player">
+    
+    <div class="title center-align">
+        <i class="fa fa-music"></i>&nbsp;&nbsp;听听音乐
+    </div>
+    
+    <div class="row">
+        <div class="col l8 offset-l2 m10 offset-m1 s12">
+            <div id="aplayer" class="music"></div>
+        </div>
+    </div>
+</div>
+
+<script src="/libs/aplayer/APlayer.min.js"></script>
+<script>
+$(function () {
+    new APlayer({
+        container: document.getElementById('aplayer'),
+        fixed: 'true' === 'true',
+        autoplay: 'true' === 'true',
+        theme: '#542674',
+        loop: 'all',
+        order: 'list',
+        preload: 'auto',
+        volume: Number('0.7'),
+        listFolded: 'true' === 'true',
+        listMaxHeight: '',
+        audio: JSON.parse('[{"name":"歌颂","artist":"陈奕迅","url":"/medias/music/gesong.mp3","cover":"/medias/music/avatars/chenyixun.jpeg"},{"name":"打回原形","artist":"陈奕迅","url":"/medias/music/dahuiyuanxing.mp3","cover":"/medias/music/avatars/dahuiyuanxing.jpeg"},{"name":"防不胜防","artist":"陈奕迅","url":"/medias/music/fangbushengfang.mp3","cover":"/medias/music/avatars/chenyixun.jpeg"},{"name":"十面埋伏","artist":"陈奕迅","url":"/medias/music/shimianmaifu.mp3","cover":"/medias/music/avatars/chenyixun.jpeg"},{"name":"葡萄成熟时","artist":"陈奕迅","url":"/medias/music/putaochengshushi.mp3","cover":"/medias/music/avatars/chenyixun.jpeg"},{"name":"最冷一天","artist":"陈奕迅","url":"/medias/music/zuilengyitian.mp3","cover":"/medias/music/avatars/chenyixun.jpeg"},{"name":"陀飞轮","artist":"陈奕迅","url":"/medias/music/tuofeilun.mp3","cover":"/medias/music/avatars/chenyixun.jpeg"}]')
+    });
+});
+</script>
+    
+
+    <div class="container row center-align"
+         style="margin-bottom: 0px !important;">
+        <div class="col s12 m8 l8 copy-right">
+            Copyright&nbsp;&copy;
+            
+                <span id="year">2019-2022</span>
+            
+            <a href="/about" target="_blank">Bourbon</a>
+            |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
+            |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
+            <br>
+            
+            
+            
+            
+                <span id="busuanzi_container_site_pv">
+                &nbsp;|&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;
+                    <span id="busuanzi_value_site_pv" class="white-color"></span>
+            </span>
+            
+            
+                <span id="busuanzi_container_site_uv">
+                &nbsp;|&nbsp;<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;
+                    <span id="busuanzi_value_site_uv" class="white-color"></span>
+            </span>
+            
+            <br>
+
+            <!-- 运行天数提醒. -->
+            
+            <br>
+            
+        </div>
+        <div class="col s12 m4 l4 social-link ">
+    <a href="https://github.com/aptxhb" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
+        <i class="fab fa-github"></i>
+    </a>
+
+
+
+    <a href="mailto:aptxhb@sina.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+        <i class="fas fa-envelope-open"></i>
+    </a>
+
+
+
+
+
+
+
+    <a href="tencent://AddContact/?fromId=50&fromSubId=1&subcmd=all&uin=401885340" class="tooltipped" target="_blank" data-tooltip="QQ联系我: 401885340" data-position="top" data-delay="50">
+        <i class="fab fa-qq"></i>
+    </a>
+
+
+
+
+
+
+
+</div>
+    </div>
+    <div class="progress-bar"></div>
+</footer>
+
+
+
+
+    <!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;搜索</span>
+            <input type="search" id="searchInput" name="s" placeholder="请输入搜索的关键字"
+                   class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script type="text/javascript">
+$(function () {
+    var searchFunc = function (path, search_id, content_id) {
+        'use strict';
+        $.ajax({
+            url: path,
+            dataType: "xml",
+            success: function (xmlResponse) {
+                // get the contents from search data
+                var datas = $("entry", xmlResponse).map(function () {
+                    return {
+                        title: $("title", this).text(),
+                        content: $("content", this).text(),
+                        url: $("url", this).text()
+                    };
+                }).get();
+                var $input = document.getElementById(search_id);
+                var $resultContent = document.getElementById(content_id);
+                $input.addEventListener('input', function () {
+                    var str = '<ul class=\"search-result-list\">';
+                    var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+                    $resultContent.innerHTML = "";
+                    if (this.value.trim().length <= 0) {
+                        return;
+                    }
+                    // perform local searching
+                    datas.forEach(function (data) {
+                        var isMatch = true;
+                        var data_title = data.title.trim().toLowerCase();
+                        var data_content = data.content.trim().replace(/<[^>]+>/g, "").toLowerCase();
+                        var data_url = data.url;
+                        data_url = data_url.indexOf('/') === 0 ? data.url : '/' + data_url;
+                        var index_title = -1;
+                        var index_content = -1;
+                        var first_occur = -1;
+                        // only match artiles with not empty titles and contents
+                        if (data_title !== '' && data_content !== '') {
+                            keywords.forEach(function (keyword, i) {
+                                index_title = data_title.indexOf(keyword);
+                                index_content = data_content.indexOf(keyword);
+                                if (index_title < 0 && index_content < 0) {
+                                    isMatch = false;
+                                } else {
+                                    if (index_content < 0) {
+                                        index_content = 0;
+                                    }
+                                    if (i === 0) {
+                                        first_occur = index_content;
+                                    }
+                                }
+                            });
+                        }
+                        // show search results
+                        if (isMatch) {
+                            str += "<li><a href='" + data_url + "' class='search-result-title'>" + data_title + "</a>";
+                            var content = data.content.trim().replace(/<[^>]+>/g, "");
+                            if (first_occur >= 0) {
+                                // cut out 100 characters
+                                var start = first_occur - 20;
+                                var end = first_occur + 80;
+                                if (start < 0) {
+                                    start = 0;
+                                }
+                                if (start === 0) {
+                                    end = 100;
+                                }
+                                if (end > content.length) {
+                                    end = content.length;
+                                }
+                                var match_content = content.substr(start, end);
+                                // highlight all keywords
+                                keywords.forEach(function (keyword) {
+                                    var regS = new RegExp(keyword, "gi");
+                                    match_content = match_content.replace(regS, "<em class=\"search-keyword\">" + keyword + "</em>");
+                                });
+
+                                str += "<p class=\"search-result\">" + match_content + "...</p>"
+                            }
+                            str += "</li>";
+                        }
+                    });
+                    str += "</ul>";
+                    $resultContent.innerHTML = str;
+                });
+            }
+        });
+    };
+
+    searchFunc('/search.xml', 'searchInput', 'searchResult');
+});
+</script>
+
+    <!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+</div>
+
+
+    <script src="/libs/materialize/materialize.min.js"></script>
+    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="/libs/aos/aos.js"></script>
+    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="/js/matery.js"></script>
+
+    
+
+    
+
+    <!-- 雪花特效 -->
+    
+
+    <!-- 鼠标星星特效 -->
+    
+
+    
+
+    <!-- Baidu Analytics -->
+
+    <!-- Baidu Push -->
+
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        } else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+    
+    <script src="/libs/others/clicklove.js" async="async"></script>
+    
+    
+
+    
+
+    
+
+    <!--腾讯兔小巢-->
+    
+    
+
+    
+
+    
+
+    
+    <script src="/libs/instantpage/instantpage.js" type="module"></script>
+    
+
+</body>
+
+</html>
