@@ -32,9 +32,7 @@
 
     <script src="/libs/jquery/jquery-3.6.0.min.js"></script>
 
-<meta name="generator" content="Hexo 5.4.2">
-<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
-<link rel="alternate" href="/atom.xml" title="叶落化仰" type="application/atom+xml">
+<meta name="generator" content="Hexo 5.4.2"><link rel="alternate" href="/atom.xml" title="叶落化仰" type="application/atom+xml">
 </head>
 
 
@@ -719,46 +717,40 @@
 
     <footer class="page-footer bg-color">
     
-        <link rel="stylesheet" href="/libs/aplayer/APlayer.min.css">
-<style>
-    .aplayer .aplayer-lrc p {
         
-        font-size: 12px;
-        font-weight: 700;
-        line-height: 16px !important;
-    }
 
-    .aplayer .aplayer-lrc p.aplayer-lrc-current {
-        
-        font-size: 15px;
-        color: #42b983;
-    }
-
+<link rel="stylesheet" href="/libs/aplayer/APlayer.min.css">
+<div class="music-player">
     
-</style>
-<div class="">
+    <div class="title center-align">
+        <i class="fa fa-music"></i>&nbsp;&nbsp;听听音乐
+    </div>
     
     <div class="row">
-        <meting-js class="col l8 offset-l2 m10 offset-m1 s12"
-                   server="netease"
-                   type="playlist"
-                   id="6917233840"
-                   fixed='true'
-                   autoplay='true'
-                   theme='#42b983'
-                   loop='all'
-                   order='list'
-                   preload='auto'
-                   volume='0.7'
-                   list-folded='true'
-        >
-        </meting-js>
+        <div class="col l8 offset-l2 m10 offset-m1 s12">
+            <div id="aplayer" class="music"></div>
+        </div>
     </div>
 </div>
 
 <script src="/libs/aplayer/APlayer.min.js"></script>
-<script src="/libs/aplayer/Meting.min.js"></script>
-
+<script>
+$(function () {
+    new APlayer({
+        container: document.getElementById('aplayer'),
+        fixed: 'true' === 'true',
+        autoplay: 'true' === 'true',
+        theme: '#542674',
+        loop: 'all',
+        order: 'list',
+        preload: 'auto',
+        volume: Number('0.7'),
+        listFolded: 'true' === 'true',
+        listMaxHeight: '',
+        audio: JSON.parse('[{"name":"歌颂","artist":"陈奕迅","url":"/medias/music/gesong.mp3","cover":"/medias/music/avatars/chenyixun.jpeg"},{"name":"打回原形","artist":"陈奕迅","url":"/medias/music/dahuiyuanxing.mp3","cover":"/medias/music/avatars/dahuiyuanxing.jpeg"},{"name":"防不胜防","artist":"陈奕迅","url":"/medias/music/fangbushengfang.mp3","cover":"/medias/music/avatars/chenyixun.jpeg"},{"name":"十面埋伏","artist":"陈奕迅","url":"/medias/music/shimianmaifu.mp3","cover":"/medias/music/avatars/chenyixun.jpeg"},{"name":"葡萄成熟时","artist":"陈奕迅","url":"/medias/music/putaochengshushi.mp3","cover":"/medias/music/avatars/chenyixun.jpeg"},{"name":"最冷一天","artist":"陈奕迅","url":"/medias/music/zuilengyitian.mp3","cover":"/medias/music/avatars/chenyixun.jpeg"},{"name":"陀飞轮","artist":"陈奕迅","url":"/medias/music/tuofeilun.mp3","cover":"/medias/music/avatars/chenyixun.jpeg"}]')
+    });
+});
+</script>
     
 
     <div class="container row center-align"

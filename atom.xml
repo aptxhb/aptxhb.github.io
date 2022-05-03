@@ -3,11 +3,11 @@
   <title>叶落化仰</title>
   
   <subtitle>叶落化仰的博客</subtitle>
-  <link href="http://example.com/atom.xml" rel="self"/>
+  <link href="https://blog.aptxhb.xyz/atom.xml" rel="self"/>
   
-  <link href="http://example.com/"/>
+  <link href="https://blog.aptxhb.xyz/"/>
   <updated>2022-05-03T05:38:14.160Z</updated>
-  <id>http://example.com/</id>
+  <id>https://blog.aptxhb.xyz/</id>
   
   <author>
     <name>Bourbon</name>
@@ -18,8 +18,8 @@
   
   <entry>
     <title>文本三剑客sed的使用</title>
-    <link href="http://example.com/2022/05/03/%E6%96%87%E6%9C%AC%E4%B8%89%E5%89%91%E5%AE%A2sed%E7%9A%84%E4%BD%BF%E7%94%A8/"/>
-    <id>http://example.com/2022/05/03/%E6%96%87%E6%9C%AC%E4%B8%89%E5%89%91%E5%AE%A2sed%E7%9A%84%E4%BD%BF%E7%94%A8/</id>
+    <link href="https://blog.aptxhb.xyz/2022/05/03/%E6%96%87%E6%9C%AC%E4%B8%89%E5%89%91%E5%AE%A2sed%E7%9A%84%E4%BD%BF%E7%94%A8/"/>
+    <id>https://blog.aptxhb.xyz/2022/05/03/%E6%96%87%E6%9C%AC%E4%B8%89%E5%89%91%E5%AE%A2sed%E7%9A%84%E4%BD%BF%E7%94%A8/</id>
     <published>2022-05-03T05:35:49.000Z</published>
     <updated>2022-05-03T05:38:14.160Z</updated>
     
@@ -31,8 +31,8 @@
   
   <entry>
     <title>article title</title>
-    <link href="http://example.com/2022/05/02/article-title/"/>
-    <id>http://example.com/2022/05/02/article-title/</id>
+    <link href="https://blog.aptxhb.xyz/2022/05/02/article-title/"/>
+    <id>https://blog.aptxhb.xyz/2022/05/02/article-title/</id>
     <published>2022-05-02T03:14:40.000Z</published>
     <updated>2022-05-02T03:14:40.153Z</updated>
     
@@ -44,8 +44,8 @@
   
   <entry>
     <title>Hello World</title>
-    <link href="http://example.com/2022/05/01/hello-world/"/>
-    <id>http://example.com/2022/05/01/hello-world/</id>
+    <link href="https://blog.aptxhb.xyz/2022/05/01/hello-world/"/>
+    <id>https://blog.aptxhb.xyz/2022/05/01/hello-world/</id>
     <published>2022-05-01T15:47:10.609Z</published>
     <updated>2022-05-01T15:47:10.609Z</updated>
     
@@ -64,9 +64,38 @@
   </entry>
   
   <entry>
+    <title>5W2H | 关于写博客的七点反思</title>
+    <link href="https://blog.aptxhb.xyz/2020/01/14/5w2h-godweiyang/"/>
+    <id>https://blog.aptxhb.xyz/2020/01/14/5w2h-godweiyang/</id>
+    <published>2020-01-14T07:27:31.000Z</published>
+    <updated>2022-05-02T10:40:21.179Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;blockquote&gt;
+&lt;p&gt;关注公众号【算法码上来】，每日算法干货马上就来！&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;img src=&quot;/medias/contact.jpg&quot;&gt;&lt;/p&gt;
+&lt;h2 id=&quot;When？什么时候开始写的？&quot;&gt;&lt;a</summary>
+        
+      
+    
+    
+    
+    <category term="随笔" scheme="https://blog.aptxhb.xyz/categories/%E9%9A%8F%E7%AC%94/"/>
+    
+    
+    <category term="博客" scheme="https://blog.aptxhb.xyz/tags/%E5%8D%9A%E5%AE%A2/"/>
+    
+  </entry>
+  
+  <entry>
     <title>Containerd二进制部署K8s</title>
-    <link href="http://example.com/2018/09/07/%E5%9F%BA%E4%BA%8Econtainerd%E4%BA%8C%E8%BF%9B%E5%88%B6%E9%83%A8%E7%BD%B2k8s/"/>
-    <id>http://example.com/2018/09/07/%E5%9F%BA%E4%BA%8Econtainerd%E4%BA%8C%E8%BF%9B%E5%88%B6%E9%83%A8%E7%BD%B2k8s/</id>
+    <link href="https://blog.aptxhb.xyz/2018/09/07/%E5%9F%BA%E4%BA%8Econtainerd%E4%BA%8C%E8%BF%9B%E5%88%B6%E9%83%A8%E7%BD%B2k8s/"/>
+    <id>https://blog.aptxhb.xyz/2018/09/07/%E5%9F%BA%E4%BA%8Econtainerd%E4%BA%8C%E8%BF%9B%E5%88%B6%E9%83%A8%E7%BD%B2k8s/</id>
     <published>2018-09-07T01:25:00.000Z</published>
     <updated>2022-05-02T11:58:12.249Z</updated>
     
@@ -83,12 +112,12 @@
     
     
     
-    <category term="Markdown" scheme="http://example.com/categories/Markdown/"/>
+    <category term="Markdown" scheme="https://blog.aptxhb.xyz/categories/Markdown/"/>
     
     
-    <category term="Typora" scheme="http://example.com/tags/Typora/"/>
+    <category term="Typora" scheme="https://blog.aptxhb.xyz/tags/Typora/"/>
     
-    <category term="Markdown" scheme="http://example.com/tags/Markdown/"/>
+    <category term="Markdown" scheme="https://blog.aptxhb.xyz/tags/Markdown/"/>
     
   </entry>
   
