@@ -2,6 +2,15 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://blog.aptxhb.xyz/2018/09/07/ji-yu-containerd-er-jin-zhi-bu-shu-k8s/</loc>
+    
+    <lastmod>2022-05-03</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://blog.aptxhb.xyz/2022/05/03/wen-ben-san-jian-ke-sed/</loc>
     
     <lastmod>2022-05-03</lastmod>
@@ -20,7 +29,7 @@
   </url>
   
   <url>
-    <loc>https://blog.aptxhb.xyz/2018/09/07/ji-yu-containerd-er-jin-zhi-bu-shu-k8s/</loc>
+    <loc>https://blog.aptxhb.xyz/404.html</loc>
     
     <lastmod>2022-05-02</lastmod>
     
@@ -30,15 +39,6 @@
   
   <url>
     <loc>https://blog.aptxhb.xyz/archives/index.html</loc>
-    
-    <lastmod>2022-05-02</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://blog.aptxhb.xyz/404.html</loc>
     
     <lastmod>2022-05-02</lastmod>
     
@@ -101,20 +101,6 @@
 
   
   <url>
-    <loc>https://blog.aptxhb.xyz/tags/linux/</loc>
-    <lastmod>2022-05-03</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://blog.aptxhb.xyz/tags/shell/</loc>
-    <lastmod>2022-05-03</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
     <loc>https://blog.aptxhb.xyz/tags/Typora/</loc>
     <lastmod>2022-05-03</lastmod>
     <changefreq>weekly</changefreq>
@@ -128,17 +114,31 @@
     <priority>0.2</priority>
   </url>
   
-
-  
   <url>
-    <loc>https://blog.aptxhb.xyz/categories/%E6%96%87%E6%9C%AC%E6%93%8D%E4%BD%9C/</loc>
+    <loc>https://blog.aptxhb.xyz/tags/linux/</loc>
     <lastmod>2022-05-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
+    <loc>https://blog.aptxhb.xyz/tags/shell/</loc>
+    <lastmod>2022-05-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+
+  
+  <url>
     <loc>https://blog.aptxhb.xyz/categories/Markdown/</loc>
+    <lastmod>2022-05-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.aptxhb.xyz/categories/%E6%96%87%E6%9C%AC%E6%93%8D%E4%BD%9C/</loc>
     <lastmod>2022-05-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
