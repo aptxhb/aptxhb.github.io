@@ -1,2 +1,3 @@
 https://blog.aptxhb.xyz/2022/05/03/wen-ben-san-jian-ke-sed/
+https://blog.aptxhb.xyz/2018/11/03/ntp-shi-jian-tong-bu/
 https://blog.aptxhb.xyz/2018/09/07/ji-yu-containerd-er-jin-zhi-bu-shu-k8s/
