@@ -31,6 +31,31 @@
     
     
     <entry>
+      <title>虚拟地址空间与上下文切换详解</title>
+      <link href="/2021/05/03/xu-ni-di-zhi-kong-jian-yong-hu-kong-jian-nei-he-kong-jian-yong-hu-tai-yu-nei-he-tai-yuan-li-he-zuo-yong/"/>
+      <url>/2021/05/03/xu-ni-di-zhi-kong-jian-yong-hu-kong-jian-nei-he-kong-jian-yong-hu-tai-yu-nei-he-tai-yuan-li-he-zuo-yong/</url>
+      
+        <content type="html"><![CDATA[<p><a href="https://juejin.cn/post/6990237426903957540">原文地址</a></p><h2 id="虚拟地址空间、用户空间、内核空间、用户态与内核态是什么？"><a href="#虚拟地址空间、用户空间、内核空间、用户态与内核态是什么？" class="headerlink" title="虚拟地址空间、用户空间、内核空间、用户态与内核态是什么？"></a>虚拟地址空间、用户空间、内核空间、用户态与内核态是什么？</h2><h3 id="内存分页"><a href="#内存分页" class="headerlink" title="内存分页"></a>内存分页</h3><p>​    为了节约内存，提高使用效率，操作系统会将内存拆成一个个的小块来使用，在Linux 中，这每一小块叫做 **page(页)**，大小一般为4k</p><hr><h3 id="虚拟地址空间"><a href="#虚拟地址空间" class="headerlink" title="虚拟地址空间"></a>虚拟地址空间</h3><p><strong>定义</strong>：在多任务操作系统中，每个进程都运行在属于自己的虚拟内存中，这块空间被称为 <strong>Virtual Address Space(虚拟地址空间)</strong></p><p><strong>作用</strong>：虚拟地址空间的作用是为了让进程之间相互隔离，假如让进程直接操作<strong>物理内存</strong>，很有可能会出现，不同进程都操作了同一物理内存地址，造成相互影响。于是就抽象出来<strong>虚拟地址空间</strong>这样一个中间层，让一块虚拟地址空间映射到一块物理地址空间上</p><p><img src="https://aptxhb.oss-cn-shenzhen.aliyuncs.com/images/image-20220505164057203.png" alt="image-20220505164057203"></p><p>如上图，两块虚拟内存通过 <strong>page table(页表)</strong> 将自己映射到无力内存上，进程只能看到虚拟内存(当然它自己是不知道内存是虚拟的)，进程只能”运行”在虚拟地址空间，只会操作属于自己的虚拟内存，因此进程之间不会相互影响</p><hr><h3 id="虚拟地址空间的大小及分配"><a href="#虚拟地址空间的大小及分配" class="headerlink" title="虚拟地址空间的大小及分配"></a>虚拟地址空间的大小及分配</h3><p>​    操作系统需要为每一个进程分配属于自己的虚拟内存，那这个虚拟内存要分配多大呢？在没有虚拟地址空间之前，是根据进程的需要按需分配物理内存的。但有了虚拟地址空间，分配策略可以变一下，先把虚拟地址空间分配的大些，但不立马建立与物理内存的映射，而是用到的时候，用多少建立多少。这样物理内存的大小虽然不变，但是内存分配的灵活性大大的提高了，进程也不用担心地址跟别的进程冲突</p><hr><h3 id="用户空间与内核空间"><a href="#用户空间与内核空间" class="headerlink" title="用户空间与内核空间"></a>用户空间与内核空间</h3><p>操作系统虽然为每个进程都分配了虚拟地址空间，但虚拟地址空间中并不是所有的区域都可以为进程所用。操作系统将虚拟地址空间分为用户空间和内核空间，对于32位的操作系统，在Linux的虚拟地址空间中，用户空间和内核空间的大小比例为3:1，而在windows中则为2:2</p><p><img src="https://aptxhb.oss-cn-shenzhen.aliyuncs.com/images/image-20220505184608068.png" alt="image-20220505184608068"></p><hr><h3 id="为什么会有内核空间"><a href="#为什么会有内核空间" class="headerlink" title="为什么会有内核空间"></a>为什么会有内核空间</h3><p>​    为了系统的安全，现代的操作系统一般都强制用户进程不能直接操作内核的，所有的系统调用都要交给内核完成。但是内核也要运行在内存中，为了防止用户进程干扰，操作系统为内核单独划分了一块内存区域，这块区域就是内核空间，系统内核运行在内核空间中</p><hr><h3 id="内核空间与用户空间的映射"><a href="#内核空间与用户空间的映射" class="headerlink" title="内核空间与用户空间的映射"></a>内核空间与用户空间的映射</h3><p>​    在Linux中，系统启动时，需要将内核加载到物理内存的内核空间上运行。但对于进程，物理内存对它是不可见的，但它又需要使用内核来完成各种系统的调用，而内核世纪又在物理内存上。怎么解决这个矛盾？</p><p>​    Linux 想了一个办法，将进程的虚拟地址空间中的内核空间映射到物理内存中的内核空间上，内核就搬到虚拟内存中了。而在进程看来，自己的内存中就有了内核，就可以通过内核进行各种系统调用。</p><p>​    在 Linux 中，内核空间是持续的，并且所有进程的虚拟地址空间中的内核空间都映射到同样的物理内存的内核空间</p><p><img src="https://aptxhb.oss-cn-shenzhen.aliyuncs.com/images/image-20220505192322010.png" alt="image-20220505192322010"></p><p>​    如上图所示：进程a 和进程b 的内核空间都映射到了同一块物理内存区域，而用户空间的地址，则被映射到了不同的物理内存区域</p><hr><h3 id="用户态与内核态"><a href="#用户态与内核态" class="headerlink" title="用户态与内核态"></a>用户态与内核态</h3><p>​    当一个进程执行系统调用而陷入内核代码中执行时，就称进程处于内核运行态(简称为内核态)</p><p>比如有一个写文件的 <strong>python</strong>程序</p><pre class=" language-python"><code class="language-python"><span class="token keyword">with</span> open<span class="token punctuation">(</span><span class="token string">'/test.txt'</span><span class="token punctuation">,</span> <span class="token string">'a+'</span><span class="token punctuation">)</span> <span class="token keyword">as</span> fw<span class="token punctuation">:</span> <span class="token comment" spellcheck="true"># 打开文件</span>    fw<span class="token punctuation">.</span>write<span class="token punctuation">(</span><span class="token string">'内容'</span><span class="token punctuation">)</span></code></pre><p>​     当我们把这个 <strong>python</strong> 程序时运行起来之后就是一个进程了，也有了自己的虚拟地址空间，包括用户空间和内核空间。刚开始这个进程是运行在用户空间，但当执行到 <code>fw.write('内容')</code> 时，发现要往磁盘中写入一个文件，而读写磁盘这种事，只有内核才能操作，内核提供了一个 <code>write</code> 系统级函数，<code>fw.write('内容')</code> 这段代码最终时执行 <code>write()</code> 系统调用来实现文件写入的</p><p>​    刚开始的 <strong>python</strong> 代码是加载到用户空间的内存中运行的，当执行 <code>write()</code> 系统调用时，<code>write()</code> 是在内核空间运行的，但它们都属于同一进程，只是在执行系统调用的时候发生一个状态的切换。</p><p>​     程序运行在用户空间的时候，进程处于用户态，程序进入到内核运行后，进程处于内核态，这两种状态的切换就被称为上下文切换</p><blockquote><p>上下文切换是很消耗资源的，所以要尽量避免上下文切换</p></blockquote><hr><h3 id="用户态切换到内核态的3种方式"><a href="#用户态切换到内核态的3种方式" class="headerlink" title="用户态切换到内核态的3种方式"></a>用户态切换到内核态的3种方式</h3><ul><li><p><strong>系统调用</strong> : 这是<strong>用户态进程主动</strong>要求切换到<strong>内核态</strong>的一种方式，<strong>用户态进程</strong>通过系统调用申请使用操作系统提供的服务程序完成工作，而系统调用的机制其核心还是使用了操作系统为用户特别开放的一个中断来实现，例如 Linux 的 int 80h 中断。</p></li><li><p><strong>异常</strong> : 当 CPU 在执行运行在<strong>用户态</strong>下的程序时，发生了某些事先不可知的异常，这时会触发由当前运行进程切换到处理此异常的内核相关程序中，也就转到了<strong>内核态</strong>，比如缺页异常。</p></li><li><p><strong>外围设备的中断</strong> : 当外围设备完成用户请求的操作后，会向 <strong>CPU</strong> 发出相应的中断信号，这时 <strong>CPU</strong> 会暂停执行下一条即将要执行的指令转而去执行与中断信号对应的处理程序，如果先前执行的指令是用户态下的程序，那么这个转换的过程自然也就发生了由用户态到内核态的切换。</p></li></ul>]]></content>
+      
+      
+      <categories>
+          
+          <category> 计算机组成 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> linux </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>FAQ问题记录手册</title>
       <link href="/2018/11/03/faq-wen-ti-ji-lu-shou-ce/"/>
       <url>/2018/11/03/faq-wen-ti-ji-lu-shou-ce/</url>

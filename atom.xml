@@ -36,6 +36,32 @@
   </entry>
   
   <entry>
+    <title>虚拟地址空间与上下文切换详解</title>
+    <link href="https://blog.aptxhb.xyz/2021/05/03/xu-ni-di-zhi-kong-jian-yong-hu-kong-jian-nei-he-kong-jian-yong-hu-tai-yu-nei-he-tai-yuan-li-he-zuo-yong/"/>
+    <id>https://blog.aptxhb.xyz/2021/05/03/xu-ni-di-zhi-kong-jian-yong-hu-kong-jian-nei-he-kong-jian-yong-hu-tai-yu-nei-he-tai-yuan-li-he-zuo-yong/</id>
+    <published>2021-05-03T12:49:00.000Z</published>
+    <updated>2022-05-05T11:52:22.084Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt;&lt;a href=&quot;https://juejin.cn/post/6990237426903957540&quot;&gt;原文地址&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&quot;虚拟地址空间、用户空间、内核空间、用户态与内核态是什么？&quot;&gt;&lt;a</summary>
+        
+      
+    
+    
+    
+    <category term="计算机组成" scheme="https://blog.aptxhb.xyz/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90/"/>
+    
+    
+    <category term="linux" scheme="https://blog.aptxhb.xyz/tags/linux/"/>
+    
+  </entry>
+  
+  <entry>
     <title>FAQ问题记录手册</title>
     <link href="https://blog.aptxhb.xyz/2018/11/03/faq-wen-ti-ji-lu-shou-ce/"/>
     <id>https://blog.aptxhb.xyz/2018/11/03/faq-wen-ti-ji-lu-shou-ce/</id>
