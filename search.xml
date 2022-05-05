@@ -56,31 +56,6 @@
     
     
     <entry>
-      <title>FAQ问题记录手册</title>
-      <link href="/2018/11/03/faq-wen-ti-ji-lu-shou-ce/"/>
-      <url>/2018/11/03/faq-wen-ti-ji-lu-shou-ce/</url>
-      
-        <content type="html"><![CDATA[<p>[toc]</p><h4 id="1-Mac-m1-安装-Docker-Desktop-时弹窗无法安装"><a href="#1-Mac-m1-安装-Docker-Desktop-时弹窗无法安装" class="headerlink" title="1. Mac m1 安装 Docker Desktop 时弹窗无法安装"></a>1. Mac m1 安装 Docker Desktop 时弹窗无法安装</h4><pre><code># 清除以下两个目录文件，在重新启动rm -rf /Users/用户名/Library/Group\ Containers/group.com.dockerrm -rf /Users/用户名/.docker/</code></pre>]]></content>
-      
-      
-      <categories>
-          
-          <category> FAQ </category>
-          
-      </categories>
-      
-      
-        <tags>
-            
-            <tag> FAQ </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
       <title>NTP时间同步</title>
       <link href="/2018/11/03/ntp-shi-jian-tong-bu/"/>
       <url>/2018/11/03/ntp-shi-jian-tong-bu/</url>
@@ -98,6 +73,31 @@
         <tags>
             
             <tag> linux </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>FAQ问题记录手册</title>
+      <link href="/2018/11/03/faq-wen-ti-ji-lu-shou-ce/"/>
+      <url>/2018/11/03/faq-wen-ti-ji-lu-shou-ce/</url>
+      
+        <content type="html"><![CDATA[<p>[toc]</p><h4 id="1-Mac-m1-安装-Docker-Desktop-时弹窗无法安装"><a href="#1-Mac-m1-安装-Docker-Desktop-时弹窗无法安装" class="headerlink" title="1. Mac m1 安装 Docker Desktop 时弹窗无法安装"></a>1. Mac m1 安装 Docker Desktop 时弹窗无法安装</h4><pre><code># 清除以下两个目录文件，在重新启动rm -rf /Users/用户名/Library/Group\ Containers/group.com.dockerrm -rf /Users/用户名/.docker/</code></pre>]]></content>
+      
+      
+      <categories>
+          
+          <category> FAQ </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> FAQ </tag>
             
         </tags>
       

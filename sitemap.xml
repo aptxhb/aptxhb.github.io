@@ -128,14 +128,14 @@
 
   
   <url>
-    <loc>https://blog.aptxhb.xyz/tags/FAQ/</loc>
+    <loc>https://blog.aptxhb.xyz/tags/linux/</loc>
     <lastmod>2022-05-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://blog.aptxhb.xyz/tags/linux/</loc>
+    <loc>https://blog.aptxhb.xyz/tags/FAQ/</loc>
     <lastmod>2022-05-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -165,14 +165,14 @@
 
   
   <url>
-    <loc>https://blog.aptxhb.xyz/categories/FAQ/</loc>
+    <loc>https://blog.aptxhb.xyz/categories/ntp/</loc>
     <lastmod>2022-05-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://blog.aptxhb.xyz/categories/ntp/</loc>
+    <loc>https://blog.aptxhb.xyz/categories/FAQ/</loc>
     <lastmod>2022-05-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -186,14 +186,14 @@
   </url>
   
   <url>
-    <loc>https://blog.aptxhb.xyz/categories/%E6%96%87%E6%9C%AC%E6%93%8D%E4%BD%9C/</loc>
+    <loc>https://blog.aptxhb.xyz/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90/</loc>
     <lastmod>2022-05-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://blog.aptxhb.xyz/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90/</loc>
+    <loc>https://blog.aptxhb.xyz/categories/%E6%96%87%E6%9C%AC%E6%93%8D%E4%BD%9C/</loc>
     <lastmod>2022-05-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
