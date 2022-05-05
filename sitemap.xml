@@ -2,6 +2,15 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://blog.aptxhb.xyz/2018/11/03/faq-wen-ti-ji-lu-shou-ce/</loc>
+    
+    <lastmod>2022-05-05</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://blog.aptxhb.xyz/2018/11/03/ntp-shi-jian-tong-bu/</loc>
     
     <lastmod>2022-05-04</lastmod>
@@ -103,36 +112,43 @@
 
   <url>
     <loc>https://blog.aptxhb.xyz/</loc>
-    <lastmod>2022-05-04</lastmod>
+    <lastmod>2022-05-05</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
 
   
   <url>
-    <loc>https://blog.aptxhb.xyz/tags/linux/</loc>
-    <lastmod>2022-05-04</lastmod>
+    <loc>https://blog.aptxhb.xyz/tags/FAQ/</loc>
+    <lastmod>2022-05-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://blog.aptxhb.xyz/tags/shell/</loc>
-    <lastmod>2022-05-04</lastmod>
+    <loc>https://blog.aptxhb.xyz/tags/linux/</loc>
+    <lastmod>2022-05-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://blog.aptxhb.xyz/tags/Typora/</loc>
-    <lastmod>2022-05-04</lastmod>
+    <lastmod>2022-05-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://blog.aptxhb.xyz/tags/Markdown/</loc>
-    <lastmod>2022-05-04</lastmod>
+    <lastmod>2022-05-05</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.aptxhb.xyz/tags/shell/</loc>
+    <lastmod>2022-05-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
@@ -140,22 +156,29 @@
 
   
   <url>
-    <loc>https://blog.aptxhb.xyz/categories/ntp/</loc>
-    <lastmod>2022-05-04</lastmod>
+    <loc>https://blog.aptxhb.xyz/categories/FAQ/</loc>
+    <lastmod>2022-05-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://blog.aptxhb.xyz/categories/%E6%96%87%E6%9C%AC%E6%93%8D%E4%BD%9C/</loc>
-    <lastmod>2022-05-04</lastmod>
+    <loc>https://blog.aptxhb.xyz/categories/ntp/</loc>
+    <lastmod>2022-05-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://blog.aptxhb.xyz/categories/Markdown/</loc>
-    <lastmod>2022-05-04</lastmod>
+    <lastmod>2022-05-05</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.aptxhb.xyz/categories/%E6%96%87%E6%9C%AC%E6%93%8D%E4%BD%9C/</loc>
+    <lastmod>2022-05-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
