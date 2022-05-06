@@ -62,6 +62,31 @@
   </entry>
   
   <entry>
+    <title>NTP时间同步</title>
+    <link href="https://blog.aptxhb.xyz/2018/11/03/ntp-shi-jian-tong-bu/"/>
+    <id>https://blog.aptxhb.xyz/2018/11/03/ntp-shi-jian-tong-bu/</id>
+    <published>2018-11-03T11:35:00.000Z</published>
+    <updated>2022-05-06T06:41:29.160Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h4 id=&quot;NTP时间同步&quot;&gt;&lt;a href=&quot;#NTP时间同步&quot; class=&quot;headerlink&quot; title=&quot;NTP时间同步&quot;&gt;&lt;/a&gt;NTP时间同步&lt;/h4&gt;&lt;h5 id=&quot;一、定时任务同步时间&quot;&gt;&lt;a href=&quot;#一、定时任务同步时间&quot;</summary>
+        
+      
+    
+    
+    
+    <category term="ntp" scheme="https://blog.aptxhb.xyz/categories/ntp/"/>
+    
+    
+    <category term="linux" scheme="https://blog.aptxhb.xyz/tags/linux/"/>
+    
+  </entry>
+  
+  <entry>
     <title>FAQ问题记录手册</title>
     <link href="https://blog.aptxhb.xyz/2018/11/03/faq-wen-ti-ji-lu-shou-ce/"/>
     <id>https://blog.aptxhb.xyz/2018/11/03/faq-wen-ti-ji-lu-shou-ce/</id>
@@ -84,31 +109,6 @@
     
     
     <category term="FAQ" scheme="https://blog.aptxhb.xyz/tags/FAQ/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>NTP时间同步</title>
-    <link href="https://blog.aptxhb.xyz/2018/11/03/ntp-shi-jian-tong-bu/"/>
-    <id>https://blog.aptxhb.xyz/2018/11/03/ntp-shi-jian-tong-bu/</id>
-    <published>2018-11-03T11:35:00.000Z</published>
-    <updated>2022-05-06T06:41:29.160Z</updated>
-    
-    
-      
-      
-        
-        
-    <summary type="html">&lt;h4 id=&quot;NTP时间同步&quot;&gt;&lt;a href=&quot;#NTP时间同步&quot; class=&quot;headerlink&quot; title=&quot;NTP时间同步&quot;&gt;&lt;/a&gt;NTP时间同步&lt;/h4&gt;&lt;h5 id=&quot;一、定时任务同步时间&quot;&gt;&lt;a href=&quot;#一、定时任务同步时间&quot;</summary>
-        
-      
-    
-    
-    
-    <category term="ntp" scheme="https://blog.aptxhb.xyz/categories/ntp/"/>
-    
-    
-    <category term="linux" scheme="https://blog.aptxhb.xyz/tags/linux/"/>
     
   </entry>
   

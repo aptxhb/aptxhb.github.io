@@ -56,7 +56,7 @@
   </url>
   
   <url>
-    <loc>https://blog.aptxhb.xyz/archives/index.html</loc>
+    <loc>https://blog.aptxhb.xyz/404.html</loc>
     
     <lastmod>2022-05-02</lastmod>
     
@@ -65,7 +65,7 @@
   </url>
   
   <url>
-    <loc>https://blog.aptxhb.xyz/404.html</loc>
+    <loc>https://blog.aptxhb.xyz/archives/index.html</loc>
     
     <lastmod>2022-05-02</lastmod>
     
@@ -128,13 +128,6 @@
 
   
   <url>
-    <loc>https://blog.aptxhb.xyz/tags/FAQ/</loc>
-    <lastmod>2022-05-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
     <loc>https://blog.aptxhb.xyz/tags/linux/</loc>
     <lastmod>2022-05-06</lastmod>
     <changefreq>weekly</changefreq>
@@ -142,7 +135,7 @@
   </url>
   
   <url>
-    <loc>https://blog.aptxhb.xyz/tags/shell/</loc>
+    <loc>https://blog.aptxhb.xyz/tags/FAQ/</loc>
     <lastmod>2022-05-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -162,7 +155,21 @@
     <priority>0.2</priority>
   </url>
   
+  <url>
+    <loc>https://blog.aptxhb.xyz/tags/shell/</loc>
+    <lastmod>2022-05-06</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
 
+  
+  <url>
+    <loc>https://blog.aptxhb.xyz/categories/ntp/</loc>
+    <lastmod>2022-05-06</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
   
   <url>
     <loc>https://blog.aptxhb.xyz/categories/FAQ/</loc>
@@ -172,7 +179,7 @@
   </url>
   
   <url>
-    <loc>https://blog.aptxhb.xyz/categories/ntp/</loc>
+    <loc>https://blog.aptxhb.xyz/categories/Markdown/</loc>
     <lastmod>2022-05-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -187,13 +194,6 @@
   
   <url>
     <loc>https://blog.aptxhb.xyz/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90/</loc>
-    <lastmod>2022-05-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://blog.aptxhb.xyz/categories/Markdown/</loc>
     <lastmod>2022-05-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
