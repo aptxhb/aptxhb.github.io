@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://blog.aptxhb.xyz/2021/05/03/xu-ni-di-zhi-kong-jian-yong-hu-kong-jian-nei-he-kong-jian-yong-hu-tai-yu-nei-he-tai-yuan-li-he-zuo-yong/</loc>
-    <lastmod>2022-05-05</lastmod>
+    <loc>https://blog.aptxhb.xyz/2018/09/07/ji-yu-containerd-er-jin-zhi-bu-shu-k8s/</loc>
+    <lastmod>2022-05-06</lastmod>
   </url>
   <url>
-    <loc>https://blog.aptxhb.xyz/2018/11/03/faq-wen-ti-ji-lu-shou-ce/</loc>
-    <lastmod>2022-05-05</lastmod>
+    <loc>https://blog.aptxhb.xyz/2021/05/03/xu-ni-di-zhi-kong-jian-yong-hu-kong-jian-nei-he-kong-jian-yong-hu-tai-yu-nei-he-tai-yuan-li-he-zuo-yong/</loc>
+    <lastmod>2022-05-06</lastmod>
   </url>
   <url>
     <loc>https://blog.aptxhb.xyz/2018/11/03/ntp-shi-jian-tong-bu/</loc>
-    <lastmod>2022-05-04</lastmod>
-  </url>
-  <url>
-    <loc>https://blog.aptxhb.xyz/2018/09/07/ji-yu-containerd-er-jin-zhi-bu-shu-k8s/</loc>
-    <lastmod>2022-05-03</lastmod>
+    <lastmod>2022-05-06</lastmod>
   </url>
   <url>
     <loc>https://blog.aptxhb.xyz/2022/05/03/wen-ben-san-jian-ke-sed/</loc>
-    <lastmod>2022-05-03</lastmod>
+    <lastmod>2022-05-06</lastmod>
+  </url>
+  <url>
+    <loc>https://blog.aptxhb.xyz/2018/11/03/faq-wen-ti-ji-lu-shou-ce/</loc>
+    <lastmod>2022-05-06</lastmod>
   </url>
 </urlset> 

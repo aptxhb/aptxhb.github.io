@@ -6,7 +6,7 @@
   <link href="https://blog.aptxhb.xyz/atom.xml" rel="self"/>
   
   <link href="https://blog.aptxhb.xyz/"/>
-  <updated>2022-05-03T17:16:32.883Z</updated>
+  <updated>2022-05-06T06:41:12.759Z</updated>
   <id>https://blog.aptxhb.xyz/</id>
   
   <author>
@@ -21,7 +21,7 @@
     <link href="https://blog.aptxhb.xyz/2022/05/03/wen-ben-san-jian-ke-sed/"/>
     <id>https://blog.aptxhb.xyz/2022/05/03/wen-ben-san-jian-ke-sed/</id>
     <published>2022-05-03T05:35:49.000Z</published>
-    <updated>2022-05-03T17:16:32.883Z</updated>
+    <updated>2022-05-06T06:41:12.759Z</updated>
     
     
     
@@ -40,7 +40,7 @@
     <link href="https://blog.aptxhb.xyz/2021/05/03/xu-ni-di-zhi-kong-jian-yong-hu-kong-jian-nei-he-kong-jian-yong-hu-tai-yu-nei-he-tai-yuan-li-he-zuo-yong/"/>
     <id>https://blog.aptxhb.xyz/2021/05/03/xu-ni-di-zhi-kong-jian-yong-hu-kong-jian-nei-he-kong-jian-yong-hu-tai-yu-nei-he-tai-yuan-li-he-zuo-yong/</id>
     <published>2021-05-03T12:49:00.000Z</published>
-    <updated>2022-05-05T11:52:22.084Z</updated>
+    <updated>2022-05-06T06:41:48.002Z</updated>
     
     
       
@@ -62,36 +62,11 @@
   </entry>
   
   <entry>
-    <title>NTP时间同步</title>
-    <link href="https://blog.aptxhb.xyz/2018/11/03/ntp-shi-jian-tong-bu/"/>
-    <id>https://blog.aptxhb.xyz/2018/11/03/ntp-shi-jian-tong-bu/</id>
-    <published>2018-11-03T11:35:00.000Z</published>
-    <updated>2022-05-04T14:00:22.276Z</updated>
-    
-    
-      
-      
-        
-        
-    <summary type="html">&lt;h4 id=&quot;NTP时间同步&quot;&gt;&lt;a href=&quot;#NTP时间同步&quot; class=&quot;headerlink&quot; title=&quot;NTP时间同步&quot;&gt;&lt;/a&gt;NTP时间同步&lt;/h4&gt;&lt;h5 id=&quot;一、定时任务同步时间&quot;&gt;&lt;a href=&quot;#一、定时任务同步时间&quot;</summary>
-        
-      
-    
-    
-    
-    <category term="ntp" scheme="https://blog.aptxhb.xyz/categories/ntp/"/>
-    
-    
-    <category term="linux" scheme="https://blog.aptxhb.xyz/tags/linux/"/>
-    
-  </entry>
-  
-  <entry>
     <title>FAQ问题记录手册</title>
     <link href="https://blog.aptxhb.xyz/2018/11/03/faq-wen-ti-ji-lu-shou-ce/"/>
     <id>https://blog.aptxhb.xyz/2018/11/03/faq-wen-ti-ji-lu-shou-ce/</id>
     <published>2018-11-03T11:35:00.000Z</published>
-    <updated>2022-05-05T05:20:05.096Z</updated>
+    <updated>2022-05-06T06:40:51.316Z</updated>
     
     
       
@@ -113,11 +88,36 @@
   </entry>
   
   <entry>
+    <title>NTP时间同步</title>
+    <link href="https://blog.aptxhb.xyz/2018/11/03/ntp-shi-jian-tong-bu/"/>
+    <id>https://blog.aptxhb.xyz/2018/11/03/ntp-shi-jian-tong-bu/</id>
+    <published>2018-11-03T11:35:00.000Z</published>
+    <updated>2022-05-06T06:41:29.160Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h4 id=&quot;NTP时间同步&quot;&gt;&lt;a href=&quot;#NTP时间同步&quot; class=&quot;headerlink&quot; title=&quot;NTP时间同步&quot;&gt;&lt;/a&gt;NTP时间同步&lt;/h4&gt;&lt;h5 id=&quot;一、定时任务同步时间&quot;&gt;&lt;a href=&quot;#一、定时任务同步时间&quot;</summary>
+        
+      
+    
+    
+    
+    <category term="ntp" scheme="https://blog.aptxhb.xyz/categories/ntp/"/>
+    
+    
+    <category term="linux" scheme="https://blog.aptxhb.xyz/tags/linux/"/>
+    
+  </entry>
+  
+  <entry>
     <title>Containerd二进制部署K8s</title>
     <link href="https://blog.aptxhb.xyz/2018/09/07/ji-yu-containerd-er-jin-zhi-bu-shu-k8s/"/>
     <id>https://blog.aptxhb.xyz/2018/09/07/ji-yu-containerd-er-jin-zhi-bu-shu-k8s/</id>
     <published>2018-09-07T01:25:00.000Z</published>
-    <updated>2022-05-03T17:22:07.429Z</updated>
+    <updated>2022-05-06T06:42:09.395Z</updated>
     
     
       
