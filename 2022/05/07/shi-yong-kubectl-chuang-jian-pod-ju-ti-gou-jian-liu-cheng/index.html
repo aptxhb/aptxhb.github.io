@@ -483,7 +483,7 @@
 <p><strong>注：</strong>本文所有内容基于 <code>kubenetes v1.14.0</code></p>
 <p>[toc]</p>
 <h3 id="Kubectl"><a href="#Kubectl" class="headerlink" title="Kubectl"></a>Kubectl</h3><hr>
-<h4 id="Validation-验证"><a href="#Validation-验证" class="headerlink" title="Validation (验证)"></a>Validation (验证)</h4><p>​    首先，当我们桥下回撤键执行命令后，Kubectl 会执行客户端验证，以确保非法的请求(例如：创建不支持的资源或使用格式错误的镜像名称) 快速失败，并不会发送给 kube-apiserver，即通过减少不必要的负载来提高系统性能。</p>
+<h4 id="Validation-验证"><a href="#Validation-验证" class="headerlink" title="Validation (验证)"></a>Validation (验证)</h4><p>​    首先，当我们敲下回车键执行命令后，Kubectl 会执行客户端验证，以确保非法的请求(例如：创建不支持的资源或使用格式错误的镜像名称) 快速失败，并不会发送给 kube-apiserver，即通过减少不必要的负载来提高系统性能。</p>
 <h4 id="Generators-生成器"><a href="#Generators-生成器" class="headerlink" title="Generators (生成器)"></a>Generators (生成器)</h4><p>​    验证通过后，kubectl 开始构造它将发送给 kube-apiserver 的 HTTP 请求。在 Kubernetes 中，访问或更改状态的所有尝试都通过 kube-apiserver 进行，后者又与 etcd 进行通信。Kubectl 客户端也不例外。为了构造 HTTP 请求，Kubectl 使用称为 <a target="_blank" rel="noopener" href="https://kubernetes.io/zh/docs/reference/access-authn-authz/admission-controllers/#what-does-each-admission-controller-do">generators</a> 的东西，这是一个负责序列化的抽象概念。</p>
 <p>​    你可能没有注意到，通过 <code>kubectl run</code> 不仅可以运行 <code>deployment</code> ，还可以通过指定参数 <code>--generator</code> 来部署其它 workload。</p>
 <p>​    如果没有指定 <code>--generator</code> 参数的值，Kubectl 将会自动推断资源的类型，具体如下：</p>
