@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="创建 Pod 具体流程, 叶落化仰">
+    <meta name="keywords" content="使用 Kubectl 创建 Pod 具体构建流程, 叶落化仰">
     <meta name="description" content="本文以 Kuberctl 创建 Pod 为例，向你揭露从客户端到 Kubelet 的请求的完整生命周期">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -19,7 +19,7 @@
 
     
 
-    <title>创建 Pod 具体流程 | 叶落化仰</title>
+    <title>使用 Kubectl 创建 Pod 具体构建流程 | 叶落化仰</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.min.css">
@@ -295,7 +295,7 @@
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">创建 Pod 具体流程</h1>
+                    <h1 class="description center-align post-title">使用 Kubectl 创建 Pod 具体构建流程</h1>
                 </div>
             </div>
         </div>
@@ -660,7 +660,7 @@
 <p>​    在我们的例子中，我们使用的是 Docker。在 Docker 中，创建沙箱涉及创建 <code>pause</code>容器。</p>
 <p>​    <code>pause</code>容器向 Pod 中的所有其他容器的父级一样，因为它承载了工作负载容器最终将使用的许多 Pod 级资源。这些“资源”是 Linux Namespaces（IPC，Network，PID）。</p>
 <blockquote>
-<p>如果你不熟悉容器在 Linux 中的工作方式，那么我们快速回顾一下。Linux 内核具有 Namespace 的概念，允许主机操作系统分割出一组专用资源（例如 CPU 或内存）并将其提供给一个进程，就好像它是世界上唯一使用它们的东西一样。Cgroup 在这里也很重要，因为它们是 Linux 管理资源隔离的方式。Docker 使用这两个内核功能来托管一个保证资源强制隔离的进程。更多信息，可深入阅读 <a target="_blank" rel="noopener" href="https://jvns.ca/blog/2016/10/10/what-even-is-a-container/">What even is a COntainer?</a></p>
+<p>如果你不熟悉容器在 Linux 中的工作方式，那么我们快速回顾一下。Linux 内核具有 Namespace 的概念，允许主机操作系统分割出一组专用资源（例如 CPU 或内存）并将其提供给一个进程，就好像它是世界上唯一使用它们的东西一样。Cgroup 在这里也很重要，因为它们是 Linux 管理资源隔离的方式。Docker 使用这两个内核功能来托管一个保证资源强制隔离的进程。更多信息，可深入阅读 <a target="_blank" rel="noopener" href="https://jvns.ca/blog/2016/10/10/what-even-is-a-container/">What even is a Container?</a></p>
 </blockquote>
 <p>​    <code>pause</code> 容器提供了一种托管所有这些 Namespaces 的方法，并允许自容器共享它们。通过成为同一 Network Namespace 的一部分，一个好处是同一个 Pod 中的容器可以使用 localhost 相互访问。</p>
 <p>​    <code>pause</code>容器的第二个好处与 PID Namespace 有关。在这些 Namespace 中，进程形成一个分层树（hierarchical tree），顶部的”init”进程负责”收获”僵尸进程。更多信息，请深入阅读 <a target="_blank" rel="noopener" href="https://www.ianlewis.org/en/almighty-pause-container">great blog post</a></p>
@@ -791,9 +791,9 @@
                 <a href="/2022/05/07/shi-yong-kubectl-chuang-jian-pod-ju-ti-gou-jian-liu-cheng/">
                     <div class="card-image">
                         
-                        <img src="/medias/featureimages/6.jpg" class="responsive-img" alt="创建 Pod 具体流程">
+                        <img src="/medias/featureimages/6.jpg" class="responsive-img" alt="使用 Kubectl 创建 Pod 具体构建流程">
                         
-                        <span class="card-title">创建 Pod 具体流程</span>
+                        <span class="card-title">使用 Kubectl 创建 Pod 具体构建流程</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
