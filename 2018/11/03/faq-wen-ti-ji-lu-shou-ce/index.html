@@ -290,7 +290,7 @@
 <script src="/libs/cryptojs/crypto-js.min.js"></script>
 <script>
     (function() {
-        let pwd = '123456';
+        let pwd = 'MTIzNDU2';
         if (pwd && pwd.length > 0) {
             if (pwd !== CryptoJS.SHA256(prompt('请输入访问本文章的密码')).toString(CryptoJS.enc.Hex)) {
                 alert('密码错误，将返回主页！');
@@ -456,7 +456,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2022-05-10
+                    2022-05-13
                 </div>
                 
 
@@ -485,6 +485,25 @@
 rm -rf /Users/用户名/Library/Group\ Containers/group.com.docker
 rm -rf /Users/用户名/.docker/
 </code></pre>
+<h3 id="docker"><a href="#docker" class="headerlink" title="docker"></a>docker</h3><h4 id="2-docker登陆私有仓库http禁止自动跳转至https"><a href="#2-docker登陆私有仓库http禁止自动跳转至https" class="headerlink" title="2. docker登陆私有仓库http禁止自动跳转至https"></a>2. docker登陆私有仓库http禁止自动跳转至https</h4><p><img src="https://aptxhb.oss-cn-shenzhen.aliyuncs.com/images/image-20220513083750891.png" alt="image-20220513083750891"></p>
+<p>编辑docker 配置文件 /etc/docker/daemon.json</p>
+<pre class=" language-json"><code class="language-json"><span class="token punctuation">{</span>
+  <span class="token property">"registry-mirrors"</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">"https://uwa9by0v.mirror.aliyuncs.com"</span><span class="token punctuation">]</span><span class="token punctuation">,</span> # 阿里云镜像加速
+  <span class="token property">"insecure-registries"</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">"http://harbor.smarlife.cn:80"</span><span class="token punctuation">]</span>  # 私有仓库地址
+<span class="token punctuation">}</span>
+</code></pre>
+<p>重启docker </p>
+<h4 id="3-Get-https-harbor-xxxxxx"><a href="#3-Get-https-harbor-xxxxxx" class="headerlink" title="3. Get https://harbor.xxxxxx"></a>3. Get <a target="_blank" rel="noopener" href="https://harbor.xxxxxx/">https://harbor.xxxxxx</a></h4><p>.cn/v2/: x509: certificate signed by unknown authority</p>
+<p>问题说明：我们在构建 docker 镜像时一般使用的是 linux 系统，默认是不带 ca-certficates 根证书的，导致无法识别外部 https 携带的数字证书。如图：</p>
+<p><img src="https://aptxhb.oss-cn-shenzhen.aliyuncs.com/images/image-20220513115435456.png" alt="image-20220513115435456"></p>
+<p><strong>方法一：</strong></p>
+<hr>
+<pre class=" language-bash"><code class="language-bash"><span class="token keyword">echo</span> -n <span class="token operator">|</span> openssl s_client -showcerts -connect harbor.smarlife.cn:443 2<span class="token operator">&amp;</span>gt<span class="token punctuation">;</span>/dev/null <span class="token operator">|</span> <span class="token function">sed</span> -ne <span class="token string">'/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p'</span> <span class="token operator">&amp;</span>gt<span class="token punctuation">;</span><span class="token operator">&amp;</span>gt<span class="token punctuation">;</span> /etc/ssl/certs/harbor.xxxxxx.cn.crt
+</code></pre>
+<p>重启 docker</p>
+<pre class=" language-bash"><code class="language-bash">systemctl daemon-reload <span class="token operator">&amp;&amp;</span> systemctl restart docker
+</code></pre>
+<h4 id="4-Error-response-from-daemon-Get-https-harbor-xxxxxx-cn-v2-x509-certificate-has-expired-or-is-not-yet-valid"><a href="#4-Error-response-from-daemon-Get-https-harbor-xxxxxx-cn-v2-x509-certificate-has-expired-or-is-not-yet-valid" class="headerlink" title="4. Error response from daemon: Get https://harbor.xxxxxx.cn/v2/: x509: certificate has expired or is not yet valid"></a>4. Error response from daemon: Get <a target="_blank" rel="noopener" href="https://harbor.xxxxxx.cn/v2/">https://harbor.xxxxxx.cn/v2/</a>: x509: certificate has expired or is not yet valid</h4><p>时间出现文件检查时间</p>
 
                 
             </div>
@@ -552,30 +571,30 @@ rm -rf /Users/用户名/.docker/
             <div class="article-badge left-badge text-color">
                 <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
             <div class="card">
-                <a href="/2018/11/03/ntp-shi-jian-tong-bu/">
+                <a href="/2021/05/03/xu-ni-di-zhi-kong-jian-yong-hu-kong-jian-nei-he-kong-jian-yong-hu-tai-yu-nei-he-tai-yuan-li-he-zuo-yong/">
                     <div class="card-image">
                         
-                        <img src="/medias/featureimages/3.jpg" class="responsive-img" alt="NTP时间同步">
+                        <img src="/medias/featureimages/5.jpg" class="responsive-img" alt="虚拟地址空间与上下文切换详解">
                         
-                        <span class="card-title">NTP时间同步</span>
+                        <span class="card-title">虚拟地址空间与上下文切换详解</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            为了保证服务集群的分布性、一致性，NTP时间同步作为基础服务有着关键性的作用
+                            本文更方便的了解什么是虚拟地址空间、用户空间、内核空间以及上下文切换
                         
                     </div>
                     <div class="publish-info">
                         <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2018-11-03
+                            <i class="far fa-clock fa-fw icon-date"></i>2021-05-03
                         </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/ntp/" class="post-category">
-                                    ntp
+                            <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90/" class="post-category">
+                                    计算机组成
                                 </a>
                             
                             
@@ -600,30 +619,30 @@ rm -rf /Users/用户名/.docker/
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2018/09/07/ji-yu-containerd-er-jin-zhi-bu-shu-k8s/">
+                <a href="/2018/11/03/ntp-shi-jian-tong-bu/">
                     <div class="card-image">
                         
-                        <img src="/medias/featureimages/1.jpg" class="responsive-img" alt="Containerd二进制部署K8s">
+                        <img src="/medias/featureimages/3.jpg" class="responsive-img" alt="NTP时间同步">
                         
-                        <span class="card-title">Containerd二进制部署K8s</span>
+                        <span class="card-title">NTP时间同步</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            
+                            为了保证服务集群的分布性、一致性，NTP时间同步作为基础服务有着关键性的作用
                         
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2018-09-07
+                                <i class="far fa-clock fa-fw icon-date"></i>2018-11-03
                             </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/Markdown/" class="post-category">
-                                    Markdown
+                            <a href="/categories/ntp/" class="post-category">
+                                    ntp
                                 </a>
                             
                             
@@ -633,12 +652,8 @@ rm -rf /Users/用户名/.docker/
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/Typora/">
-                        <span class="chip bg-color">Typora</span>
-                    </a>
-                    
-                    <a href="/tags/Markdown/">
-                        <span class="chip bg-color">Markdown</span>
+                    <a href="/tags/linux/">
+                        <span class="chip bg-color">linux</span>
                     </a>
                     
                 </div>
