@@ -91,6 +91,32 @@
   </entry>
   
   <entry>
+    <title>Traefik 服务发现之 etcd</title>
+    <link href="https://blog.aptxhb.xyz/2021/05/03/traefik-fu-wu-fa-xian-zhi-etcd/"/>
+    <id>https://blog.aptxhb.xyz/2021/05/03/traefik-fu-wu-fa-xian-zhi-etcd/</id>
+    <published>2021-05-02T18:29:00.000Z</published>
+    <updated>2022-06-03T18:29:56.713Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt;&lt;img src=&quot;https://doc.traefik.io/traefik/assets/img/traefik-architecture.png&quot;&gt;&lt;/p&gt;
+&lt;h4 id=&quot;基础环境准备&quot;&gt;&lt;a href=&quot;#基础环境准备&quot; class=&quot;headerlink&quot;</summary>
+        
+      
+    
+    
+    
+    <category term="traefik etcd" scheme="https://blog.aptxhb.xyz/categories/traefik-etcd/"/>
+    
+    
+    <category term="traefik etcd" scheme="https://blog.aptxhb.xyz/tags/traefik-etcd/"/>
+    
+  </entry>
+  
+  <entry>
     <title>FAQ问题记录手册</title>
     <link href="https://blog.aptxhb.xyz/2018/11/03/faq-wen-ti-ji-lu-shou-ce/"/>
     <id>https://blog.aptxhb.xyz/2018/11/03/faq-wen-ti-ji-lu-shou-ce/</id>

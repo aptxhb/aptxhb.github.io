@@ -4,8 +4,8 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="FAQ问题记录手册, 叶落化仰">
-    <meta name="description" content="用于记录日常简单问题的处理过程">
+    <meta name="keywords" content="Traefik 服务发现之 etcd, 叶落化仰">
+    <meta name="description" content="traefik 使用 etcd 服务自动发现部署">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -19,7 +19,7 @@
 
     
 
-    <title>FAQ问题记录手册 | 叶落化仰</title>
+    <title>Traefik 服务发现之 etcd | 叶落化仰</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.min.css">
@@ -290,7 +290,7 @@
 <script src="/libs/cryptojs/crypto-js.min.js"></script>
 <script>
     (function() {
-        let pwd = 'MTIzNDU2';
+        let pwd = '';
         if (pwd && pwd.length > 0) {
             if (pwd !== CryptoJS.SHA256(prompt('请输入访问本文章的密码')).toString(CryptoJS.enc.Hex)) {
                 alert('密码错误，将返回主页！');
@@ -303,12 +303,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/4.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/5.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">FAQ问题记录手册</h1>
+                    <h1 class="description center-align post-title">Traefik 服务发现之 etcd</h1>
                 </div>
             </div>
         </div>
@@ -424,8 +424,8 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/FAQ/">
-                                <span class="chip bg-color">FAQ</span>
+                            <a href="/tags/traefik-etcd/">
+                                <span class="chip bg-color">traefik etcd</span>
                             </a>
                         
                     </div>
@@ -436,8 +436,8 @@
                     <div class="post-cate">
                         <i class="fas fa-bookmark fa-fw icon-category"></i>
                         
-                            <a href="/categories/FAQ/" class="post-category">
-                                FAQ
+                            <a href="/categories/traefik-etcd/" class="post-category">
+                                traefik etcd
                             </a>
                         
                     </div>
@@ -449,14 +449,14 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2018-11-03
+                    2021-05-03
                 </div>
                 
 
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2022-05-16
+                    2022-06-04
                 </div>
                 
 
@@ -480,44 +480,192 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p>[toc]</p>
-<h4 id="1-Mac-m1-安装-Docker-Desktop-时弹窗无法安装"><a href="#1-Mac-m1-安装-Docker-Desktop-时弹窗无法安装" class="headerlink" title="1. Mac m1 安装 Docker Desktop 时弹窗无法安装"></a>1. Mac m1 安装 Docker Desktop 时弹窗无法安装</h4><pre><code># 清除以下两个目录文件，在重新启动
-rm -rf /Users/用户名/Library/Group\ Containers/group.com.docker
-rm -rf /Users/用户名/.docker/
+                <p><img src="https://doc.traefik.io/traefik/assets/img/traefik-architecture.png"></p>
+<h4 id="基础环境准备"><a href="#基础环境准备" class="headerlink" title="基础环境准备"></a>基础环境准备</h4><p>文件目录结构如下：</p>
+<pre class=" language-bash"><code class="language-bash">tree ./
+./
+├── docker-compose.yaml
+├── etcd
+│<span class="token operator">&amp;</span>nbsp<span class="token punctuation">;</span><span class="token operator">&amp;</span>nbsp<span class="token punctuation">;</span> └── data
+├── nginx1
+│<span class="token operator">&amp;</span>nbsp<span class="token punctuation">;</span><span class="token operator">&amp;</span>nbsp<span class="token punctuation">;</span> └── html
+│<span class="token operator">&amp;</span>nbsp<span class="token punctuation">;</span><span class="token operator">&amp;</span>nbsp<span class="token punctuation">;</span>     └── index.html
+├── nginx2
+│<span class="token operator">&amp;</span>nbsp<span class="token punctuation">;</span><span class="token operator">&amp;</span>nbsp<span class="token punctuation">;</span> └── html
+│<span class="token operator">&amp;</span>nbsp<span class="token punctuation">;</span><span class="token operator">&amp;</span>nbsp<span class="token punctuation">;</span>     └── index.html
+└── traefik
+    ├── log
+    └── traefik.yml
 </code></pre>
-<h3 id="docker"><a href="#docker" class="headerlink" title="docker"></a>docker</h3><h4 id="2-docker登陆私有仓库http禁止自动跳转至https"><a href="#2-docker登陆私有仓库http禁止自动跳转至https" class="headerlink" title="2. docker登陆私有仓库http禁止自动跳转至https"></a>2. docker登陆私有仓库http禁止自动跳转至https</h4><p><img src="https://aptxhb.oss-cn-shenzhen.aliyuncs.com/images/image-20220513083750891.png" alt="image-20220513083750891"></p>
-<p>编辑docker 配置文件 /etc/docker/daemon.json</p>
-<pre class=" language-json"><code class="language-json"><span class="token punctuation">{</span>
-  <span class="token property">"registry-mirrors"</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">"https://uwa9by0v.mirror.aliyuncs.com"</span><span class="token punctuation">]</span><span class="token punctuation">,</span> # 阿里云镜像加速
-  <span class="token property">"insecure-registries"</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">"http://harbor.smarlife.cn:80"</span><span class="token punctuation">]</span>  # 私有仓库地址
-<span class="token punctuation">}</span>
-</code></pre>
-<p>重启docker </p>
-<h4 id="3-Get-https-harbor-xxxxxx"><a href="#3-Get-https-harbor-xxxxxx" class="headerlink" title="3. Get https://harbor.xxxxxx"></a>3. Get <a target="_blank" rel="noopener" href="https://harbor.xxxxxx/">https://harbor.xxxxxx</a></h4><p>.cn/v2/: x509: certificate signed by unknown authority</p>
-<p>问题说明：我们在构建 docker 镜像时一般使用的是 linux 系统，默认是不带 ca-certficates 根证书的，导致无法识别外部 https 携带的数字证书。如图：</p>
-<p><img src="https://aptxhb.oss-cn-shenzhen.aliyuncs.com/images/image-20220513115435456.png" alt="image-20220513115435456"></p>
-<p><strong>方法一：</strong></p>
-<hr>
-<pre class=" language-bash"><code class="language-bash"><span class="token keyword">echo</span> -n <span class="token operator">|</span> openssl s_client -showcerts -connect harbor.smarlife.cn:443 2<span class="token operator">&amp;</span>gt<span class="token punctuation">;</span>/dev/null <span class="token operator">|</span> <span class="token function">sed</span> -ne <span class="token string">'/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p'</span> <span class="token operator">&amp;</span>gt<span class="token punctuation">;</span><span class="token operator">&amp;</span>gt<span class="token punctuation">;</span> /etc/ssl/certs/harbor.xxxxxx.cn.crt
-</code></pre>
-<p>重启 docker</p>
-<pre class=" language-bash"><code class="language-bash">systemctl daemon-reload <span class="token operator">&amp;&amp;</span> systemctl restart docker
-</code></pre>
-<h4 id="4-Error-response-from-daemon-Get-https-harbor-xxxxxx-cn-v2-x509-certificate-has-expired-or-is-not-yet-valid"><a href="#4-Error-response-from-daemon-Get-https-harbor-xxxxxx-cn-v2-x509-certificate-has-expired-or-is-not-yet-valid" class="headerlink" title="4. Error response from daemon: Get https://harbor.xxxxxx.cn/v2/: x509: certificate has expired or is not yet valid"></a>4. Error response from daemon: Get <a target="_blank" rel="noopener" href="https://harbor.xxxxxx.cn/v2/">https://harbor.xxxxxx.cn/v2/</a>: x509: certificate has expired or is not yet valid</h4><p>时间出现文件检查时间</p>
-<h4 id="5-Error-response-from-daemon-Get-“https-registry-ops-com-5000-v2-quot-http-server-gave-HTTP-response-to-HTTPS-client"><a href="#5-Error-response-from-daemon-Get-“https-registry-ops-com-5000-v2-quot-http-server-gave-HTTP-response-to-HTTPS-client" class="headerlink" title="5. Error response from daemon: Get “https://registry.ops.com:5000/v2/&quot;: http: server gave HTTP response to HTTPS client"></a>5. Error response from daemon: Get “<a target="_blank" rel="noopener" href="https://registry.ops.com:5000/v2/&quot;">https://registry.ops.com:5000/v2/"</a>: http: server gave HTTP response to HTTPS client</h4><p><strong>问题描述：</strong>推送私有仓库时自动跳转 HTTPS 协议，由于我的镜像仓库是 HTTP 协议所以被拒绝。如图所示：</p>
-<p><img src="https://aptxhb.oss-cn-shenzhen.aliyuncs.com/images/20220516093201.png" alt="图1"></p>
-<p>解决方式一：修改 docker 配置文件 daemon.json 指定私有仓库地址协议和端口</p>
-<pre class=" language-bash"><code class="language-bash"><span class="token function">cat</span> /etc/docker/daemon.json 
-<span class="token punctuation">{</span>
-  <span class="token string">"insecure-registries"</span><span class="token keyword">:</span> <span class="token punctuation">[</span><span class="token string">"http://registry.ops.com:5000"</span><span class="token punctuation">]</span>
-<span class="token punctuation">}</span>
+<p>首先我们准备 <code>docker-compose.yaml</code> 文件</p>
+<pre class=" language-yaml"><code class="language-yaml"><span class="token comment" spellcheck="true"># docker-compose.yaml</span>
+<span class="token key atrule">version</span><span class="token punctuation">:</span> <span class="token string">"3"</span>
 
-<span class="token comment" spellcheck="true"># 加载配置</span>
-systemctl daemon-reload
-
-<span class="token comment" spellcheck="true"># 重启 docker</span>
-systemctl restart docker
+<span class="token key atrule">services</span><span class="token punctuation">:</span>
+  <span class="token comment" spellcheck="true"># Etcd </span>
+  <span class="token key atrule">etcd</span><span class="token punctuation">:</span>
+    <span class="token key atrule">container_name</span><span class="token punctuation">:</span> etcd
+    <span class="token key atrule">restart</span><span class="token punctuation">:</span> always
+    <span class="token key atrule">image</span><span class="token punctuation">:</span> bitnami/etcd<span class="token punctuation">:</span>latest
+    <span class="token key atrule">environment</span><span class="token punctuation">:</span>
+      <span class="token punctuation">-</span> ALLOW_NONE_AUTHENTICATION=yes
+      <span class="token punctuation">-</span> ETCD_ADVERTISE_CLIENT_URLS=http<span class="token punctuation">:</span>//etcd<span class="token punctuation">:</span><span class="token number">2379</span>
+    <span class="token key atrule">ports</span><span class="token punctuation">:</span>
+      <span class="token punctuation">-</span> 2379<span class="token punctuation">:</span><span class="token number">2379</span>
+      <span class="token punctuation">-</span> 2380<span class="token punctuation">:</span><span class="token number">2380</span>
+    <span class="token key atrule">volumes</span><span class="token punctuation">:</span>
+      <span class="token punctuation">-</span> $<span class="token punctuation">{</span>PWD<span class="token punctuation">}</span>/etcd<span class="token punctuation">:</span>/bitnami/etcd
+  <span class="token comment" spellcheck="true"># traefik</span>
+  <span class="token key atrule">traefik</span><span class="token punctuation">:</span>
+    <span class="token key atrule">container_name</span><span class="token punctuation">:</span> traefik
+    <span class="token key atrule">image</span><span class="token punctuation">:</span> traefik<span class="token punctuation">:</span>latest
+    <span class="token key atrule">command</span><span class="token punctuation">:</span> <span class="token punctuation">-</span><span class="token punctuation">-</span>api.insecure=true <span class="token punctuation">-</span><span class="token punctuation">-</span>providers.docker
+    <span class="token key atrule">ports</span><span class="token punctuation">:</span>
+      <span class="token punctuation">-</span> 8080<span class="token punctuation">:</span><span class="token number">8080</span>
+      <span class="token punctuation">-</span> <span class="token datetime number">80:80</span>
+      <span class="token punctuation">-</span> 443<span class="token punctuation">:</span><span class="token number">443</span>
+    <span class="token key atrule">volumes</span><span class="token punctuation">:</span>
+      <span class="token punctuation">-</span> $<span class="token punctuation">{</span>PWD<span class="token punctuation">}</span>/traefik/traefik.yml<span class="token punctuation">:</span>/etc/traefik/traefik.yml
+      <span class="token punctuation">-</span> $<span class="token punctuation">{</span>PWD<span class="token punctuation">}</span>/traefik/log<span class="token punctuation">:</span>/var/log/traefik/log
+  <span class="token comment" spellcheck="true"># nginx1</span>
+  <span class="token key atrule">nginx1</span><span class="token punctuation">:</span>
+    <span class="token key atrule">container_name</span><span class="token punctuation">:</span> nginx1
+    <span class="token key atrule">restart</span><span class="token punctuation">:</span> always
+    <span class="token key atrule">image</span><span class="token punctuation">:</span> nginx<span class="token punctuation">:</span>latest
+    <span class="token key atrule">volumes</span><span class="token punctuation">:</span>
+      <span class="token punctuation">-</span> $<span class="token punctuation">{</span>PWD<span class="token punctuation">}</span>/nginx1/html<span class="token punctuation">:</span>/usr/share/nginx/html
+  <span class="token comment" spellcheck="true"># nginx2</span>
+  <span class="token key atrule">nginx2</span><span class="token punctuation">:</span>
+    <span class="token key atrule">container_name</span><span class="token punctuation">:</span> nginx2
+    <span class="token key atrule">restart</span><span class="token punctuation">:</span> always
+    <span class="token key atrule">image</span><span class="token punctuation">:</span> nginx<span class="token punctuation">:</span>latest
+    <span class="token key atrule">volumes</span><span class="token punctuation">:</span>
+      <span class="token punctuation">-</span> $<span class="token punctuation">{</span>PWD<span class="token punctuation">}</span>/nginx2/html<span class="token punctuation">:</span>/usr/share/nginx/html
 </code></pre>
+<p>Traefik 配置文件<code>traefik.yml</code></p>
+<pre class=" language-yaml"><code class="language-yaml"><span class="token comment" spellcheck="true"># traefik.yml</span>
+<span class="token key atrule">global</span><span class="token punctuation">:</span>
+  <span class="token key atrule">checkNewVersion</span><span class="token punctuation">:</span> <span class="token boolean important">true</span>
+  <span class="token key atrule">sendAnonymousUsage</span><span class="token punctuation">:</span> <span class="token boolean important">false</span>
+
+<span class="token key atrule">api</span><span class="token punctuation">:</span>
+  <span class="token key atrule">insecure</span><span class="token punctuation">:</span> <span class="token boolean important">true</span>
+  <span class="token key atrule">dashboard</span><span class="token punctuation">:</span> <span class="token boolean important">true</span>
+  <span class="token key atrule">debug</span><span class="token punctuation">:</span> <span class="token boolean important">true</span>
+
+<span class="token key atrule">log</span><span class="token punctuation">:</span>
+  <span class="token key atrule">filePath</span><span class="token punctuation">:</span> <span class="token string">"/var/log/traefik/log/traefik.log"</span>
+  <span class="token key atrule">format</span><span class="token punctuation">:</span> json
+
+<span class="token key atrule">accessLog</span><span class="token punctuation">:</span>
+  <span class="token key atrule">filePath</span><span class="token punctuation">:</span> <span class="token string">"/var/log/traefik/log/access.log"</span>
+  <span class="token key atrule">format</span><span class="token punctuation">:</span> json
+
+<span class="token key atrule">entryPoints</span><span class="token punctuation">:</span>
+  <span class="token key atrule">traefik</span><span class="token punctuation">:</span>
+    <span class="token key atrule">address</span><span class="token punctuation">:</span> <span class="token punctuation">:</span><span class="token number">8080</span>
+  <span class="token key atrule">http</span><span class="token punctuation">:</span>
+    <span class="token key atrule">address</span><span class="token punctuation">:</span> <span class="token punctuation">:</span><span class="token number">80</span>
+    <span class="token key atrule">forwardedHeaders</span><span class="token punctuation">:</span>
+      <span class="token key atrule">insecure</span><span class="token punctuation">:</span> <span class="token boolean important">true</span>
+    <span class="token key atrule">proxyProtocol</span><span class="token punctuation">:</span>
+      <span class="token key atrule">insecure</span><span class="token punctuation">:</span> <span class="token boolean important">true</span>
+  <span class="token key atrule">https</span><span class="token punctuation">:</span>
+    <span class="token key atrule">address</span><span class="token punctuation">:</span> <span class="token punctuation">:</span><span class="token number">443</span>
+    <span class="token key atrule">forwardedHeaders</span><span class="token punctuation">:</span>
+      <span class="token key atrule">insecure</span><span class="token punctuation">:</span> <span class="token boolean important">true</span>
+    <span class="token key atrule">proxyProtocol</span><span class="token punctuation">:</span>
+      <span class="token key atrule">insecure</span><span class="token punctuation">:</span> <span class="token boolean important">true</span>
+
+<span class="token key atrule">providers</span><span class="token punctuation">:</span>
+  <span class="token key atrule">providersThrottleDuration</span><span class="token punctuation">:</span> 2s
+
+  <span class="token key atrule">etcd</span><span class="token punctuation">:</span>
+    <span class="token key atrule">rootKey</span><span class="token punctuation">:</span> <span class="token string">"/traefik"</span>
+    <span class="token key atrule">endpoints</span><span class="token punctuation">:</span>
+      <span class="token punctuation">-</span> <span class="token string">"etcd:2379"</span>
+</code></pre>
+<p>这里我们为了展示 <code>traefik</code> 的负载均衡功能，启动两个<code>nginx</code>容器作为后端服务并且以<code>index.html</code>内容不同加以区分。</p>
+<pre class=" language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># 创建 nginx 目录</span>
+<span class="token function">mkdir</span> -p <span class="token punctuation">{</span>nginx1,nginx2<span class="token punctuation">}</span>/html
+
+<span class="token comment" spellcheck="true"># 编辑 index.html 静态页面</span>
+<span class="token keyword">echo</span> <span class="token string">'&lt;h1>Hello nginx1&lt;/h1>'</span> <span class="token operator">></span> <span class="token variable">${PWD}</span>/nginx1/html/index.html
+<span class="token keyword">echo</span> <span class="token string">'&lt;h1>Hello nginx2&lt;/h1>'</span> <span class="token operator">></span> <span class="token variable">${PWD}</span>/nginx2/html/index.html
+</code></pre>
+<p>etcd 持久化目录创建与添加权限</p>
+<pre class=" language-bash"><code class="language-bash"><span class="token function">mkdir</span> -p etcd/data <span class="token operator">&amp;&amp;</span> <span class="token function">chmod</span> 777 etcd
+</code></pre>
+<p>启动容器</p>
+<pre class=" language-bash"><code class="language-bash">docker-compose up -d
+</code></pre>
+<p>启动后状态如下：</p>
+<p><img src="https://aptxhb.oss-cn-shenzhen.aliyuncs.com/images/image-20220603180122867.png"></p>
+<p>这时我们可以访问<code>127.0.0.1:8080</code> 就可以看到 traefik 的管理页面</p>
+<p><img src="https://aptxhb.oss-cn-shenzhen.aliyuncs.com/images/image-20220603180331115.png"></p>
+<p>当一切准备就绪后，我们就可以向 <code>etcd</code> 添加配置使 <code>traefik</code> 反向代理到后端 <code>nginx</code> 容器上</p>
+<h4 id="etcd-添加配置数据"><a href="#etcd-添加配置数据" class="headerlink" title="etcd 添加配置数据"></a>etcd 添加配置数据</h4><pre class=" language-bash"><code class="language-bash">etcdctl put /traefik/enable <span class="token boolean">true</span>
+etcdctl put /traefik/http/middlewares/gzip/compress <span class="token boolean">true</span>
+etcdctl put /traefik/http/routers/nginx-web/entrypoints/0 http
+etcdctl put /traefik/http/routers/nginx-web/rule <span class="token string">'Host(<span class="token variable"><span class="token variable">`</span>nginx.aptxhb.xyz<span class="token variable">`</span></span>) || PathPrefix(<span class="token variable"><span class="token variable">`</span>/<span class="token variable">`</span></span>)'</span>
+etcdctl put /traefik/http/routers/nginx-web/service nginx-web-lb
+etcdctl put /traefik/http/services/nginx-web-lb/loadbalancer/servers/1/url http://nginx1:80
+etcdctl put /traefik/http/services/nginx-web-lb/loadbalancer/servers/2/url http://nginx2:80
+</code></pre>
+<p>这时我们可以看到 traefik 管理页面已经有刚才添加的路由，证明 <code>traefik</code> 自动发现配置且支持热加载</p>
+<p><img src="https://aptxhb.oss-cn-shenzhen.aliyuncs.com/images/image-20220604015410972.png"></p>
+<p>我们对域名绑定本地 <code>hosts</code> 解析后就可以在浏览器访问，并且尝试刷新可以看到请求在两个后端容器上轮询</p>
+<p><img src="https://aptxhb.oss-cn-shenzhen.aliyuncs.com/images/image-20220604015850012.png"></p>
+<h4 id="重定向-HTTPS"><a href="#重定向-HTTPS" class="headerlink" title="重定向 HTTPS"></a>重定向 HTTPS</h4><h5 id="制作证书"><a href="#制作证书" class="headerlink" title="制作证书"></a>制作证书</h5><pre class=" language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># 创建 ssl 目录</span>
+<span class="token function">mkdir</span> ssl <span class="token operator">&amp;&amp;</span> <span class="token function">cd</span> ssl
+
+<span class="token comment" spellcheck="true"># 生成私钥</span>
+openssl genrsa -des3 -out nginx.aptxhb.xyz.key 2048
+
+<span class="token comment" spellcheck="true"># 生成CA证书</span>
+openssl req -new -key nginx.aptxhb.xyz.key -out ca.csr
+
+<span class="token comment" spellcheck="true"># 去除私钥密码</span>
+openssl rsa -in nginx.aptxhb.xyz.key -out nginx.aptxhb.xyz.key
+
+<span class="token comment" spellcheck="true"># 签发公钥</span>
+openssl x509 -req -days 3650 -in ca.csr -signkey nginx.aptxhb.xyz.key -out nginx.aptxhb.xyz.crt
+
+<span class="token comment" spellcheck="true"># 生成PEM格式公钥</span>
+openssl x509 -in nginx.aptxhb.xyz.crt -out nginx.aptxhb.xyz.pem -outform PEM
+</code></pre>
+<p>修改 <code>docker-compose.yaml</code>  traefik 服务把证书挂载至容器 <code>/data/ssl</code> 目录</p>
+<pre class=" language-yaml"><code class="language-yaml"><span class="token key atrule">volumes</span><span class="token punctuation">:</span>
+  <span class="token punctuation">-</span> $<span class="token punctuation">{</span>PWD<span class="token punctuation">}</span>/traefik/ssl<span class="token punctuation">:</span>/data/ssl<span class="token punctuation">:</span>ro
+</code></pre>
+<p>使用 <code>docker-compose up --detach --build traefik</code>  单独加载修改过的服务</p>
+<h4 id="etcd-添加-HTTPS-配置"><a href="#etcd-添加-HTTPS-配置" class="headerlink" title="etcd 添加 HTTPS 配置"></a>etcd 添加 HTTPS 配置</h4><pre><code># 捕捉所有 hosts 重定向 https
+etcdctl put /traefik/http/routers/https-redirect/entryPoints/0 http
+etcdctl put /traefik/http/routers/https-redirect/rule 'HostRegexp(`{any:.*}`)'
+etcdctl put /traefik/http/routers/https-redirect/middlewares https-redirect
+etcdctl put /traefik/http/routers/https-redirect/service noop
+etcdctl put /traefik/http/services/noop/LoadBalancer/servers/url ""
+etcdctl put /traefik/http/middlewares/https-redirect/redirectScheme/scheme https
+etcdctl put /traefik/tls/options/default/maxVersion VersionTLS12
+etcdctl put /traefik/tls/options/default/minVersion VersionTLS12
+etcdctl put /traefik/tls/certificates '
+[
+    {
+        "certFile": "/data/ssl/nginx.aptxhb.xyz.crt"
+    },
+    {
+        "keyFile": "/data/ssl/nginx.aptxhb.xyz.key"
+    }
+]'
+
+# 对 nginx-web 路由开启 https
+etcdctl put /traefik/http/routers/nginx-web/entrypoints/1 https
+etcdctl put /traefik/http/routers/nginx-web/tls true
+</code></pre>
+<p>我们可以从 <code>traefik</code> 管理页面看到 <code>nginx-web</code> 路由已经开启了<code>https</code>，并且绑定了 <code>tls证书</code></p>
+<p><img src="https://aptxhb.oss-cn-shenzhen.aliyuncs.com/images/image-20220604021528663.png"></p>
+<p>现在我们继续在浏览器访问 <code>nginx.aptxhb.xyz</code> 域名已经正常跳转 https 访问了，由于是自签证书所以浏览器显示不安全的告警</p>
+<p><img src="https://aptxhb.oss-cn-shenzhen.aliyuncs.com/images/image-20220604022114814.png"></p>
 
                 
             </div>
@@ -532,8 +680,8 @@ systemctl restart docker
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/FAQ/">
-                                    <span class="chip bg-color">FAQ</span>
+                                <a href="/tags/traefik-etcd/">
+                                    <span class="chip bg-color">traefik etcd</span>
                                 </a>
                             
                         </div>
@@ -585,18 +733,18 @@ systemctl restart docker
             <div class="article-badge left-badge text-color">
                 <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
             <div class="card">
-                <a href="/2021/05/03/traefik-fu-wu-fa-xian-zhi-etcd/">
+                <a href="/2021/05/03/xu-ni-di-zhi-kong-jian-yong-hu-kong-jian-nei-he-kong-jian-yong-hu-tai-yu-nei-he-tai-yuan-li-he-zuo-yong/">
                     <div class="card-image">
                         
-                        <img src="/medias/featureimages/5.jpg" class="responsive-img" alt="Traefik 服务发现之 etcd">
+                        <img src="/medias/featureimages/5.jpg" class="responsive-img" alt="虚拟地址空间与上下文切换详解">
                         
-                        <span class="card-title">Traefik 服务发现之 etcd</span>
+                        <span class="card-title">虚拟地址空间与上下文切换详解</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            traefik 使用 etcd 服务自动发现部署
+                            本文更方便的了解什么是虚拟地址空间、用户空间、内核空间以及上下文切换
                         
                     </div>
                     <div class="publish-info">
@@ -607,8 +755,8 @@ systemctl restart docker
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/traefik-etcd/" class="post-category">
-                                    traefik etcd
+                            <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90/" class="post-category">
+                                    计算机组成
                                 </a>
                             
                             
@@ -618,8 +766,8 @@ systemctl restart docker
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/traefik-etcd/">
-                        <span class="chip bg-color">traefik etcd</span>
+                    <a href="/tags/linux/">
+                        <span class="chip bg-color">linux</span>
                     </a>
                     
                 </div>
@@ -633,18 +781,18 @@ systemctl restart docker
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2018/11/03/ntp-shi-jian-tong-bu/">
+                <a href="/2018/11/03/faq-wen-ti-ji-lu-shou-ce/">
                     <div class="card-image">
                         
-                        <img src="/medias/featureimages/3.jpg" class="responsive-img" alt="NTP时间同步">
+                        <img src="/medias/featureimages/4.jpg" class="responsive-img" alt="FAQ问题记录手册">
                         
-                        <span class="card-title">NTP时间同步</span>
+                        <span class="card-title">FAQ问题记录手册</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            为了保证服务集群的分布性、一致性，NTP时间同步作为基础服务有着关键性的作用
+                            用于记录日常简单问题的处理过程
                         
                     </div>
                     <div class="publish-info">
@@ -655,8 +803,8 @@ systemctl restart docker
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/ntp/" class="post-category">
-                                    ntp
+                            <a href="/categories/FAQ/" class="post-category">
+                                    FAQ
                                 </a>
                             
                             
@@ -666,8 +814,8 @@ systemctl restart docker
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/linux/">
-                        <span class="chip bg-color">linux</span>
+                    <a href="/tags/FAQ/">
+                        <span class="chip bg-color">FAQ</span>
                     </a>
                     
                 </div>
