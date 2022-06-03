@@ -486,13 +486,13 @@
 ./
 ├── docker-compose.yaml
 ├── etcd
-│<span class="token operator">&amp;</span>nbsp<span class="token punctuation">;</span><span class="token operator">&amp;</span>nbsp<span class="token punctuation">;</span> └── data
+│   └── data
 ├── nginx1
-│<span class="token operator">&amp;</span>nbsp<span class="token punctuation">;</span><span class="token operator">&amp;</span>nbsp<span class="token punctuation">;</span> └── html
-│<span class="token operator">&amp;</span>nbsp<span class="token punctuation">;</span><span class="token operator">&amp;</span>nbsp<span class="token punctuation">;</span>     └── index.html
+│   └── html
+│       └── index.html
 ├── nginx2
-│<span class="token operator">&amp;</span>nbsp<span class="token punctuation">;</span><span class="token operator">&amp;</span>nbsp<span class="token punctuation">;</span> └── html
-│<span class="token operator">&amp;</span>nbsp<span class="token punctuation">;</span><span class="token operator">&amp;</span>nbsp<span class="token punctuation">;</span>     └── index.html
+│   └── html
+│       └── index.html
 └── traefik
     ├── log
     └── traefik.yml
@@ -639,16 +639,16 @@ openssl x509 -in nginx.aptxhb.xyz.crt -out nginx.aptxhb.xyz.pem -outform PEM
   <span class="token punctuation">-</span> $<span class="token punctuation">{</span>PWD<span class="token punctuation">}</span>/traefik/ssl<span class="token punctuation">:</span>/data/ssl<span class="token punctuation">:</span>ro
 </code></pre>
 <p>使用 <code>docker-compose up --detach --build traefik</code>  单独加载修改过的服务</p>
-<h4 id="etcd-添加-HTTPS-配置"><a href="#etcd-添加-HTTPS-配置" class="headerlink" title="etcd 添加 HTTPS 配置"></a>etcd 添加 HTTPS 配置</h4><pre><code># 捕捉所有 hosts 重定向 https
+<h4 id="etcd-添加-HTTPS-配置"><a href="#etcd-添加-HTTPS-配置" class="headerlink" title="etcd 添加 HTTPS 配置"></a>etcd 添加 HTTPS 配置</h4><pre class=" language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># 捕捉所有 hosts 重定向 https</span>
 etcdctl put /traefik/http/routers/https-redirect/entryPoints/0 http
-etcdctl put /traefik/http/routers/https-redirect/rule 'HostRegexp(`{any:.*}`)'
+etcdctl put /traefik/http/routers/https-redirect/rule <span class="token string">'HostRegexp(<span class="token variable"><span class="token variable">`</span><span class="token punctuation">{</span>any:.*<span class="token punctuation">}</span><span class="token variable">`</span></span>)'</span>
 etcdctl put /traefik/http/routers/https-redirect/middlewares https-redirect
 etcdctl put /traefik/http/routers/https-redirect/service noop
-etcdctl put /traefik/http/services/noop/LoadBalancer/servers/url ""
+etcdctl put /traefik/http/services/noop/LoadBalancer/servers/url <span class="token string">""</span>
 etcdctl put /traefik/http/middlewares/https-redirect/redirectScheme/scheme https
 etcdctl put /traefik/tls/options/default/maxVersion VersionTLS12
 etcdctl put /traefik/tls/options/default/minVersion VersionTLS12
-etcdctl put /traefik/tls/certificates '
+etcdctl put /traefik/tls/certificates <span class="token string">'
 [
     {
         "certFile": "/data/ssl/nginx.aptxhb.xyz.crt"
@@ -656,12 +656,13 @@ etcdctl put /traefik/tls/certificates '
     {
         "keyFile": "/data/ssl/nginx.aptxhb.xyz.key"
     }
-]'
+]'</span>
 
-# 对 nginx-web 路由开启 https
+<span class="token comment" spellcheck="true"># 对 nginx-web 路由开启 https</span>
 etcdctl put /traefik/http/routers/nginx-web/entrypoints/1 https
-etcdctl put /traefik/http/routers/nginx-web/tls true
+etcdctl put /traefik/http/routers/nginx-web/tls <span class="token boolean">true</span>
 </code></pre>
+<p>想要了解更多关于 <code>traefik</code>  的重定向知识请参考 <a target="_blank" rel="noopener" href="https://github.com/traefik/traefik/issues/4863">traefik HTTP to HTTPS</a></p>
 <p>我们可以从 <code>traefik</code> 管理页面看到 <code>nginx-web</code> 路由已经开启了<code>https</code>，并且绑定了 <code>tls证书</code></p>
 <p><img src="https://aptxhb.oss-cn-shenzhen.aliyuncs.com/images/image-20220604021528663.png"></p>
 <p>现在我们继续在浏览器访问 <code>nginx.aptxhb.xyz</code> 域名已经正常跳转 https 访问了，由于是自签证书所以浏览器显示不安全的告警</p>
