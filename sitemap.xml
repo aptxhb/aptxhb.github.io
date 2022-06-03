@@ -146,27 +146,6 @@
 
   
   <url>
-    <loc>https://blog.aptxhb.xyz/tags/FAQ/</loc>
-    <lastmod>2022-06-03</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://blog.aptxhb.xyz/tags/Typora/</loc>
-    <lastmod>2022-06-03</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://blog.aptxhb.xyz/tags/Markdown/</loc>
-    <lastmod>2022-06-03</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
     <loc>https://blog.aptxhb.xyz/tags/linux/</loc>
     <lastmod>2022-06-03</lastmod>
     <changefreq>weekly</changefreq>
@@ -174,7 +153,21 @@
   </url>
   
   <url>
+    <loc>https://blog.aptxhb.xyz/tags/traefik-etcd/</loc>
+    <lastmod>2022-06-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
     <loc>https://blog.aptxhb.xyz/tags/shell/</loc>
+    <lastmod>2022-06-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.aptxhb.xyz/tags/FAQ/</loc>
     <lastmod>2022-06-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -202,7 +195,14 @@
   </url>
   
   <url>
-    <loc>https://blog.aptxhb.xyz/tags/traefik-etcd/</loc>
+    <loc>https://blog.aptxhb.xyz/tags/Typora/</loc>
+    <lastmod>2022-06-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.aptxhb.xyz/tags/Markdown/</loc>
     <lastmod>2022-06-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -211,14 +211,14 @@
 
   
   <url>
-    <loc>https://blog.aptxhb.xyz/categories/FAQ/</loc>
+    <loc>https://blog.aptxhb.xyz/categories/ntp/</loc>
     <lastmod>2022-06-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://blog.aptxhb.xyz/categories/Markdown/</loc>
+    <loc>https://blog.aptxhb.xyz/categories/traefik-etcd/</loc>
     <lastmod>2022-06-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -232,7 +232,7 @@
   </url>
   
   <url>
-    <loc>https://blog.aptxhb.xyz/categories/ntp/</loc>
+    <loc>https://blog.aptxhb.xyz/categories/FAQ/</loc>
     <lastmod>2022-06-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -253,7 +253,7 @@
   </url>
   
   <url>
-    <loc>https://blog.aptxhb.xyz/categories/traefik-etcd/</loc>
+    <loc>https://blog.aptxhb.xyz/categories/Markdown/</loc>
     <lastmod>2022-06-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>

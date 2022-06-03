@@ -2,6 +2,6 @@ https://blog.aptxhb.xyz/2022/05/07/shi-yong-kubectl-chuang-jian-pod-ju-ti-gou-ji
 https://blog.aptxhb.xyz/2022/05/03/wen-ben-san-jian-ke-sed/
 https://blog.aptxhb.xyz/2021/05/03/xu-ni-di-zhi-kong-jian-yong-hu-kong-jian-nei-he-kong-jian-yong-hu-tai-yu-nei-he-tai-yuan-li-he-zuo-yong/
 https://blog.aptxhb.xyz/2021/05/03/traefik-fu-wu-fa-xian-zhi-etcd/
-https://blog.aptxhb.xyz/2018/11/03/faq-wen-ti-ji-lu-shou-ce/
 https://blog.aptxhb.xyz/2018/11/03/ntp-shi-jian-tong-bu/
+https://blog.aptxhb.xyz/2018/11/03/faq-wen-ti-ji-lu-shou-ce/
 https://blog.aptxhb.xyz/2018/09/07/ji-yu-containerd-er-jin-zhi-bu-shu-k8s/
