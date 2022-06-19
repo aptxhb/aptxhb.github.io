@@ -121,7 +121,7 @@
     <link href="https://blog.aptxhb.xyz/2018/11/17/iptables-nei-wang-liu-liang-zhuan-fa/"/>
     <id>https://blog.aptxhb.xyz/2018/11/17/iptables-nei-wang-liu-liang-zhuan-fa/</id>
     <published>2018-11-17T12:31:10.000Z</published>
-    <updated>2022-06-19T05:02:49.473Z</updated>
+    <updated>2022-06-19T06:39:07.868Z</updated>
     
     
       
@@ -129,8 +129,7 @@
         
         
     <summary type="html">&lt;p&gt;&lt;strong&gt;说明&lt;/strong&gt;：由于业务某个支付服务需要苹果验证，但是服务器为了安全考虑都是内网机器无法访问公网。这里使用一台同网段且可以访问公网的机器做流量的转发&lt;/p&gt;
-&lt;p&gt;服务器a：192.168.0.1&lt;/p&gt;
-&lt;p&gt;服务器b：192.168.0.2（可访</summary>
+&lt;h4 id=&quot;iptables-工作流程&quot;&gt;&lt;a</summary>
         
       
     
