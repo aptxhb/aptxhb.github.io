@@ -117,6 +117,33 @@
   </entry>
   
   <entry>
+    <title>pip 安装 docker-compose 模块</title>
+    <link href="https://blog.aptxhb.xyz/2018/11/24/pip-an-zhuang-docker-compose-mo-kuai/"/>
+    <id>https://blog.aptxhb.xyz/2018/11/24/pip-an-zhuang-docker-compose-mo-kuai/</id>
+    <published>2018-11-23T17:36:07.000Z</published>
+    <updated>2022-06-26T17:36:54.206Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h4 id=&quot;安装要求&quot;&gt;&lt;a href=&quot;#安装要求&quot; class=&quot;headerlink&quot; title=&quot;安装要求&quot;&gt;&lt;/a&gt;安装要求&lt;/h4&gt;&lt;blockquote&gt;
+&lt;p&gt;Docker API &amp;gt;= 1.20&lt;/p&gt;
+&lt;p&gt;Docker SDK for</summary>
+        
+      
+    
+    
+    
+    <category term="ansible docker docker-compose" scheme="https://blog.aptxhb.xyz/categories/ansible-docker-docker-compose/"/>
+    
+    
+    <category term="ansible docker docker-compose" scheme="https://blog.aptxhb.xyz/tags/ansible-docker-docker-compose/"/>
+    
+  </entry>
+  
+  <entry>
     <title>iptables 内网访问外网配置</title>
     <link href="https://blog.aptxhb.xyz/2018/11/17/iptables-nei-wang-liu-liang-zhuan-fa/"/>
     <id>https://blog.aptxhb.xyz/2018/11/17/iptables-nei-wang-liu-liang-zhuan-fa/</id>

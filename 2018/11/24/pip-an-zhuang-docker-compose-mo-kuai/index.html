@@ -4,8 +4,8 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="标签: traefik etcd, 叶落化仰">
-    <meta name="description" content="叶落化仰">
+    <meta name="keywords" content="pip 安装 docker-compose 模块, 叶落化仰">
+    <meta name="description" content="ansible docker-compose 模块管理远程主机安装所需模块">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -19,7 +19,7 @@
 
     
 
-    <title>标签: traefik etcd | 叶落化仰</title>
+    <title>pip 安装 docker-compose 模块 | 叶落化仰</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.min.css">
@@ -286,199 +286,334 @@
 
 </header>
 
-    <div class="bg-cover pd-header about-cover">
-    <div class="container">
-    <div class="row">
-    <div class="col s10 offset-s1 m8 offset-m2 l8 offset-l2">
-        <div class="brand">
-            <div class="title center-align">
-                
-                叶落化仰的博客
-                
-            </div>
-
-            <div class="description center-align">
-                
-                <span id="subtitle"></span>
-                <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.11"></script>
-                <script>
-                    var typed = new Typed("#subtitle", {
-                        strings: [ 
-                            
-                                "如夏花之绚烂，如秋叶之静美",
-                            
-                                "As gorgeous as summer flowers, as quiet as autumn leaves",
-                            
-                        ],
-                        startDelay: 300,
-                        typeSpeed: 100,
-                        loop: true,
-                        backSpeed: 50,
-                        showCursor: true
-                    });
-                </script>
-                
-            </div>
-        </div>
-    </div>
-</div>
-
-
+    
+<script src="/libs/cryptojs/crypto-js.min.js"></script>
 <script>
-    // 每天切换 banner 图.  Switch banner image every day.
-    var bannerUrl = "/medias/banner/" + new Date().getDay() + '.jpg';
-    $('.bg-cover').css('background-image', 'url(' + bannerUrl + ')');
+    (function() {
+        let pwd = '';
+        if (pwd && pwd.length > 0) {
+            if (pwd !== CryptoJS.SHA256(prompt('请输入访问本文章的密码')).toString(CryptoJS.enc.Hex)) {
+                alert('密码错误，将返回主页！');
+                location.href = '/';
+            }
+        }
+    })();
 </script>
 
 
-    </div>
-</div>
 
-<main class="content">
 
-    
-
-<div id="tags" class="container chip-container">
-    <div class="card">
-        <div class="card-content">
-            <div class="tag-title center-align">
-                <i class="fas fa-tags"></i>&nbsp;&nbsp;文章标签
-            </div>
-            <div class="tag-chips">
-                
-                
-                <a href="/tags/linux/" title="linux: 4">
-                    <span class="chip center-align waves-effect waves-light
-                             chip-default "
-                            data-tagname="linux" style="background-color: #F9EBEA;">linux
-                        <span class="tag-length">4</span>
-                    </span>
-                </a>
-                
-                
-                <a href="/tags/traefik-etcd/" title="traefik etcd: 1">
-                    <span class="chip center-align waves-effect waves-light
-                             chip-active "
-                            data-tagname="traefik etcd" style="background-color: #F5EEF8;">traefik etcd
-                        <span class="tag-length">1</span>
-                    </span>
-                </a>
-                
-                
-                <a href="/tags/shell/" title="shell: 1">
-                    <span class="chip center-align waves-effect waves-light
-                             chip-default "
-                            data-tagname="shell" style="background-color: #D5F5E3;">shell
-                        <span class="tag-length">1</span>
-                    </span>
-                </a>
-                
-                
-                <a href="/tags/FAQ/" title="FAQ: 1">
-                    <span class="chip center-align waves-effect waves-light
-                             chip-default "
-                            data-tagname="FAQ" style="background-color: #E8F8F5;">FAQ
-                        <span class="tag-length">1</span>
-                    </span>
-                </a>
-                
-                
-                <a href="/tags/kubernetes/" title="kubernetes: 1">
-                    <span class="chip center-align waves-effect waves-light
-                             chip-default "
-                            data-tagname="kubernetes" style="background-color: #FEF9E7;">kubernetes
-                        <span class="tag-length">1</span>
-                    </span>
-                </a>
-                
-                
-                <a href="/tags/pod/" title="pod: 1">
-                    <span class="chip center-align waves-effect waves-light
-                             chip-default "
-                            data-tagname="pod" style="background-color: #F8F9F9;">pod
-                        <span class="tag-length">1</span>
-                    </span>
-                </a>
-                
-                
-                <a href="/tags/container/" title="container: 1">
-                    <span class="chip center-align waves-effect waves-light
-                             chip-default "
-                            data-tagname="container" style="background-color: #82E0AA;">container
-                        <span class="tag-length">1</span>
-                    </span>
-                </a>
-                
-                
-                <a href="/tags/Typora/" title="Typora: 1">
-                    <span class="chip center-align waves-effect waves-light
-                             chip-default "
-                            data-tagname="Typora" style="background-color: #D7BDE2;">Typora
-                        <span class="tag-length">1</span>
-                    </span>
-                </a>
-                
-                
-                <a href="/tags/Markdown/" title="Markdown: 1">
-                    <span class="chip center-align waves-effect waves-light
-                             chip-default "
-                            data-tagname="Markdown" style="background-color: #A3E4D7;">Markdown
-                        <span class="tag-length">1</span>
-                    </span>
-                </a>
-                
-                
-                <a href="/tags/ansible-docker-docker-compose/" title="ansible docker docker-compose: 1">
-                    <span class="chip center-align waves-effect waves-light
-                             chip-default "
-                            data-tagname="ansible docker docker-compose" style="background-color: #85C1E9;">ansible docker docker-compose
-                        <span class="tag-length">1</span>
-                    </span>
-                </a>
-                
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/10.jpg')">
+    <div class="container" style="right: 0px;left: 0px;">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <h1 class="description center-align post-title">pip 安装 docker-compose 模块</h1>
+                </div>
             </div>
         </div>
     </div>
 </div>
 
+
+
+
+<main class="container content">
+
+    
+    <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                    <div class="article-tag">
+                        
+                            <a href="/tags/ansible-docker-docker-compose/">
+                                <span class="chip bg-color">ansible docker docker-compose</span>
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/ansible-docker-docker-compose/" class="post-category">
+                                ansible docker docker-compose
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
+                    2018-11-24
+                </div>
+                
+
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
+                    2022-06-27
+                </div>
+                
+
+                
+
+                
+
+                
+                    <div id="busuanzi_container_page_pv" class="info-break-policy">
+                        <i class="far fa-eye fa-fw"></i>阅读次数:&nbsp;&nbsp;
+                        <span id="busuanzi_value_page_pv"></span>
+                    </div>
+				
+            </div>
+        </div>
+        <hr class="clearfix">
+
+        
+
+        
+
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <h4 id="安装要求"><a href="#安装要求" class="headerlink" title="安装要求"></a>安装要求</h4><blockquote>
+<p>Docker API &gt;= 1.20</p>
+<p>Docker SDK for Python: Please note that the <a target="_blank" rel="noopener" href="https://pypi.org/project/docker-py/">docker-py</a> Python module has been superseded by <a target="_blank" rel="noopener" href="https://pypi.org/project/docker/">docker</a> (see <a target="_blank" rel="noopener" href="https://github.com/docker/docker-py/issues/1310">here</a> for details). For Python 2.6, <code>docker-py</code> must be used. Otherwise, it is recommended to install the <code>docker</code> Python module. Note that both modules should <em>not</em> be installed at the same time. Also note that when both modules are installed and one of them is uninstalled, the other might no longer function and a reinstall of it is required.</p>
+<p><a target="_blank" rel="noopener" href="https://docker-py.readthedocs.io/en/stable/">Docker SDK for Python</a> &gt;= 1.8.0 (use <a target="_blank" rel="noopener" href="https://pypi.org/project/docker-py/">docker-py</a> for Python 2.6)</p>
+<p>PyYAML &gt;= 3.11</p>
+<p>docker-compose &gt;= 1.7.0</p>
+</blockquote>
+<h4 id="pip-工具安装"><a href="#pip-工具安装" class="headerlink" title="pip 工具安装"></a>pip 工具安装</h4><pre class=" language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># 下载安装包</span>
+<span class="token function">wget</span> https://pypi.python.org/packages/11/b6/abcb525026a4be042b486df43905d6893fb04f05aac21c32c638e939e447/pip-9.0.1.tar.gz<span class="token comment" spellcheck="true">#md5=35f01da33009719497f01a4ba69d63c9</span>
+
+<span class="token comment" spellcheck="true"># 解压安装包</span>
+<span class="token function">tar</span> -xf pip-9.0.1.tar.gz
+
+<span class="token comment" spellcheck="true"># 进入安装目录</span>
+<span class="token function">cd</span> pip-9.0.1
+
+<span class="token comment" spellcheck="true"># 执行安装脚本</span>
+python setup.py <span class="token function">install</span>
+</code></pre>
+<h4 id="setuptools-工具安装"><a href="#setuptools-工具安装" class="headerlink" title="setuptools 工具安装"></a>setuptools 工具安装</h4><pre class=" language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># 下载安装包</span>
+<span class="token function">wget</span> https://pypi.python.org/packages/45/29/8814bf414e7cd1031e1a3c8a4169218376e284ea2553cc0822a6ea1c2d78/setuptools-36.6.0.zip<span class="token comment" spellcheck="true">#md5=74663b15117d9a2cc5295d76011e6fd1</span>
+
+<span class="token comment" spellcheck="true"># 解压安装包</span>
+unzip setuptools-36.6.0.zip
+
+<span class="token comment" spellcheck="true"># 进入安装目录</span>
+<span class="token function">cd</span> setuptools-36.6.0/
+
+<span class="token comment" spellcheck="true"># 执行安装脚本</span>
+python setup.py <span class="token function">install</span>
+</code></pre>
+<h4 id="卸载-docker-py-模块"><a href="#卸载-docker-py-模块" class="headerlink" title="卸载 docker-py 模块"></a>卸载 docker-py 模块</h4><pre class=" language-bash"><code class="language-bash">pip uninstall -y docker-py
+</code></pre>
+<h4 id="安装-docker、docker-compose-模块"><a href="#安装-docker、docker-compose-模块" class="headerlink" title="安装 docker、docker-compose 模块"></a>安装 docker、docker-compose 模块</h4><pre class=" language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># 升级 pip 工具</span>
+pip <span class="token function">install</span> --upgrade pip
+
+<span class="token comment" spellcheck="true"># 安装 docker 模块</span>
+pip <span class="token function">install</span> docker
+
+<span class="token comment" spellcheck="true"># 安装 docker-compose 模块</span>
+pip <span class="token function">install</span> docker-compose
+</code></pre>
+<h4 id="安装-pyYAML-模块"><a href="#安装-pyYAML-模块" class="headerlink" title="安装 pyYAML 模块"></a>安装 pyYAML 模块</h4><pre class=" language-bash"><code class="language-bash">pip <span class="token function">install</span> --ignore-installed PyYAML<span class="token operator">==</span>3.12
+</code></pre>
+
+                
+            </div>
+            <hr/>
+
+            
+
+
+
+            <div class="tag_share" style="display: block;">
+                <div class="post-meta__tag-list" style="display: inline-block;">
+                    
+                        <div class="article-tag">
+                            
+                                <a href="/tags/ansible-docker-docker-compose/">
+                                    <span class="chip bg-color">ansible docker docker-compose</span>
+                                </a>
+                            
+                        </div>
+                    
+                </div>
+                <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
+                    <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+<div id="article-share">
+
+    
+    <div class="social-share" data-sites="twitter,facebook,google,qq,qzone,wechat,weibo,douban,linkedin" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div>
+    <script src="/libs/share/js/social-share.min.js"></script>
     
 
-    <article id="articles" class="container articles">
-        <div class="row tags-posts">
-            
-            
-            <div class="article tag-post col s12 m6 l4" data-tags="traefik etcd" data-aos="fade-up">
-                <div class="card">
-                    <a href="/2021/05/03/traefik-fu-wu-fa-xian-zhi-etcd/">
-                        <div class="card-image tag-image">
-                            
-                            <img src="/medias/featureimages/5.jpg" class="responsive-img" alt="Traefik 服务发现之 etcd">
-                            
-                            <span class="card-title">Traefik 服务发现之 etcd</span>
-                        </div>
-                    </a>
-                    <div class="card-content article-content">
-                        <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2021-05-03
-                            </span>
-                            <span class="publish-author">
-                                
-                                <i class="fas fa-bookmark fa-fw icon-category"></i>
-                                
-                                <a href="/categories/traefik-etcd/" class="post-category">
-                                traefik etcd
-                                </a>
-                                
-                                
-                            </span>
-                        </div>
-                    </div>
+    
+
+</div>
+
                 </div>
             </div>
             
         </div>
-    </article>
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+            <div class="card">
+                <a href="/2021/05/03/traefik-fu-wu-fa-xian-zhi-etcd/">
+                    <div class="card-image">
+                        
+                        <img src="/medias/featureimages/5.jpg" class="responsive-img" alt="Traefik 服务发现之 etcd">
+                        
+                        <span class="card-title">Traefik 服务发现之 etcd</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            traefik 使用 etcd 服务自动发现部署
+                        
+                    </div>
+                    <div class="publish-info">
+                        <span class="publish-date">
+                            <i class="far fa-clock fa-fw icon-date"></i>2021-05-03
+                        </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/traefik-etcd/" class="post-category">
+                                    traefik etcd
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/traefik-etcd/">
+                        <span class="chip bg-color">traefik etcd</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2018/11/17/iptables-nei-wang-liu-liang-zhuan-fa/">
+                    <div class="card-image">
+                        
+                        <img src="/medias/featureimages/7.jpg" class="responsive-img" alt="iptables 内网访问外网配置">
+                        
+                        <span class="card-title">iptables 内网访问外网配置</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            使用 iptables nat 流量转发达到内网通过跳板机可访问外网
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2018-11-17
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/iptables/" class="post-category">
+                                    iptables
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/linux/">
+                        <span class="chip bg-color">linux</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+
+</div>
+
+
+
+<!-- 代码块功能依赖 -->
+<script type="text/javascript" src="/libs/codeBlock/codeBlockFuction.js"></script>
+
+<!-- 代码语言 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeLang.js"></script>
+
+
+<!-- 代码块复制 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeCopy.js"></script>
+
+
+<!-- 代码块收缩 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script>
+
+
+    
+
 </main>
 
 
