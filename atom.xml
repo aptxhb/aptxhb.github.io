@@ -46,25 +46,6 @@
   </entry>
   
   <entry>
-    <title>文本三剑客sed的使用</title>
-    <link href="https://blog.aptxhb.xyz/2022/05/03/wen-ben-san-jian-ke-sed/"/>
-    <id>https://blog.aptxhb.xyz/2022/05/03/wen-ben-san-jian-ke-sed/</id>
-    <published>2022-05-03T05:35:49.000Z</published>
-    <updated>2022-05-06T06:41:12.759Z</updated>
-    
-    
-    
-    
-    <category term="文本操作" scheme="https://blog.aptxhb.xyz/categories/%E6%96%87%E6%9C%AC%E6%93%8D%E4%BD%9C/"/>
-    
-    
-    <category term="linux" scheme="https://blog.aptxhb.xyz/tags/linux/"/>
-    
-    <category term="shell" scheme="https://blog.aptxhb.xyz/tags/shell/"/>
-    
-  </entry>
-  
-  <entry>
     <title>虚拟地址空间与上下文切换详解</title>
     <link href="https://blog.aptxhb.xyz/2021/05/03/xu-ni-di-zhi-kong-jian-yong-hu-kong-jian-nei-he-kong-jian-yong-hu-tai-yu-nei-he-tai-yuan-li-he-zuo-yong/"/>
     <id>https://blog.aptxhb.xyz/2021/05/03/xu-ni-di-zhi-kong-jian-yong-hu-kong-jian-nei-he-kong-jian-yong-hu-tai-yu-nei-he-tai-yuan-li-he-zuo-yong/</id>
@@ -191,32 +172,6 @@
     
     
     <category term="linux" scheme="https://blog.aptxhb.xyz/tags/linux/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>FAQ问题记录手册</title>
-    <link href="https://blog.aptxhb.xyz/2018/11/03/faq-wen-ti-ji-lu-shou-ce/"/>
-    <id>https://blog.aptxhb.xyz/2018/11/03/faq-wen-ti-ji-lu-shou-ce/</id>
-    <published>2018-11-03T11:35:00.000Z</published>
-    <updated>2022-05-16T01:43:34.054Z</updated>
-    
-    
-      
-      
-        
-        
-    <summary type="html">&lt;p&gt;[toc]&lt;/p&gt;
-&lt;h4 id=&quot;1-Mac-m1-安装-Docker-Desktop-时弹窗无法安装&quot;&gt;&lt;a href=&quot;#1-Mac-m1-安装-Docker-Desktop-时弹窗无法安装&quot; class=&quot;headerlink&quot; title=&quot;1. Mac m1</summary>
-        
-      
-    
-    
-    
-    <category term="FAQ" scheme="https://blog.aptxhb.xyz/categories/FAQ/"/>
-    
-    
-    <category term="FAQ" scheme="https://blog.aptxhb.xyz/tags/FAQ/"/>
     
   </entry>
   
