@@ -4,8 +4,8 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="Traefik 服务发现之 etcd, 叶落化仰">
-    <meta name="description" content="traefik 使用 etcd 服务自动发现部署">
+    <meta name="keywords" content="Dockerfile ADD vs COPY, 叶落化仰">
+    <meta name="description" content="Dockerfile中指令之间的区别">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -19,7 +19,7 @@
 
     
 
-    <title>Traefik 服务发现之 etcd | 叶落化仰</title>
+    <title>Dockerfile ADD vs COPY | 叶落化仰</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.min.css">
@@ -303,12 +303,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/5.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('https://aptxhb.oss-cn-shenzhen.aliyuncs.com/images/20220713232511.png')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">Traefik 服务发现之 etcd</h1>
+                    <h1 class="description center-align post-title">Dockerfile ADD vs COPY</h1>
                 </div>
             </div>
         </div>
@@ -424,8 +424,8 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/traefik-etcd/">
-                                <span class="chip bg-color">traefik etcd</span>
+                            <a href="/tags/Dockerfile/">
+                                <span class="chip bg-color">Dockerfile</span>
                             </a>
                         
                     </div>
@@ -436,8 +436,8 @@
                     <div class="post-cate">
                         <i class="fas fa-bookmark fa-fw icon-category"></i>
                         
-                            <a href="/categories/traefik-etcd/" class="post-category">
-                                traefik etcd
+                            <a href="/categories/Dockerfile/" class="post-category">
+                                Dockerfile
                             </a>
                         
                     </div>
@@ -449,14 +449,14 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2021-05-03
+                    2019-07-13
                 </div>
                 
 
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2022-06-04
+                    2022-07-14
                 </div>
                 
 
@@ -480,193 +480,57 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p><img src="https://doc.traefik.io/traefik/assets/img/traefik-architecture.png"></p>
-<h4 id="基础环境准备"><a href="#基础环境准备" class="headerlink" title="基础环境准备"></a>基础环境准备</h4><p>文件目录结构如下：</p>
-<pre class=" language-bash"><code class="language-bash">tree ./
-./
-├── docker-compose.yaml
-├── etcd
-│   └── data
-├── nginx1
-│   └── html
-│       └── index.html
-├── nginx2
-│   └── html
-│       └── index.html
-└── traefik
-    ├── log
-    └── traefik.yml
+                <p>原文地址 <a target="_blank" rel="noopener" href="https://www.ctl.io/developers/blog/post/dockerfile-add-vs-copy/">Dockerfile: ADD vs COPY</a></p>
+<h4 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h4><p>这篇文章将帮助您理解 <strong>Dockerfile</strong> 中两个相似的指令 <code>ADD</code> 和 <code>COPY</code> 之间的区别，它们是如何变成今天的样子的，以及我们关于您应该使用哪种指令的建议。</p>
+<p>当从 <code>Dockerfile</code> 中构建 <code>docker</code> 镜像时，有两个指令可以供选择，用于向镜像内添加目录或文件：<code>ADD</code> 和 <code>COPY</code> 。这两个指令都遵循相同的基本形式，完成几乎相同的事情：</p>
+<pre class=" language-dockerfile"><code class="language-dockerfile">ADD <src> <dest>
+COPY <src> <dest>
 </code></pre>
-<p>首先我们准备 <code>docker-compose.yaml</code> 文件</p>
-<pre class=" language-yaml"><code class="language-yaml"><span class="token comment" spellcheck="true"># docker-compose.yaml</span>
-<span class="token key atrule">version</span><span class="token punctuation">:</span> <span class="token string">"3"</span>
-
-<span class="token key atrule">services</span><span class="token punctuation">:</span>
-  <span class="token comment" spellcheck="true"># Etcd </span>
-  <span class="token key atrule">etcd</span><span class="token punctuation">:</span>
-    <span class="token key atrule">container_name</span><span class="token punctuation">:</span> etcd
-    <span class="token key atrule">restart</span><span class="token punctuation">:</span> always
-    <span class="token key atrule">image</span><span class="token punctuation">:</span> bitnami/etcd<span class="token punctuation">:</span>latest
-    <span class="token key atrule">environment</span><span class="token punctuation">:</span>
-      <span class="token punctuation">-</span> ALLOW_NONE_AUTHENTICATION=yes
-      <span class="token punctuation">-</span> ETCD_ADVERTISE_CLIENT_URLS=http<span class="token punctuation">:</span>//etcd<span class="token punctuation">:</span><span class="token number">2379</span>
-    <span class="token key atrule">ports</span><span class="token punctuation">:</span>
-      <span class="token punctuation">-</span> 2379<span class="token punctuation">:</span><span class="token number">2379</span>
-      <span class="token punctuation">-</span> 2380<span class="token punctuation">:</span><span class="token number">2380</span>
-    <span class="token key atrule">volumes</span><span class="token punctuation">:</span>
-      <span class="token punctuation">-</span> $<span class="token punctuation">{</span>PWD<span class="token punctuation">}</span>/etcd<span class="token punctuation">:</span>/bitnami/etcd
-  <span class="token comment" spellcheck="true"># traefik</span>
-  <span class="token key atrule">traefik</span><span class="token punctuation">:</span>
-    <span class="token key atrule">container_name</span><span class="token punctuation">:</span> traefik
-    <span class="token key atrule">image</span><span class="token punctuation">:</span> traefik<span class="token punctuation">:</span>latest
-    <span class="token key atrule">command</span><span class="token punctuation">:</span> <span class="token punctuation">-</span><span class="token punctuation">-</span>api.insecure=true <span class="token punctuation">-</span><span class="token punctuation">-</span>providers.docker
-    <span class="token key atrule">ports</span><span class="token punctuation">:</span>
-      <span class="token punctuation">-</span> 8080<span class="token punctuation">:</span><span class="token number">8080</span>
-      <span class="token punctuation">-</span> <span class="token datetime number">80:80</span>
-      <span class="token punctuation">-</span> 443<span class="token punctuation">:</span><span class="token number">443</span>
-    <span class="token key atrule">volumes</span><span class="token punctuation">:</span>
-      <span class="token punctuation">-</span> $<span class="token punctuation">{</span>PWD<span class="token punctuation">}</span>/traefik/traefik.yml<span class="token punctuation">:</span>/etc/traefik/traefik.yml
-      <span class="token punctuation">-</span> $<span class="token punctuation">{</span>PWD<span class="token punctuation">}</span>/traefik/log<span class="token punctuation">:</span>/var/log/traefik/log
-  <span class="token comment" spellcheck="true"># nginx1</span>
-  <span class="token key atrule">nginx1</span><span class="token punctuation">:</span>
-    <span class="token key atrule">container_name</span><span class="token punctuation">:</span> nginx1
-    <span class="token key atrule">restart</span><span class="token punctuation">:</span> always
-    <span class="token key atrule">image</span><span class="token punctuation">:</span> nginx<span class="token punctuation">:</span>latest
-    <span class="token key atrule">volumes</span><span class="token punctuation">:</span>
-      <span class="token punctuation">-</span> $<span class="token punctuation">{</span>PWD<span class="token punctuation">}</span>/nginx1/html<span class="token punctuation">:</span>/usr/share/nginx/html
-  <span class="token comment" spellcheck="true"># nginx2</span>
-  <span class="token key atrule">nginx2</span><span class="token punctuation">:</span>
-    <span class="token key atrule">container_name</span><span class="token punctuation">:</span> nginx2
-    <span class="token key atrule">restart</span><span class="token punctuation">:</span> always
-    <span class="token key atrule">image</span><span class="token punctuation">:</span> nginx<span class="token punctuation">:</span>latest
-    <span class="token key atrule">volumes</span><span class="token punctuation">:</span>
-      <span class="token punctuation">-</span> $<span class="token punctuation">{</span>PWD<span class="token punctuation">}</span>/nginx2/html<span class="token punctuation">:</span>/usr/share/nginx/html
+<p>在这两种情况下，都会将目录或文件 <code>&lt;src&gt;</code> 复制并添加到容器指定的 <code>&lt;dest&gt;</code> 路径。</p>
+<p>因此，如果两个指令是等价的，为什么它们都存在，应该使用哪一个？读下去就知道了。</p>
+<hr>
+<p><strong>TL;DR</strong></p>
+<p>如果您对 <code>ADD</code> 和 <code>COPY</code> 的细微差别不感兴趣，只想知道”我应该使用哪一个？”，所以你需要知道的是：使用 <code>COPY</code>。</p>
+<h4 id="ADD"><a href="#ADD" class="headerlink" title="ADD"></a>ADD</h4><p>与 <code>COPY</code> 指令不同，<code>ADD</code> 从一开始就是 Docker 的一部分，并且支持一些额外的技巧，而不仅仅是从构建上下文中复制文件。</p>
+<p><code>ADD</code> 指令允许您使用 URL 作为 <code>&lt;src&gt;</code> 参数。当提供一个 URL 时，将从 URL 下载一个文件并将其复制到 <code>&lt;dest&gt;</code>。</p>
+<pre class=" language-dockerfile"><code class="language-dockerfile">ADD http://foo.com/bar.go /tmp/main.go
 </code></pre>
-<p>Traefik 配置文件<code>traefik.yml</code></p>
-<pre class=" language-yaml"><code class="language-yaml"><span class="token comment" spellcheck="true"># traefik.yml</span>
-<span class="token key atrule">global</span><span class="token punctuation">:</span>
-  <span class="token key atrule">checkNewVersion</span><span class="token punctuation">:</span> <span class="token boolean important">true</span>
-  <span class="token key atrule">sendAnonymousUsage</span><span class="token punctuation">:</span> <span class="token boolean important">false</span>
-
-<span class="token key atrule">api</span><span class="token punctuation">:</span>
-  <span class="token key atrule">insecure</span><span class="token punctuation">:</span> <span class="token boolean important">true</span>
-  <span class="token key atrule">dashboard</span><span class="token punctuation">:</span> <span class="token boolean important">true</span>
-  <span class="token key atrule">debug</span><span class="token punctuation">:</span> <span class="token boolean important">true</span>
-
-<span class="token key atrule">log</span><span class="token punctuation">:</span>
-  <span class="token key atrule">filePath</span><span class="token punctuation">:</span> <span class="token string">"/var/log/traefik/log/traefik.log"</span>
-  <span class="token key atrule">format</span><span class="token punctuation">:</span> json
-
-<span class="token key atrule">accessLog</span><span class="token punctuation">:</span>
-  <span class="token key atrule">filePath</span><span class="token punctuation">:</span> <span class="token string">"/var/log/traefik/log/access.log"</span>
-  <span class="token key atrule">format</span><span class="token punctuation">:</span> json
-
-<span class="token key atrule">entryPoints</span><span class="token punctuation">:</span>
-  <span class="token key atrule">traefik</span><span class="token punctuation">:</span>
-    <span class="token key atrule">address</span><span class="token punctuation">:</span> <span class="token punctuation">:</span><span class="token number">8080</span>
-  <span class="token key atrule">http</span><span class="token punctuation">:</span>
-    <span class="token key atrule">address</span><span class="token punctuation">:</span> <span class="token punctuation">:</span><span class="token number">80</span>
-    <span class="token key atrule">forwardedHeaders</span><span class="token punctuation">:</span>
-      <span class="token key atrule">insecure</span><span class="token punctuation">:</span> <span class="token boolean important">true</span>
-    <span class="token key atrule">proxyProtocol</span><span class="token punctuation">:</span>
-      <span class="token key atrule">insecure</span><span class="token punctuation">:</span> <span class="token boolean important">true</span>
-  <span class="token key atrule">https</span><span class="token punctuation">:</span>
-    <span class="token key atrule">address</span><span class="token punctuation">:</span> <span class="token punctuation">:</span><span class="token number">443</span>
-    <span class="token key atrule">forwardedHeaders</span><span class="token punctuation">:</span>
-      <span class="token key atrule">insecure</span><span class="token punctuation">:</span> <span class="token boolean important">true</span>
-    <span class="token key atrule">proxyProtocol</span><span class="token punctuation">:</span>
-      <span class="token key atrule">insecure</span><span class="token punctuation">:</span> <span class="token boolean important">true</span>
-
-<span class="token key atrule">providers</span><span class="token punctuation">:</span>
-  <span class="token key atrule">providersThrottleDuration</span><span class="token punctuation">:</span> 2s
-
-  <span class="token key atrule">etcd</span><span class="token punctuation">:</span>
-    <span class="token key atrule">rootKey</span><span class="token punctuation">:</span> <span class="token string">"/traefik"</span>
-    <span class="token key atrule">endpoints</span><span class="token punctuation">:</span>
-      <span class="token punctuation">-</span> <span class="token string">"etcd:2379"</span>
+<p>上面的文件将从指定的 URL 下载并添加到容器的文件系统 <code>/tmp/main.go</code> 。另一种简单的方式只需指定下载文件的目标目录。</p>
+<pre class=" language-dockerfile"><code class="language-dockerfile">ADD http://foo.com/bar.go /tmp/
 </code></pre>
-<p>这里我们为了展示 <code>traefik</code> 的负载均衡功能，启动两个<code>nginx</code>容器作为后端服务并且以<code>index.html</code>内容不同加以区分。</p>
-<pre class=" language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># 创建 nginx 目录</span>
-<span class="token function">mkdir</span> -p <span class="token punctuation">{</span>nginx1,nginx2<span class="token punctuation">}</span>/html
-
-<span class="token comment" spellcheck="true"># 编辑 index.html 静态页面</span>
-<span class="token keyword">echo</span> <span class="token string">'&lt;h1>Hello nginx1&lt;/h1>'</span> <span class="token operator">></span> <span class="token variable">${PWD}</span>/nginx1/html/index.html
-<span class="token keyword">echo</span> <span class="token string">'&lt;h1>Hello nginx2&lt;/h1>'</span> <span class="token operator">></span> <span class="token variable">${PWD}</span>/nginx2/html/index.html
+<p>因为 <code>&lt;dest&gt;</code> 参数以一个尾部斜杠结束，Docker 将从 URL 下载文件并将其添加到指定的目录，在这种情况下，一个名为 <code>/tmp/main.go</code> 的文件将被添加到容器的文件系统中。</p>
+<p><code>ADD</code> 的另一个特性是能够自动解压缩文件。如果 <code>&lt;src&gt;</code> 参数是一个可识别压缩格式（tar、gzip、bzip2）等的本地文件，那么它将在容器的文件系统中指定的 <code>&lt;dest&gt;</code> 处被解压缩。</p>
+<pre class=" language-dockerfile"><code class="language-dockerfile">ADD /foo.tar.gz /tmp/
 </code></pre>
-<p>etcd 持久化目录创建与添加权限</p>
-<pre class=" language-bash"><code class="language-bash"><span class="token function">mkdir</span> -p etcd/data <span class="token operator">&amp;&amp;</span> <span class="token function">chmod</span> 777 etcd
+<p>上面的命令会将 <code>foo.tar.gz</code> 压缩文件解压缩至容器的 <code>/tmp/</code> 目录中。</p>
+<p>有趣的是，URL 下载和解压缩功能不能一起使用，任何通过 URL 复制的压缩包都不会自动解压缩。</p>
+<p>显然，在简单的 <code>ADD</code> 指令背后有许多功能。虽然这使 <code>ADD</code> 相当多才多艺，但它并不使其特别可预测。这里引用 2013年12月在 ADD 命令下被记录的一个<a target="_blank" rel="noopener" href="https://github.com/moby/moby/issues/3050">问题</a>：</p>
+<blockquote>
+<p><em>Currently the ADD command is IMO far too magical. It can add local and remote files. It will sometimes untar a file and it will sometimes not untar a file. If a file is a tarball that you want to copy, you accidentally untar it. If the file is a tarball in some unrecognized compressed format that you want to untar, you accidentally copy it. -</em> <a target="_blank" rel="noopener" href="https://github.com/amluto">amluto</a></p>
+</blockquote>
+<p>人们的共识似乎是，<code>ADD</code> 试图做得太多，使用户感到困惑。显然，没有人想要打破现有的 <code>ADD</code> 使用向下兼容，所以决定添加一个新的指令，其行为更可预测。</p>
+<h4 id="COPY"><a href="#COPY" class="headerlink" title="COPY"></a>COPY</h4><p>当 Docker 1.0 版本发布时，包含了新的 <code>COPY</code> 指令。与 <code>ADD</code> 不同，<code>COPY</code> 直接将文件和文件夹从构建上下文复制到容器中。</p>
+<p><code>COPY</code> 不支持作为 <code>&lt;src&gt;</code> 参数的 URL ，因此它不能用于从远程位置下载文件。您想要复制到容器中的任何内容都必须出现在本地构建上下文中。</p>
+<p>此外，<code>COPY</code> 没有给予任何特殊待遇的档案。如果您复制一个压缩文件，它将完全按照在构建上下文中出现的方式添加到容器中，而不会尝试解压缩它。</p>
+<p><code>COPY</code> 实际上只是 <code>ADD</code> 的一个精简版本，旨在满足大多数”从文件到容器”的用例，而不会出现任何意外。</p>
+<h4 id="使用那个？"><a href="#使用那个？" class="headerlink" title="使用那个？"></a>使用那个？</h4><p>如果现在还不明显，Docker 团队的建议是在几乎所有情况下都使用 <code>COPY</code> 。</p>
+<p>实际上，使用 <code>ADD</code> 的唯一原因是当您拥有一个压缩文件时，您肯定希望将其自动解压到图层中。理想情况下，<code>ADD</code> 可以重命名为 EXTRACT 之类的东西，从而真正实现这一点（同样，由于向后兼容性的原因，这种情况不太可能发生）。</p>
+<p>好的，如果从远程 URL 获取压缩包，<code>ADD</code> 不是仍然有用吗？从技术上讲，是的，但是在大多数情况下，您可能最好运行一个 curl 或 wget。考虑下面的例子：</p>
+<pre class=" language-dockerfile"><code class="language-dockerfile">ADD http://foo.com/package.tar.bz2 /tmp/
+RUN tar -xjf /tmp/package.tar.bz2 \
+  && make -C /tmp/package \
+  && rm /tmp/package.tar.bz2
 </code></pre>
-<p>启动容器</p>
-<pre class=" language-bash"><code class="language-bash">docker-compose up -d
+<p>这里我们有个 <code>ADD</code> 指令，它从一个 URL 中添加一个压缩包至容器 <code>/tmp/</code> 目录下，后面跟着一个 <code>RUN</code> 指令，它解压这个压缩包并编译，然后尝试清理下载的归档文件。</p>
+<p>不幸的是，由于包添加和 <code>rm</code> 命令位于不同的图像层，我们实际上并没有在最终图像中节省任何空间。（有关这一现象的更详细解释，请参阅<a target="_blank" rel="noopener" href="https://www.ctl.io/developers/blog/post/optimizing-docker-images/">Optimizing Docker Images</a>）</p>
+<p>在这种情况下，你最好这样做：</p>
+<pre class=" language-dockerfile"><code class="language-dockerfile">RUN curl http://foo.com/package.tar.bz2 \
+  | tar -xjC /tmp/package \
+  && make -C /tmp/package
 </code></pre>
-<p>启动后状态如下：</p>
-<p><img src="https://aptxhb.oss-cn-shenzhen.aliyuncs.com/images/image-20220603180122867.png"></p>
-<p>这时我们可以访问<code>127.0.0.1:8080</code> 就可以看到 traefik 的管理页面</p>
-<p><img src="https://aptxhb.oss-cn-shenzhen.aliyuncs.com/images/image-20220603180331115.png"></p>
-<p>当一切准备就绪后，我们就可以向 <code>etcd</code> 添加配置使 <code>traefik</code> 反向代理到后端 <code>nginx</code> 容器上</p>
-<h4 id="etcd-添加配置数据"><a href="#etcd-添加配置数据" class="headerlink" title="etcd 添加配置数据"></a>etcd 添加配置数据</h4><pre class=" language-bash"><code class="language-bash">etcdctl put /traefik/enable <span class="token boolean">true</span>
-etcdctl put /traefik/http/middlewares/gzip/compress <span class="token boolean">true</span>
-etcdctl put /traefik/http/routers/nginx-web/entrypoints/0 http
-etcdctl put /traefik/http/routers/nginx-web/rule <span class="token string">'Host(<span class="token variable"><span class="token variable">`</span>nginx.aptxhb.xyz<span class="token variable">`</span></span>) || PathPrefix(<span class="token variable"><span class="token variable">`</span>/<span class="token variable">`</span></span>)'</span>
-etcdctl put /traefik/http/routers/nginx-web/service nginx-web-lb
-etcdctl put /traefik/http/services/nginx-web-lb/loadbalancer/servers/1/url http://nginx1:80
-etcdctl put /traefik/http/services/nginx-web-lb/loadbalancer/servers/2/url http://nginx2:80
-</code></pre>
-<p>这时我们可以看到 traefik 管理页面已经有刚才添加的路由，证明 <code>traefik</code> 自动发现配置且支持热加载</p>
-<p><img src="https://aptxhb.oss-cn-shenzhen.aliyuncs.com/images/image-20220604015410972.png"></p>
-<p>我们对域名绑定本地 <code>hosts</code> 解析后就可以在浏览器访问，并且尝试刷新可以看到请求在两个后端容器上轮询</p>
-<p><img src="https://aptxhb.oss-cn-shenzhen.aliyuncs.com/images/image-20220604015850012.png"></p>
-<h4 id="重定向-HTTPS"><a href="#重定向-HTTPS" class="headerlink" title="重定向 HTTPS"></a>重定向 HTTPS</h4><h5 id="制作证书"><a href="#制作证书" class="headerlink" title="制作证书"></a>制作证书</h5><pre class=" language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># 创建 ssl 目录</span>
-<span class="token function">mkdir</span> ssl <span class="token operator">&amp;&amp;</span> <span class="token function">cd</span> ssl
-
-<span class="token comment" spellcheck="true"># 生成私钥</span>
-openssl genrsa -des3 -out nginx.aptxhb.xyz.key 2048
-
-<span class="token comment" spellcheck="true"># 生成CA证书</span>
-openssl req -new -key nginx.aptxhb.xyz.key -out ca.csr
-
-<span class="token comment" spellcheck="true"># 去除私钥密码</span>
-openssl rsa -in nginx.aptxhb.xyz.key -out nginx.aptxhb.xyz.key
-
-<span class="token comment" spellcheck="true"># 签发公钥</span>
-openssl x509 -req -days 3650 -in ca.csr -signkey nginx.aptxhb.xyz.key -out nginx.aptxhb.xyz.crt
-
-<span class="token comment" spellcheck="true"># 生成PEM格式公钥</span>
-openssl x509 -in nginx.aptxhb.xyz.crt -out nginx.aptxhb.xyz.pem -outform PEM
-</code></pre>
-<p>修改 <code>docker-compose.yaml</code>  traefik 服务把证书挂载至容器 <code>/data/ssl</code> 目录</p>
-<pre class=" language-yaml"><code class="language-yaml"><span class="token key atrule">volumes</span><span class="token punctuation">:</span>
-  <span class="token punctuation">-</span> $<span class="token punctuation">{</span>PWD<span class="token punctuation">}</span>/traefik/ssl<span class="token punctuation">:</span>/data/ssl<span class="token punctuation">:</span>ro
-</code></pre>
-<p>使用 <code>docker-compose up --detach --build traefik</code>  单独加载修改过的服务</p>
-<h4 id="etcd-添加-HTTPS-配置"><a href="#etcd-添加-HTTPS-配置" class="headerlink" title="etcd 添加 HTTPS 配置"></a>etcd 添加 HTTPS 配置</h4><pre class=" language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># 捕捉所有 hosts 重定向 https</span>
-etcdctl put /traefik/http/routers/https-redirect/entryPoints/0 http
-etcdctl put /traefik/http/routers/https-redirect/rule <span class="token string">'HostRegexp(<span class="token variable"><span class="token variable">`</span><span class="token punctuation">{</span>any:.*<span class="token punctuation">}</span><span class="token variable">`</span></span>)'</span>
-etcdctl put /traefik/http/routers/https-redirect/middlewares https-redirect
-etcdctl put /traefik/http/routers/https-redirect/service noop
-etcdctl put /traefik/http/services/noop/LoadBalancer/servers/url <span class="token string">""</span>
-etcdctl put /traefik/http/middlewares/https-redirect/redirectScheme/scheme https
-etcdctl put /traefik/tls/options/default/maxVersion VersionTLS12
-etcdctl put /traefik/tls/options/default/minVersion VersionTLS12
-etcdctl put /traefik/tls/certificates <span class="token string">'
-[
-    {
-        "certFile": "/data/ssl/nginx.aptxhb.xyz.crt"
-    },
-    {
-        "keyFile": "/data/ssl/nginx.aptxhb.xyz.key"
-    }
-]'</span>
-
-<span class="token comment" spellcheck="true"># 对 nginx-web 路由开启 https</span>
-etcdctl put /traefik/http/routers/nginx-web/entrypoints/1 https
-etcdctl put /traefik/http/routers/nginx-web/tls <span class="token boolean">true</span>
-</code></pre>
-<p>想要了解更多关于 <code>traefik</code>  的重定向知识请参考 <a target="_blank" rel="noopener" href="https://github.com/traefik/traefik/issues/4863">traefik HTTP to HTTPS</a></p>
-<p>我们可以从 <code>traefik</code> 管理页面看到 <code>nginx-web</code> 路由已经开启了<code>https</code>，并且绑定了 <code>tls证书</code></p>
-<p><img src="https://aptxhb.oss-cn-shenzhen.aliyuncs.com/images/image-20220604021528663.png"></p>
-<p>现在我们继续在浏览器访问 <code>nginx.aptxhb.xyz</code> 域名已经正常跳转 https 访问了，由于是自签证书所以浏览器显示不安全的告警</p>
-<p><img src="https://aptxhb.oss-cn-shenzhen.aliyuncs.com/images/image-20220604022114814.png"></p>
+<p>在这里，我们 <code>curl</code> 压缩包并将其直接导入 <code>tar</code> 命令以进行解压，这样我们就不需要清理文件系统上的压缩文件了。</p>
+<p>可能仍然有合理的理由向镜像添加远程文件，但这应该是一个清楚的决定，而不是您的默认选择。</p>
+<p>最终，规则是这样的：使用 <code>COPY</code> (除非您完全确定需要 ADD)。</p>
 
                 
             </div>
@@ -681,8 +545,8 @@ etcdctl put /traefik/http/routers/nginx-web/tls <span class="token boolean">true
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/traefik-etcd/">
-                                    <span class="chip bg-color">traefik etcd</span>
+                                <a href="/tags/Dockerfile/">
+                                    <span class="chip bg-color">Dockerfile</span>
                                 </a>
                             
                         </div>
@@ -734,18 +598,18 @@ etcdctl put /traefik/http/routers/nginx-web/tls <span class="token boolean">true
             <div class="article-badge left-badge text-color">
                 <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
             <div class="card">
-                <a href="/2021/05/03/xu-ni-di-zhi-kong-jian-yong-hu-kong-jian-nei-he-kong-jian-yong-hu-tai-yu-nei-he-tai-yuan-li-he-zuo-yong/">
+                <a href="/2021/05/03/traefik-fu-wu-fa-xian-zhi-etcd/">
                     <div class="card-image">
                         
-                        <img src="/medias/featureimages/5.jpg" class="responsive-img" alt="虚拟地址空间与上下文切换详解">
+                        <img src="/medias/featureimages/5.jpg" class="responsive-img" alt="Traefik 服务发现之 etcd">
                         
-                        <span class="card-title">虚拟地址空间与上下文切换详解</span>
+                        <span class="card-title">Traefik 服务发现之 etcd</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            本文更方便的了解什么是虚拟地址空间、用户空间、内核空间以及上下文切换
+                            traefik 使用 etcd 服务自动发现部署
                         
                     </div>
                     <div class="publish-info">
@@ -756,8 +620,8 @@ etcdctl put /traefik/http/routers/nginx-web/tls <span class="token boolean">true
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90/" class="post-category">
-                                    计算机组成
+                            <a href="/categories/traefik-etcd/" class="post-category">
+                                    traefik etcd
                                 </a>
                             
                             
@@ -767,8 +631,8 @@ etcdctl put /traefik/http/routers/nginx-web/tls <span class="token boolean">true
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/linux/">
-                        <span class="chip bg-color">linux</span>
+                    <a href="/tags/traefik-etcd/">
+                        <span class="chip bg-color">traefik etcd</span>
                     </a>
                     
                 </div>
@@ -782,30 +646,30 @@ etcdctl put /traefik/http/routers/nginx-web/tls <span class="token boolean">true
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2019/07/13/dockerfile-zhong-add-he-copy-qu-bie/">
+                <a href="/2018/11/24/pip-an-zhuang-docker-compose-mo-kuai/">
                     <div class="card-image">
                         
-                        <img src="https://aptxhb.oss-cn-shenzhen.aliyuncs.com/images/20220713232511.png" class="responsive-img" alt="Dockerfile ADD vs COPY">
+                        <img src="/medias/featureimages/3.jpg" class="responsive-img" alt="pip 安装 docker-compose 模块">
                         
-                        <span class="card-title">Dockerfile ADD vs COPY</span>
+                        <span class="card-title">pip 安装 docker-compose 模块</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            Dockerfile中指令之间的区别
+                            ansible docker-compose 模块管理远程主机安装所需模块
                         
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2019-07-13
+                                <i class="far fa-clock fa-fw icon-date"></i>2018-11-24
                             </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/Dockerfile/" class="post-category">
-                                    Dockerfile
+                            <a href="/categories/ansible/" class="post-category">
+                                    ansible
                                 </a>
                             
                             
@@ -815,8 +679,8 @@ etcdctl put /traefik/http/routers/nginx-web/tls <span class="token boolean">true
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/Dockerfile/">
-                        <span class="chip bg-color">Dockerfile</span>
+                    <a href="/tags/ansible/">
+                        <span class="chip bg-color">ansible</span>
                     </a>
                     
                 </div>

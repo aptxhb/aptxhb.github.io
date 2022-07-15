@@ -98,11 +98,37 @@
   </entry>
   
   <entry>
+    <title>Dockerfile ADD vs COPY</title>
+    <link href="https://blog.aptxhb.xyz/2019/07/13/dockerfile-zhong-add-he-copy-qu-bie/"/>
+    <id>https://blog.aptxhb.xyz/2019/07/13/dockerfile-zhong-add-he-copy-qu-bie/</id>
+    <published>2019-07-13T13:22:10.000Z</published>
+    <updated>2022-07-14T13:19:41.887Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt;原文地址 &lt;a href=&quot;https://www.ctl.io/developers/blog/post/dockerfile-add-vs-copy/&quot;&gt;Dockerfile: ADD vs COPY&lt;/a&gt;&lt;/p&gt;
+&lt;h4 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot;</summary>
+        
+      
+    
+    
+    
+    <category term="Dockerfile" scheme="https://blog.aptxhb.xyz/categories/Dockerfile/"/>
+    
+    
+    <category term="Dockerfile" scheme="https://blog.aptxhb.xyz/tags/Dockerfile/"/>
+    
+  </entry>
+  
+  <entry>
     <title>pip 安装 docker-compose 模块</title>
     <link href="https://blog.aptxhb.xyz/2018/11/24/pip-an-zhuang-docker-compose-mo-kuai/"/>
     <id>https://blog.aptxhb.xyz/2018/11/24/pip-an-zhuang-docker-compose-mo-kuai/</id>
     <published>2018-11-23T17:36:07.000Z</published>
-    <updated>2022-06-27T12:51:41.980Z</updated>
+    <updated>2022-07-14T13:16:43.121Z</updated>
     
     
       
@@ -117,10 +143,10 @@
     
     
     
-    <category term="ansible docker docker-compose" scheme="https://blog.aptxhb.xyz/categories/ansible-docker-docker-compose/"/>
+    <category term="ansible" scheme="https://blog.aptxhb.xyz/categories/ansible/"/>
     
     
-    <category term="ansible docker docker-compose" scheme="https://blog.aptxhb.xyz/tags/ansible-docker-docker-compose/"/>
+    <category term="ansible" scheme="https://blog.aptxhb.xyz/tags/ansible/"/>
     
   </entry>
   

@@ -1,6 +1,7 @@
 https://blog.aptxhb.xyz/2022/05/07/shi-yong-kubectl-chuang-jian-pod-ju-ti-gou-jian-liu-cheng/
 https://blog.aptxhb.xyz/2021/05/03/xu-ni-di-zhi-kong-jian-yong-hu-kong-jian-nei-he-kong-jian-yong-hu-tai-yu-nei-he-tai-yuan-li-he-zuo-yong/
 https://blog.aptxhb.xyz/2021/05/03/traefik-fu-wu-fa-xian-zhi-etcd/
+https://blog.aptxhb.xyz/2019/07/13/dockerfile-zhong-add-he-copy-qu-bie/
 https://blog.aptxhb.xyz/2018/11/24/pip-an-zhuang-docker-compose-mo-kuai/
 https://blog.aptxhb.xyz/2018/11/17/iptables-nei-wang-liu-liang-zhuan-fa/
 https://blog.aptxhb.xyz/2018/11/03/ntp-shi-jian-tong-bu/

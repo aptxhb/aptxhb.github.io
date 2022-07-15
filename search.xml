@@ -83,6 +83,31 @@
     
     
     <entry>
+      <title>Dockerfile ADD vs COPY</title>
+      <link href="/2019/07/13/dockerfile-zhong-add-he-copy-qu-bie/"/>
+      <url>/2019/07/13/dockerfile-zhong-add-he-copy-qu-bie/</url>
+      
+        <content type="html"><![CDATA[<p>原文地址 <a href="https://www.ctl.io/developers/blog/post/dockerfile-add-vs-copy/">Dockerfile: ADD vs COPY</a></p><h4 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h4><p>这篇文章将帮助您理解 <strong>Dockerfile</strong> 中两个相似的指令 <code>ADD</code> 和 <code>COPY</code> 之间的区别，它们是如何变成今天的样子的，以及我们关于您应该使用哪种指令的建议。</p><p>当从 <code>Dockerfile</code> 中构建 <code>docker</code> 镜像时，有两个指令可以供选择，用于向镜像内添加目录或文件：<code>ADD</code> 和 <code>COPY</code> 。这两个指令都遵循相同的基本形式，完成几乎相同的事情：</p><pre class=" language-dockerfile"><code class="language-dockerfile">ADD <src> <dest>COPY <src> <dest></code></pre><p>在这两种情况下，都会将目录或文件 <code>&lt;src&gt;</code> 复制并添加到容器指定的 <code>&lt;dest&gt;</code> 路径。</p><p>因此，如果两个指令是等价的，为什么它们都存在，应该使用哪一个？读下去就知道了。</p><hr><p><strong>TL;DR</strong></p><p>如果您对 <code>ADD</code> 和 <code>COPY</code> 的细微差别不感兴趣，只想知道”我应该使用哪一个？”，所以你需要知道的是：使用 <code>COPY</code>。</p><h4 id="ADD"><a href="#ADD" class="headerlink" title="ADD"></a>ADD</h4><p>与 <code>COPY</code> 指令不同，<code>ADD</code> 从一开始就是 Docker 的一部分，并且支持一些额外的技巧，而不仅仅是从构建上下文中复制文件。</p><p><code>ADD</code> 指令允许您使用 URL 作为 <code>&lt;src&gt;</code> 参数。当提供一个 URL 时，将从 URL 下载一个文件并将其复制到 <code>&lt;dest&gt;</code>。</p><pre class=" language-dockerfile"><code class="language-dockerfile">ADD http://foo.com/bar.go /tmp/main.go</code></pre><p>上面的文件将从指定的 URL 下载并添加到容器的文件系统 <code>/tmp/main.go</code> 。另一种简单的方式只需指定下载文件的目标目录。</p><pre class=" language-dockerfile"><code class="language-dockerfile">ADD http://foo.com/bar.go /tmp/</code></pre><p>因为 <code>&lt;dest&gt;</code> 参数以一个尾部斜杠结束，Docker 将从 URL 下载文件并将其添加到指定的目录，在这种情况下，一个名为 <code>/tmp/main.go</code> 的文件将被添加到容器的文件系统中。</p><p><code>ADD</code> 的另一个特性是能够自动解压缩文件。如果 <code>&lt;src&gt;</code> 参数是一个可识别压缩格式（tar、gzip、bzip2）等的本地文件，那么它将在容器的文件系统中指定的 <code>&lt;dest&gt;</code> 处被解压缩。</p><pre class=" language-dockerfile"><code class="language-dockerfile">ADD /foo.tar.gz /tmp/</code></pre><p>上面的命令会将 <code>foo.tar.gz</code> 压缩文件解压缩至容器的 <code>/tmp/</code> 目录中。</p><p>有趣的是，URL 下载和解压缩功能不能一起使用，任何通过 URL 复制的压缩包都不会自动解压缩。</p><p>显然，在简单的 <code>ADD</code> 指令背后有许多功能。虽然这使 <code>ADD</code> 相当多才多艺，但它并不使其特别可预测。这里引用 2013年12月在 ADD 命令下被记录的一个<a href="https://github.com/moby/moby/issues/3050">问题</a>：</p><blockquote><p><em>Currently the ADD command is IMO far too magical. It can add local and remote files. It will sometimes untar a file and it will sometimes not untar a file. If a file is a tarball that you want to copy, you accidentally untar it. If the file is a tarball in some unrecognized compressed format that you want to untar, you accidentally copy it. -</em> <a href="https://github.com/amluto">amluto</a></p></blockquote><p>人们的共识似乎是，<code>ADD</code> 试图做得太多，使用户感到困惑。显然，没有人想要打破现有的 <code>ADD</code> 使用向下兼容，所以决定添加一个新的指令，其行为更可预测。</p><h4 id="COPY"><a href="#COPY" class="headerlink" title="COPY"></a>COPY</h4><p>当 Docker 1.0 版本发布时，包含了新的 <code>COPY</code> 指令。与 <code>ADD</code> 不同，<code>COPY</code> 直接将文件和文件夹从构建上下文复制到容器中。</p><p><code>COPY</code> 不支持作为 <code>&lt;src&gt;</code> 参数的 URL ，因此它不能用于从远程位置下载文件。您想要复制到容器中的任何内容都必须出现在本地构建上下文中。</p><p>此外，<code>COPY</code> 没有给予任何特殊待遇的档案。如果您复制一个压缩文件，它将完全按照在构建上下文中出现的方式添加到容器中，而不会尝试解压缩它。</p><p><code>COPY</code> 实际上只是 <code>ADD</code> 的一个精简版本，旨在满足大多数”从文件到容器”的用例，而不会出现任何意外。</p><h4 id="使用那个？"><a href="#使用那个？" class="headerlink" title="使用那个？"></a>使用那个？</h4><p>如果现在还不明显，Docker 团队的建议是在几乎所有情况下都使用 <code>COPY</code> 。</p><p>实际上，使用 <code>ADD</code> 的唯一原因是当您拥有一个压缩文件时，您肯定希望将其自动解压到图层中。理想情况下，<code>ADD</code> 可以重命名为 EXTRACT 之类的东西，从而真正实现这一点（同样，由于向后兼容性的原因，这种情况不太可能发生）。</p><p>好的，如果从远程 URL 获取压缩包，<code>ADD</code> 不是仍然有用吗？从技术上讲，是的，但是在大多数情况下，您可能最好运行一个 curl 或 wget。考虑下面的例子：</p><pre class=" language-dockerfile"><code class="language-dockerfile">ADD http://foo.com/package.tar.bz2 /tmp/RUN tar -xjf /tmp/package.tar.bz2 \  && make -C /tmp/package \  && rm /tmp/package.tar.bz2</code></pre><p>这里我们有个 <code>ADD</code> 指令，它从一个 URL 中添加一个压缩包至容器 <code>/tmp/</code> 目录下，后面跟着一个 <code>RUN</code> 指令，它解压这个压缩包并编译，然后尝试清理下载的归档文件。</p><p>不幸的是，由于包添加和 <code>rm</code> 命令位于不同的图像层，我们实际上并没有在最终图像中节省任何空间。（有关这一现象的更详细解释，请参阅<a href="https://www.ctl.io/developers/blog/post/optimizing-docker-images/">Optimizing Docker Images</a>）</p><p>在这种情况下，你最好这样做：</p><pre class=" language-dockerfile"><code class="language-dockerfile">RUN curl http://foo.com/package.tar.bz2 \  | tar -xjC /tmp/package \  && make -C /tmp/package</code></pre><p>在这里，我们 <code>curl</code> 压缩包并将其直接导入 <code>tar</code> 命令以进行解压，这样我们就不需要清理文件系统上的压缩文件了。</p><p>可能仍然有合理的理由向镜像添加远程文件，但这应该是一个清楚的决定，而不是您的默认选择。</p><p>最终，规则是这样的：使用 <code>COPY</code> (除非您完全确定需要 ADD)。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> Dockerfile </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> Dockerfile </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>pip 安装 docker-compose 模块</title>
       <link href="/2018/11/24/pip-an-zhuang-docker-compose-mo-kuai/"/>
       <url>/2018/11/24/pip-an-zhuang-docker-compose-mo-kuai/</url>
@@ -92,14 +117,14 @@
       
       <categories>
           
-          <category> ansible docker docker-compose </category>
+          <category> ansible </category>
           
       </categories>
       
       
         <tags>
             
-            <tag> ansible docker docker-compose </tag>
+            <tag> ansible </tag>
             
         </tags>
       
